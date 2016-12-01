@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -7,12 +8,12 @@ public abstract class Travel
 {
 	private Bus bus;
 	private Chauffeur chauffeur;
-	private Date reservationStartDate;
-	private Date reservationEndDate;
+	private LocalDateTime reservationStartDate;
+	private LocalDateTime reservationEndDate;
 	
 	private double basePrice;
 	private String[] destinations;
-	public Travel(Bus bus, Chauffeur chauffeur, Date reservationStartDate, Date reservationEndDate)
+	public Travel(Bus bus, Chauffeur chauffeur, LocalDateTime reservationStartDate, LocalDateTime reservationEndDate)
 	{
 		this.bus = bus;
 		this.chauffeur = chauffeur;
@@ -60,20 +61,30 @@ public abstract class Travel
 	}
 
 
-	public Date getReservationStartDate()
+	public LocalDateTime getReservationStartDate()
 	{
 		return reservationStartDate;
 	}
 
 
-	public Date getReservationEndDate()
+	public LocalDateTime getReservationEndDate()
 	{
 		return reservationEndDate;
 	}
 
 
-	public boolean reservationOverlaps(Date startDate, Date endDate)
+	public boolean reservationOverlaps(LocalDateTime startDate, LocalDateTime endDate)
 	{
-		throw new NotImplementedException();
+		return ((TimeStamp.unixTime(startDate) < TimeStamp.unixTime(reservationEndDate) && TimeStamp.unixTime(startDate) > TimeStamp.unixTime(reservationStartDate)) ||
+				(TimeStamp.unixTime(endDate) > TimeStamp.unixTime(reservationStartDate) && TimeStamp.unixTime(endDate) < TimeStamp.unixTime(reservationEndDate))) ||
+				//or the other way around:
+				((TimeStamp.unixTime(reservationStartDate) < TimeStamp.unixTime(endDate) && TimeStamp.unixTime(reservationStartDate) > TimeStamp.unixTime(startDate)) ||
+				(TimeStamp.unixTime(reservationEndDate) > TimeStamp.unixTime(startDate) && TimeStamp.unixTime(reservationEndDate) < TimeStamp.unixTime(endDate)));
+ 	}
+	public boolean reservationOverlaps(Travel other)
+	{
+		return reservationOverlaps(other.getReservationStartDate(), other.getReservationEndDate());
 	}
+	
+	
 }

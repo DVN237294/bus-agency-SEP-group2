@@ -1,16 +1,17 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
 
 public class Tour extends Travel
 {
-	private Date departureDate;
-	private Date arrivalDate;
-	private Date returnDate;
+	private LocalDateTime departureDate;
+	private LocalDateTime arrivalDate;
+	private LocalDateTime returnDate;
 	private PassengerList passengerList;
 	private ArrayList<Customer> customers;
 	
-	public Tour(Bus bus, Chauffeur chauffeur, Date reservationStartDate, Date reservationEndDate)
+	public Tour(Bus bus, Chauffeur chauffeur, LocalDateTime reservationStartDate, LocalDateTime reservationEndDate)
 	{
 		super(bus, chauffeur, reservationStartDate, reservationEndDate);
 		departureDate = null;
@@ -25,32 +26,32 @@ public class Tour extends Travel
 		passengerList.addPassenger(passenger, price);
 	}
 
-	public Date getDepartureDate()
+	public LocalDateTime getDepartureDate()
 	{
 		return departureDate;
 	}
 
-	public void setDepartureDate(Date departureDate)
+	public void setDepartureDate(LocalDateTime departureDate)
 	{
 		this.departureDate = departureDate;
 	}
 
-	public Date getArrivalDate()
+	public LocalDateTime getArrivalDate()
 	{
 		return arrivalDate;
 	}
 
-	public void setArrivalDate(Date arrivalDate)
+	public void setArrivalDate(LocalDateTime arrivalDate)
 	{
 		this.arrivalDate = arrivalDate;
 	}
 
-	public Date getReturnDate()
+	public LocalDateTime getReturnDate()
 	{
 		return returnDate;
 	}
 
-	public void setReturnDate(Date returnDate)
+	public void setReturnDate(LocalDateTime returnDate)
 	{
 		this.returnDate = returnDate;
 	}
