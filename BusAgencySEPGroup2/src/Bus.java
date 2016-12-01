@@ -7,11 +7,12 @@ public class Bus
    private String[] specialFeatures;
    private int maxCapacity;
 
-   public Bus(String make, String model, String licensePlate)
+   public Bus(String make, String model, String licensePlate, int maxCapacity)
    {
       this.make = make;
       this.model = model;
       this.licensePlate = licensePlate;
+      this.maxCapacity = maxCapacity;
       this.color = null;
       this.specialFeatures = null;
    }
