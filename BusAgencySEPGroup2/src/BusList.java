@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class BusList
 {
    private ArrayList<Bus> buses;
@@ -21,8 +19,16 @@ public class BusList
       buses.remove(bus);
    }
 
-   public Bus[] getBusses(int minCapacity)
+   public ArrayList<Bus> getBusses(int minCapacity)
    {
-      throw new NotImplementedException();
+      ArrayList<Bus> temp = new ArrayList<>();
+      for (int i = 0; i < buses.size(); i++)
+      {
+         if(buses.get(i).getMaxCapacity() > minCapacity) {
+            temp.add(buses.get(i));
+         }
+      }
+      
+      return temp;
    }
 }
