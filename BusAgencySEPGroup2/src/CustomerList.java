@@ -6,6 +6,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class CustomerList
 {
 	private ArrayList<Customer> customers;
+	
 	public CustomerList()
 	{
 		this.customers = new ArrayList<Customer>();
