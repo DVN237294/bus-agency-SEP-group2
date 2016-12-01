@@ -31,4 +31,9 @@ public class CustomerList
 	{
 		throw new NotImplementedException(); //also, this might need to be rephrased / reworked
 	}
+	
+	public int getTotalNumberOfCustomers()
+	{
+	   return customers.size();
+	}
 }
