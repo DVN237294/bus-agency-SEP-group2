@@ -58,5 +58,9 @@ public class Tour extends Travel
 		this.returnDate = returnDate;
 	}
 	
+	public ArrayList<Customer> getAllCustomers()
+	{
+	   return customers;
+	}
 	
 }
