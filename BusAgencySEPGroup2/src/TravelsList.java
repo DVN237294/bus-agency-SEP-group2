@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -22,12 +23,17 @@ public class TravelsList
       travels.remove(travel);
    }
 
-   public boolean hasReservation(Bus what, Date startDate, Date endDate)
+   public boolean hasReservationFor(Bus what, LocalDateTime startDate, LocalDateTime endDate)
    {
-      throw new NotImplementedException(); // hmm, what did i want to do here..?
+      for(Travel travel : travels)
+      {
+    	  if(travel.getBus().equals(what) && travel.reservationOverlaps(startDate, endDate))
+    		  return true;
+      }
+      return false;
    }
 
-   public boolean hasReservation(Chauffeur what, Date startDate, Date endDate)
+   public boolean hasReservationFor(Chauffeur what, Date startDate, Date endDate)
    {
       throw new NotImplementedException(); // hmm, what did i want to do here..?
    }

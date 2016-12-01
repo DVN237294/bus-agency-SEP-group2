@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -19,10 +21,17 @@ public class TravelAgency
       this.travelsList = travelsList;
    }
 
-   public Bus[] listAvailableBusses(Date startDate, Date endDate,
-         int minCapacity)
+   public Bus[] listAvailableBusses(LocalDateTime startDate, LocalDateTime endDate, int minCapacity)
    {
-      throw new NotImplementedException();
+	   ArrayList<Bus> temp = new ArrayList<Bus>();
+	   for(Bus bus : busList.getBusses(minCapacity))
+	   {
+		   if(!travelsList.hasReservationFor(bus, startDate, endDate))
+			   temp.add(bus);
+	   }
+	   Bus[] returnTemp = new Bus[temp.size()];
+	   temp.toArray(returnTemp);
+	   return returnTemp;
    }
 
    public Chauffeur[] listAvailableChauffeurs(Date startDate, Date endDate)
