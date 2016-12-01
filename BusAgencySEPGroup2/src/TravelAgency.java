@@ -35,8 +35,17 @@ public class TravelAgency
 	   return returnTemp;
    }
 
-   public Chauffeur[] listAvailableChauffeurs(Date startDate, Date endDate)
+   public ArrayList<Chauffeur> listAvailableChauffeurs(LocalDateTime startDate, LocalDateTime endDate)
    {
-      throw new NotImplementedException();
+	   ArrayList<Chauffeur> temp = new ArrayList<Chauffeur>();
+	   for(Chauffeur chauffeur : chauffeurList.getAllChauffeurs())
+	   {
+		   if(!travelsList.hasReservationFor(chauffeur, startDate, endDate))
+			   temp.add(chauffeur);
+	   }
+	   /*Chauffeur[] returnTemp = new Chauffeur[temp.size()];
+	   temp.toArray(returnTemp);
+	   return returnTemp;*/
+	   return temp;
    }
 }
