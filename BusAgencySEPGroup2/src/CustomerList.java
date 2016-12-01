@@ -17,6 +17,11 @@ public class CustomerList
 		customers.add(customer);
 	}
 	
+	public void deleteCustomer(Customer customer)
+	{
+	   customers.remove(customer);
+	}
+	
 	public boolean isFrequentCustomer(Customer customer)
 	{
 		throw new NotImplementedException(); //also, this might need to be rephrased / reworked
