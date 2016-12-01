@@ -23,15 +23,11 @@ public class Address
 
 	public void setDoorNumber(int doorNumber)
 	{
-		if(this.doorNumber == Integer.MIN_VALUE)
-			throw new IllegalStateException("Invalid or unset door number");
 		this.doorNumber = doorNumber;
 	}
 
 	public void setFloorNumber(int floorNumber)
 	{
-		if(this.floorNumber == Integer.MIN_VALUE)
-			throw new IllegalStateException("Invalid or unset floor number");
 		this.floorNumber = floorNumber;
 	}
 
@@ -47,11 +43,15 @@ public class Address
 
 	public int getDoorNumber()
 	{
+		if(this.floorNumber == Integer.MIN_VALUE)
+			throw new IllegalStateException("Invalid or unset floor number");
 		return doorNumber;
 	}
 
 	public int getFloorNumber()
 	{
+		if(this.doorNumber == Integer.MIN_VALUE)
+			throw new IllegalStateException("Invalid or unset door number");
 		return floorNumber;
 	}
 }
