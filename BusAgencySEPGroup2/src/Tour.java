@@ -17,6 +17,16 @@ public class Tour extends Travel
 		returnDate = null;
 		customers = new ArrayList<Customer>();
 	}
+	
+	public void addCustomer(Customer customer)
+	{
+	   customers.add(customer);
+	}
+	
+	public void deleteCustomer(Customer customer)
+	{
+	   customers.remove(customer);
+	}
 
 	public Date getDepartureDate()
 	{
