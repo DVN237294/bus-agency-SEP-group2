@@ -17,6 +17,6 @@ public class PassengerList
 		passengers.add(passenger);
 		tickets.add(new Ticket(passenger, price));
 	}
-	
+
 
 }
