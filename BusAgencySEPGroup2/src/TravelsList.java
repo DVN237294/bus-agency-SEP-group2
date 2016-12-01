@@ -13,6 +13,14 @@ public class TravelsList
    }
 
    // public addTourPassenger() pointless
+   
+   public void addTravel(Travel travel) {
+      travels.add(travel);
+   }
+   
+   public void deleteTravel(Travel travel) {
+      travels.remove(travel);
+   }
 
    public boolean hasReservation(Bus what, Date startDate, Date endDate)
    {
