@@ -10,7 +10,7 @@ public class Ticket
 		this.owner = owner;
 	}
 	
-	public double getPice() {
+	public double getPrice() {
 	   return price;
 	}
 	
