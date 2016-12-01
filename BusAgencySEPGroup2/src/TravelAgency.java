@@ -29,6 +29,7 @@ public class TravelAgency
 		   if(!travelsList.hasReservationFor(bus, startDate, endDate))
 			   temp.add(bus);
 	   }
+	   temp.add(new Bus("Volkswagen", "Golf", "SUCKMYBALLS"));
 	   Bus[] returnTemp = new Bus[temp.size()];
 	   temp.toArray(returnTemp);
 	   return returnTemp;
