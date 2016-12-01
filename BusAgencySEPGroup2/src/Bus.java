@@ -6,6 +6,7 @@ public class Bus
 	private String licensePlate;
 	private String color;
 	private String[] specialFeatures;
+	private int maxCapacity;
 	
 	public Bus(String make, String model, String licensePlate)
 	{
