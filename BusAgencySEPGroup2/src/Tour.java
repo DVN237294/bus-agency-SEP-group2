@@ -24,6 +24,11 @@ public class Tour extends Travel
 	{
 		passengerList.addPassenger(passenger, price);
 	}
+	
+	public void deletePassenger(Passenger passenger)
+	{
+	   passengerList.deletePassenger(passenger);
+	}
 
 	public Date getDepartureDate()
 	{
