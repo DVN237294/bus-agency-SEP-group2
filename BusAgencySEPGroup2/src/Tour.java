@@ -7,7 +7,6 @@ public class Tour extends Travel
 	private Date departureDate;
 	private Date arrivalDate;
 	private Date returnDate;
-	private PassengerList passengerList;
 	private ArrayList<Customer> customers;
 	
 	public Tour(Bus bus, Chauffeur chauffeur, Date reservationStartDate, Date reservationEndDate)
@@ -16,18 +15,7 @@ public class Tour extends Travel
 		departureDate = null;
 		arrivalDate = null;
 		returnDate = null;
-		passengerList = new PassengerList();
 		customers = new ArrayList<Customer>();
-	}
-	
-	public void addPassenger(Passenger passenger, double price)
-	{
-		passengerList.addPassenger(passenger, price);
-	}
-	
-	public void deletePassenger(Passenger passenger)
-	{
-	   passengerList.deletePassenger(passenger);
 	}
 
 	public Date getDepartureDate()
