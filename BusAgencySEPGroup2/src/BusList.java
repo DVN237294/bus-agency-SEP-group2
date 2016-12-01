@@ -5,15 +5,15 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BusList
 {
-	private ArrayList<Bus> busses;
+	private ArrayList<Bus> buses;
 	
 	public BusList()
 	{
-		busses = new ArrayList<Bus>();
+		buses = new ArrayList<Bus>();
 	}
 	public void addBus(Bus bus)
 	{
-		busses.add(bus);
+		buses.add(bus);
 	}
 	public Bus[] getBusses(int minCapacity)
 	{
