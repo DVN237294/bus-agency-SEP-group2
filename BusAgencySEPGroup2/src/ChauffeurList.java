@@ -15,6 +15,11 @@ public class ChauffeurList
 		chauffeurs.add(chauffeur);
 	}
 	
+	public void deleteChauffeur(Chauffeur chauffeur)
+	{
+	   chauffeurs.remove(chauffeur);
+	}
+	
 	public Chauffeur[] getAllChauffeurs()
 	{
 		Chauffeur[] temp = new Chauffeur[chauffeurs.size()];

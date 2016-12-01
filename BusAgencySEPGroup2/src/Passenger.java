@@ -6,7 +6,7 @@ public class Passenger extends Customer
 	private Date birthday;
 	private String email;
 	
-	public Passenger(String name, String phoneNumber, Date birthday)
+	public Passenger(String name, int phoneNumber, Date birthday)
 	{
 		super(name,  phoneNumber);
 		this.birthday = birthday;

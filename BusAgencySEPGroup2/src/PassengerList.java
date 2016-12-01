@@ -17,4 +17,10 @@ public class PassengerList
 		passengers.add(passenger);
 		tickets.add(new Ticket(passenger, price));
 	}
+
+
+	public void deletePassenger(Passenger passenger) {
+	   passengers.remove(passenger);
+	}
+
 }

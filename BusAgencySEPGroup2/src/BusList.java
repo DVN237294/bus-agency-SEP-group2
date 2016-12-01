@@ -1,22 +1,34 @@
 import java.util.ArrayList;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-
 public class BusList
 {
-	private ArrayList<Bus> busses;
-	
-	public BusList()
-	{
-		busses = new ArrayList<Bus>();
-	}
-	public void addBus(Bus bus)
-	{
-		busses.add(bus);
-	}
-	public Bus[] getBusses(int minCapacity)
-	{
-		throw new NotImplementedException();
-	}
+   private ArrayList<Bus> buses;
+
+   public BusList()
+   {
+      buses = new ArrayList<Bus>();
+   }
+
+   public void addBus(Bus bus)
+   {
+      buses.add(bus);
+   }
+
+   public void deleteBus(Bus bus)
+   {
+      buses.remove(bus);
+   }
+
+   public ArrayList<Bus> getBusses(int minCapacity)
+   {
+      ArrayList<Bus> temp = new ArrayList<>();
+      for (int i = 0; i < buses.size(); i++)
+      {
+         if(buses.get(i).getMaxCapacity() > minCapacity) {
+            temp.add(buses.get(i));
+         }
+      }
+      
+      return temp;
+   }
 }

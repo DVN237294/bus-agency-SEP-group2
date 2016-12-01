@@ -10,4 +10,12 @@ public class Ticket
 		this.owner = owner;
 	}
 	
+	public double getPrice() {
+	   return price;
+	}
+	
+	public Passenger getOwner() {
+	   return owner;
+	}
+	
 }

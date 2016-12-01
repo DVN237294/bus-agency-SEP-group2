@@ -6,6 +6,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class CustomerList
 {
 	private ArrayList<Customer> customers;
+	
 	public CustomerList()
 	{
 		this.customers = new ArrayList<Customer>();
@@ -16,6 +17,11 @@ public class CustomerList
 		customers.add(customer);
 	}
 	
+	public void deleteCustomer(Customer customer)
+	{
+	   customers.remove(customer);
+	}
+	
 	public boolean isFrequentCustomer(Customer customer)
 	{
 		throw new NotImplementedException(); //also, this might need to be rephrased / reworked
@@ -24,5 +30,10 @@ public class CustomerList
 	public void setFrequentCustomerThreshhold(int reservationCount)
 	{
 		throw new NotImplementedException(); //also, this might need to be rephrased / reworked
+	}
+	
+	public int getTotalNumberOfCustomers()
+	{
+	   return customers.size();
 	}
 }

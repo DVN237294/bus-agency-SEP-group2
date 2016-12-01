@@ -8,7 +8,6 @@ public class Tour extends Travel
 	private LocalDateTime departureDate;
 	private LocalDateTime arrivalDate;
 	private LocalDateTime returnDate;
-	private PassengerList passengerList;
 	private ArrayList<Customer> customers;
 	
 	public Tour(Bus bus, Chauffeur chauffeur, LocalDateTime reservationStartDate, LocalDateTime reservationEndDate)
@@ -17,13 +16,17 @@ public class Tour extends Travel
 		departureDate = null;
 		arrivalDate = null;
 		returnDate = null;
-		passengerList = new PassengerList();
 		customers = new ArrayList<Customer>();
 	}
 	
-	public void addPassenger(Passenger passenger, double price)
+	public void addCustomer(Customer customer)
 	{
-		passengerList.addPassenger(passenger, price);
+	   customers.add(customer);
+	}
+	
+	public void deleteCustomer(Customer customer)
+	{
+	   customers.remove(customer);
 	}
 
 	public LocalDateTime getDepartureDate()
