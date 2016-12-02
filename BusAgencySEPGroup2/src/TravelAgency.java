@@ -1,6 +1,8 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import sun.nio.cs.ext.ISCII91;
+
 public class TravelAgency
 {
 	private double defaultDiscountRate;
@@ -71,6 +73,7 @@ public class TravelAgency
 	public double getCustomerSuggestedPrice(Travel travel, Customer payingCustomer)
 	{
 		double price = travel.getBasePrice();
+		
 		if(customerList.isFrequentCustomer(payingCustomer))
 		{
 			//apply discount
@@ -78,4 +81,5 @@ public class TravelAgency
 		}
 		return price;
 	}
+	
 }

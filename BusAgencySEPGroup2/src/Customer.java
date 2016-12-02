@@ -56,4 +56,9 @@ public class Customer
    {
 	   return associatedPassengers.hasPassenger(passenger);
    }
+   
+   public double getPassengerTicketPrice(Passenger passenger)
+   {
+	   return associatedPassengers.getPassengerTicketPrice(passenger);
+   }
 }
