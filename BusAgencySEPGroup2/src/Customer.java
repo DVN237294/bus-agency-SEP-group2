@@ -5,20 +5,22 @@ public class Customer
 {
    private String name;
    private int phoneNumber;
-   private PassengerList passengerList;
+   private PassengerList associatedPassengers;
+   private int reservationCount;
 
    public Customer(String name, int phoneNumber)
    {
       this.name = name;
       this.phoneNumber = phoneNumber;
+      this.reservationCount = 0;
    }
    
    public void addPassenger(Passenger passenger, double price) {
-      passengerList.addPassenger(passenger, price);
+	   associatedPassengers.addPassenger(passenger, price);
    }
    
    public void deletePassenger(Passenger passenger) {
-      passengerList.deletePassenger(passenger);
+	   associatedPassengers.deletePassenger(passenger);
    }
    
    public String getName()
@@ -32,7 +34,26 @@ public class Customer
    }
    
    public ArrayList<Passenger> getAllPassengers() {
-      return passengerList.getAllPassengers();
+      return associatedPassengers.getAllPassengers();
+   }
+   
+   public int getReservationCount()
+   {
+	   return reservationCount;
+   }
+   
+   public void incrementReservations()
+   {
+	   reservationCount++;
    }
 
+   public boolean equals(Customer other)
+   {
+	   return name.equals(other.getName()) && phoneNumber == other.getPhoneNumber();
+   }
+   
+   public boolean hasAssociatedPassenger(Passenger passenger)
+   {
+	   return associatedPassengers.hasPassenger(passenger);
+   }
 }

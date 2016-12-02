@@ -58,6 +58,15 @@ public class Tour extends Travel
 		this.returnDate = returnDate;
 	}
 	
+	public boolean hasCustomer(Customer customer)
+	{
+		for(Customer collectionCustomer: customers)
+			if(customer.equals(collectionCustomer))
+				return true;
+		
+		return false;
+	}
+	
 	public ArrayList<Customer> getAllCustomers()
 	{
 	   return customers;

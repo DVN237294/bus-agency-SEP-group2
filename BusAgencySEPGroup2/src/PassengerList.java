@@ -27,4 +27,9 @@ public class PassengerList
 	   return passengers;
 	}
 
+	public boolean hasPassenger(Passenger passenger)
+	{
+		for(Passenger collectionPassenger : passengers)
+			if(collectionPassenger.equals(other))
+	}
 }

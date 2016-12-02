@@ -6,10 +6,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class CustomerList
 {
 	private ArrayList<Customer> customers;
+	private int frequentCustomerThreshhold;
 	
 	public CustomerList()
 	{
 		this.customers = new ArrayList<Customer>();
+		frequentCustomerThreshhold = Integer.MAX_VALUE;
 	}
 	
 	public void addCustomer(Customer customer)
@@ -24,12 +26,12 @@ public class CustomerList
 	
 	public boolean isFrequentCustomer(Customer customer)
 	{
-		throw new NotImplementedException(); //also, this might need to be rephrased / reworked
+		return customer.getReservationCount() >= frequentCustomerThreshhold;
 	}
 	
 	public void setFrequentCustomerThreshhold(int reservationCount)
 	{
-		throw new NotImplementedException(); //also, this might need to be rephrased / reworked
+		frequentCustomerThreshhold = reservationCount;
 	}
 	
 	public int getTotalNumberOfCustomers()
