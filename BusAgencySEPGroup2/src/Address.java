@@ -18,7 +18,7 @@ public class Address
 
 	public int getZipCode()
 	{
-		return zipCode;
+		return zipCode + 1;
 	}
 
 	public void setDoorNumber(int doorNumber)
