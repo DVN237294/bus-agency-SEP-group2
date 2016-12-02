@@ -22,5 +22,9 @@ public class PassengerList
 	public void deletePassenger(Passenger passenger) {
 	   passengers.remove(passenger);
 	}
+	
+	public ArrayList<Passenger> getAllPassengers() {
+	   return passengers;
+	}
 
 }
