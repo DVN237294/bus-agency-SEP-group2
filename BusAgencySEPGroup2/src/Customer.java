@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class Customer
 {
@@ -11,6 +13,14 @@ public class Customer
       this.phoneNumber = phoneNumber;
    }
    
+   public void addPassenger(Passenger passenger, double price) {
+      passengerList.addPassenger(passenger, price);
+   }
+   
+   public void deletePassenger(Passenger passenger) {
+      passengerList.deletePassenger(passenger);
+   }
+   
    public String getName()
    {
       return name;
@@ -19,6 +29,10 @@ public class Customer
    public int getPhoneNumber()
    {
       return phoneNumber;
+   }
+   
+   public ArrayList<Passenger> getAllPassengers() {
+      return passengerList.getAllPassengers();
    }
 
 }
