@@ -53,10 +53,6 @@ public class PassengerList
 	
 	public ArrayList<Passenger> getAllPassengers() {
 	   return passengers;
-
-	public ArrayList<Passenger> getAllPassengers()
-	{
-		return passengers;
 	}
 
 	public boolean hasPassenger(Passenger passenger)
