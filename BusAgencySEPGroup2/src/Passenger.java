@@ -3,11 +3,11 @@ import java.time.LocalDateTime;
 public class Passenger
 {
 	private String name;
-	private int phoneNumber;
+	private String phoneNumber;
 	private LocalDateTime birthday;
 	private String email;
 	
-	public Passenger(String name, int phoneNumber, LocalDateTime birthday)
+	public Passenger(String name, String phoneNumber, LocalDateTime birthday)
 	{
 		this.name = name;
 		this.phoneNumber = phoneNumber;
@@ -20,7 +20,7 @@ public class Passenger
 	{
 		return name;
 	}
-	public int getPhoneNumber()
+	public String getPhoneNumber()
 	{
 		return phoneNumber;
 	}
