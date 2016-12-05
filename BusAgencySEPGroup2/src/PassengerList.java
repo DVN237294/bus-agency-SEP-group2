@@ -23,6 +23,16 @@ public class PassengerList
 	   passengers.remove(passenger);
 	}
 	
+	public Passenger getPassenger(Passenger passenger) {
+	   for (int i = 0; i < passengers.size(); i++)
+      {
+         if(passengers.get(i).equals(passenger)) {
+            return passengers.get(i);
+         }
+      }
+	   return null;
+	}
+	
 	public ArrayList<Passenger> getAllPassengers() {
 	   return passengers;
 	}
