@@ -76,10 +76,10 @@ public class TravelAgencyGUI extends JFrame
 			{
 				JComboBox cBox = (JComboBox)arg0.getSource();
 				
-				if(cBox.getItemAt(0) instanceof String && cBox.getItemAt(0))
+				/*if(cBox.getItemAt(0) instanceof String && cBox.getItemAt(0))
 				{
 					
-				}
+				}*/
 			}
 		
 		}
