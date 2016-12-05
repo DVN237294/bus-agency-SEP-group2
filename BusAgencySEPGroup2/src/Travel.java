@@ -20,6 +20,13 @@ public abstract class Travel
 		this.destinations = null;
 	}
 	
+	public void setBus(Bus bus) {
+	   this.bus = bus;
+	}
+	
+	public void setChauffeur(Chauffeur chauffeur) {
+	   this.chauffeur = chauffeur;
+	}
 	
 	public double getBasePrice()
 	{
