@@ -68,6 +68,7 @@ public class TravelAgency
 		}
 		addTourPassenger(tour, payingCustomer, passenger, price);
 	}
+	
 	public double getCustomerSuggestedPrice(Travel travel, Customer payingCustomer)
 	{
 		double price = travel.getBasePrice();
