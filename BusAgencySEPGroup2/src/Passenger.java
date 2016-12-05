@@ -1,19 +1,32 @@
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
-public class Passenger extends Customer
+public class Passenger
 {
-	private Date birthday;
+	private String name;
+	private int phoneNumber;
+	private LocalDateTime birthday;
 	private String email;
 	
-	public Passenger(String name, int phoneNumber, Date birthday)
+	public Passenger(String name, int phoneNumber, LocalDateTime birthday)
 	{
-		super(name,  phoneNumber);
+		this.name = name;
+		this.phoneNumber = phoneNumber;
 		this.birthday = birthday;
 		this.email = null;
 	}
 	
 
+	public String getName()
+	{
+		return name;
+	}
+	public int getPhoneNumber()
+	{
+		return phoneNumber;
+	}
+	
 	public String getEmail()
 	{
 		return email;
@@ -24,9 +37,13 @@ public class Passenger extends Customer
 		this.email = email;
 	}
 
-	public Date getBirthday()
+	public LocalDateTime getBirthday()
 	{
 		return birthday;
 	}
-
+	
+	public boolean equals(Passenger other)
+	{
+		return name.equals(other.getName()) && phoneNumber == other.getPhoneNumber();
+	}
 }
