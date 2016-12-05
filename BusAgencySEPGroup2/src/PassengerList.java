@@ -33,6 +33,16 @@ public class PassengerList
 	   return null;
 	}
 	
+	public Passenger getPassengerByName(String name) {
+      for (int i = 0; i < passengers.size(); i++)
+      {
+         if(passengers.get(i).getName().equals(name)) {
+            return passengers.get(i);
+         }
+      }
+      return null;
+   }
+	
 	public ArrayList<Passenger> getAllPassengers() {
 	   return passengers;
 	}
