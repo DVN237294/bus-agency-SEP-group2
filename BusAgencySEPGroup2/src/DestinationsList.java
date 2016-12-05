@@ -13,6 +13,10 @@ public class DestinationsList
    {
       destinations.add(destination);
    }
+   
+   public void delete(String destination) {
+      destinations.remove(destination);
+   }
 
    public String[] getAllDestinations()
    {
