@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-
 public class CustomerList
 {
 	private ArrayList<Customer> customers;
