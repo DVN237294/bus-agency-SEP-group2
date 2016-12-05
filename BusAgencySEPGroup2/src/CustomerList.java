@@ -54,4 +54,24 @@ public class CustomerList
 	{
 	   return customers.size();
 	}
+	
+	public Customer getCustomer(Customer customer) {
+	   for (int i = 0; i < customers.size(); i++)
+      {
+         if(customers.get(i).equals(customer)) {
+            return customers.get(i);
+         }
+      }
+	   return null;
+	}
+	
+	public Customer getCustomerByName(String name) {
+	   for (int i = 0; i < customers.size(); i++)
+      {
+         if(customers.get(i).getName().equals(name)) {
+            return customers.get(i);
+         }
+      }
+	   return null;
+	}
 }
