@@ -10,7 +10,16 @@ public class TravelAgency
 	private ChauffeurList chauffeurList;
 	private CustomerList customerList;
 	private TravelsList travelsList;
+	private DestinationsList destinationsList;
 
+	public TravelAgency()
+	{
+		this.busList = new BusList();
+		this.chauffeurList = new ChauffeurList();
+		this.customerList = new CustomerList();
+		this.travelsList = new TravelsList();
+		this.destinationsList = new DestinationsList();
+	}
 	public TravelAgency(BusList busList, ChauffeurList chauffeurList, CustomerList customerList, TravelsList travelsList)
 	{
 		this.busList = busList;
@@ -81,5 +90,8 @@ public class TravelAgency
 		}
 		return price;
 	}
-	
+	public String[] getAllDestinations()
+	{
+		return destinationsList.getAllDestinations();
+	}
 }
