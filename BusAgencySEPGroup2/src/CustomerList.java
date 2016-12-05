@@ -74,4 +74,8 @@ public class CustomerList
       }
 	   return null;
 	}
+	
+	public ArrayList<Customer> getAllCustomers() {
+	   return customers;
+	}
 }
