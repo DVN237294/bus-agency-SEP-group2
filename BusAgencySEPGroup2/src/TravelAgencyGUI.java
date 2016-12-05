@@ -1,5 +1,6 @@
 import java.awt.event.*;
 import java.awt.*;
+
 import javax.swing.*;
 
 public class TravelAgencyGUI extends JFrame
@@ -44,14 +45,14 @@ public class TravelAgencyGUI extends JFrame
 		toursNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		toursNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		String[] destinations = agency.getAllDestinations();
-		/*String[] temp = new String[destinations.length + 1];
+		String[] temp = new String[destinations.length + 1];
 		temp[0] = "Destination";
 		for(int i = 0, index = 1; i < destinations.length;i++)
-			temp[index++] = destinations[i];*/
+			temp[index++] = destinations[i];
 			
-		JComboBox destiBox = new JComboBox<String>(destinations);
-		destiBox.setName("Destination");
-		toursNorthPanel.add(destiBox);
+		JComboBox destiBox = new JComboBox<String>(temp);
+		destiBox.addFocusListener(new DropDownFocusListener());
+		toursNorthPanel.add(destiBox);	
 		tabPanels[0].setLayout(new BorderLayout());
 		tabPanels[0].add(toursNorthPanel, BorderLayout.NORTH);
 
@@ -64,6 +65,33 @@ public class TravelAgencyGUI extends JFrame
 		{
 			TravelAgencyGUI.this.dispose();
 		}
+	}
+	
+	class DropDownFocusListener implements FocusListener
+	{
+		@Override
+		public void focusGained(FocusEvent arg0)
+		{
+			if(arg0.getSource() instanceof JComboBox)
+			{
+				JComboBox cBox = (JComboBox)arg0.getSource();
+				
+				if(cBox.getItemAt(0) instanceof String && cBox.getItemAt(0))
+				{
+					
+				}
+			}
+		
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
 	}
 
 }
