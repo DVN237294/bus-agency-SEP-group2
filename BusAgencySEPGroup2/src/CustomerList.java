@@ -3,12 +3,12 @@ import java.util.ArrayList;
 public class CustomerList
 {
 	private ArrayList<Customer> customers;
-	private int frequentCustomerThreshhold;
+	private int frequentCustomerThreshHold;
 	
 	public CustomerList()
 	{
 		this.customers = new ArrayList<Customer>();
-		frequentCustomerThreshhold = Integer.MAX_VALUE;
+		frequentCustomerThreshHold = Integer.MAX_VALUE;
 	}
 	public Customer addCustomer(String name, int phoneNumber)
 	{
@@ -39,12 +39,12 @@ public class CustomerList
 	
 	public boolean isFrequentCustomer(Customer customer)
 	{
-		return customer.getReservationCount() >= frequentCustomerThreshhold;
+		return customer.getReservationCount() >= frequentCustomerThreshHold;
 	}
 	
 	public void setFrequentCustomerThreshhold(int reservationCount)
 	{
-		frequentCustomerThreshhold = reservationCount;
+		frequentCustomerThreshHold = reservationCount;
 	}
 	
 	public int getTotalNumberOfCustomers()
