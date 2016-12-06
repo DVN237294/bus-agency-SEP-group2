@@ -32,7 +32,9 @@ public class BusList
       return temp;
    }
    
-   public ArrayList<Bus> getAllBusses() {
-      return buses;
+   public Bus[] getAllBusses() {
+      Bus[] temp = new Bus[buses.size()];
+      buses.toArray(temp);
+      return temp;
    }
 }
