@@ -66,7 +66,7 @@ public class TravelAgencyGUI extends JFrame
 		
 		//Busses pane
 		JPanel bussesNorthPanel = new JPanel();
-      bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
+      bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Reserve"));
       bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
       destinations = agency.getAllDestinations();
       destiBox = new JExtendedComboBox<String>(destinations);
