@@ -24,6 +24,7 @@ public class BussesPane extends JPanel
    
    JPanel bussesNorthPanel = new JPanel();
    JPanel bussesWestPanel = new JPanel();
+   JPanel bussesSouthPanel = new JPanel();
    
 	public BussesPane(TravelAgency agency)
 	{
@@ -50,11 +51,12 @@ public class BussesPane extends JPanel
 	      bussesNorthPanel.add(chauffeurBox);
 	      bussesNorthPanel.add(searchButton);
 	      bussesWestPanel.add(busList);
-         bussesWestPanel.add(deleteButton);
+         bussesSouthPanel.add(deleteButton);
 	      searchButton.addActionListener(new SearchAllListener());
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
 	      this.add(bussesWestPanel, BorderLayout.WEST);
+	      this.add(bussesSouthPanel, BorderLayout.SOUTH);
 	}
 	
 	private class SearchAllListener implements ActionListener
