@@ -65,7 +65,10 @@ public class Bus
    @Override
    public String toString()
    {
-      return make +", " + model + ", " + licensePlate + ", " + maxCapacity;
+	   if(model == null && licensePlate == null && maxCapacity == Integer.MIN_VALUE)
+		   return make;
+	   
+      return make + ", " + model + ", " + licensePlate + ", " + maxCapacity;
    }
 
 }

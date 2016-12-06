@@ -101,6 +101,9 @@ public class Chauffeur
 	@Override
 	public String toString()
 	{
+		if(lastName == null && chauffeurID == Integer.MIN_VALUE)
+			return firstName;
+		
 		return lastName +", " + firstName + " (" + chauffeurID + ")";
 	}
 	

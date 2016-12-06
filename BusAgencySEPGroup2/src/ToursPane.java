@@ -6,11 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class ToursPane extends JPanel
 {
@@ -31,7 +34,7 @@ public class ToursPane extends JPanel
 		// Tour pane
 		toursNorthPanel = new JPanel();
 		toursCenterPanel = new JPanel();
-		centerWestList = new JList<Tour>();
+		centerWestList = new JList<Tour>(new DefaultListModel<Tour>());
 		centerWestList.setVisible(false);
 		centerEastJTextArea = new JTextArea();
 		centerEastJTextArea.setVisible(false);
@@ -48,8 +51,10 @@ public class ToursPane extends JPanel
 		destinationBox.setPrototypeDisplayValue("Destination");
 		destinationBox.setDefaultDisplayedItem("Destination");
 		chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
-		busBox = new JExtendedComboBox<>(agency.getAllBusses());
+		chauffeurBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE)); //is this cheating?
 		
+		busBox = new JExtendedComboBox<>(agency.getAllBusses());
+		busBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE));
 		toursNorthPanel.add(destinationBox);
 		toursNorthPanel.add(chauffeurBox);
 		toursNorthPanel.add(busBox);
@@ -67,6 +72,10 @@ public class ToursPane extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			// TODO Auto-generated method stub
+
+			destinationBox.reset();
+			chauffeurBox.reset();
+			busBox.reset();
 			
 		}
 		
@@ -79,6 +88,25 @@ public class ToursPane extends JPanel
 		{
 			// TODO Auto-generated method stub
 			centerWestList.setVisible(true);
+			Travel[] searchResult = agency.searchTravel(destinationBox.getSelectedItem(), chauffeurBox.getSelectedItem(), busBox.getSelectedItem());
+			DefaultListModel<Tour> listModel = (DefaultListModel<Tour>)centerWestList.getModel();
+			listModel.clear();
+			for(Travel travel : searchResult)
+			{
+				if(travel instanceof Tour)
+					listModel.addElement((Tour)travel);
+			}
+			
+		}
+		
+	}
+	private class ListSelection implements ListSelectionListener
+	{
+
+		@Override
+		public void valueChanged(ListSelectionEvent arg0)
+		{
+			// TODO Auto-generated method stub
 		}
 		
 	}

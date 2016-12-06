@@ -37,7 +37,7 @@ public class BussesPane extends JPanel
 	      busBox = new JExtendedComboBox<>(agency.getAllBusses());
 	      destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
 	      destiBox.setPrototypeDisplayValue("Destination");
-	      destiBox.setDefaultDisplayedValue("Destination");
+	      destiBox.setDefaultDisplayedItem("Destination");
 	      chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
 	      busList = new JList<Bus>(agency.getAllBusses());
 	      busList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
