@@ -36,7 +36,7 @@ public class BussesPane extends JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-               bussesEastPanel.add(busList);  
+               bussesEastPanel.add(busList);
             }
          });
 	      
