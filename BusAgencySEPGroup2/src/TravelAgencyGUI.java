@@ -52,10 +52,9 @@ public class TravelAgencyGUI extends JFrame
 		tabbedPane.setComponentAt(2, tabPanels[2]);
 		
 	   setDefaultCloseOperation(EXIT_ON_CLOSE);
-	   setVisible(true);
 	   setSize(960, 540);
 		repaint();
-		
+		setVisible(true);
 		//i dont get it
 
 	}
