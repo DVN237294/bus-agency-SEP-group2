@@ -14,8 +14,10 @@ public class BussesPane extends JPanel
 		this.agency = agency;
 		
 		JPanel bussesNorthPanel = new JPanel();
+		JPanel bussesWestPanel = new JPanel();
 	      bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 	      bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+	      bussesWestPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 	      JExtendedComboBox<Bus> busBox = new JExtendedComboBox<>(agency.getAllBusses());
 	      
 	      JExtendedComboBox<String> destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
