@@ -123,6 +123,7 @@ public class BussesPane extends JPanel
          fullBusList.setVisible(true);
          deleteButton.setVisible(true);
          busList.setVisible(false);
+         infoBusList.setVisible(false);
       }
       
    }
