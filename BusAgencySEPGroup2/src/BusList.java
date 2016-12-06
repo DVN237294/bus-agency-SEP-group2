@@ -45,8 +45,8 @@ public class BusList
       for (int i = 0; i < buses.size(); i++)
       {
          if (buses.get(i).getMake().equals(make)
-               && buses.get(i).getModel().equals(model)
-               && buses.get(i).getLicensePlate().equals(licensePlate))
+               || buses.get(i).getModel().equals(model)
+               || buses.get(i).getLicensePlate().equals(licensePlate))
          {
             return buses.get(i);
          }
