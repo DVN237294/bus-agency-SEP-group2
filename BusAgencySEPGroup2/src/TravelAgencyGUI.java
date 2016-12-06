@@ -47,8 +47,6 @@ public class TravelAgencyGUI extends JFrame
 		for(int i = 0; i < tabNames.length; i++)
 		{
             tabbedPane.add(tabNames[i], new JLabel(tabNames[i]));
-            tabPanels[i] = new JPanel();
-            tabbedPane.setComponentAt(i, tabPanels[i]);
 		}
 		
 		
@@ -66,6 +64,7 @@ public class TravelAgencyGUI extends JFrame
 		toursNorthPanel.add(chauffeurBox);
 		tabPanels[0].setLayout(new BorderLayout());
 		tabPanels[0].add(toursNorthPanel, BorderLayout.NORTH);
+		tabbedPane.setComponentAt(0, tabPanels[0]);
 		
 		//Busses pane
 		JPanel bussesNorthPanel = new JPanel();
@@ -84,7 +83,11 @@ public class TravelAgencyGUI extends JFrame
       tabPanels[2].setLayout(new BorderLayout());
       tabPanels[2].add(bussesNorthPanel, BorderLayout.NORTH);
 		
+		tabPanels[2] = new BussesPane(agency);
+		tabbedPane.setComponentAt(2, tabPanels[2]);
 		repaint();
+		
+		//i dont get it
 
 	}
 
