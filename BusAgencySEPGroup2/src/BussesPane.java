@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
@@ -25,10 +26,12 @@ public class BussesPane extends JPanel
 	      destiBox.setDefaultDisplayedValue("Destination");
 	      JExtendedComboBox<Chauffeur> chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
 	      JList<Bus> busList = new JList<Bus>(agency.getAllBusses());
+	      JButton searchButton = new JButton("Search");
 	      
 	      bussesNorthPanel.add(destiBox);   
 	      bussesNorthPanel.add(busBox);
 	      bussesNorthPanel.add(chauffeurBox);
+	      bussesNorthPanel.add(searchButton);
 	      bussesEastPanel.add(busList);
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
