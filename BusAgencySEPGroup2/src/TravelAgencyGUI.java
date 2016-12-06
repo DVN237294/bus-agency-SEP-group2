@@ -57,6 +57,8 @@ public class TravelAgencyGUI extends JFrame
 		//Busses pane
 		tabPanels[2] = new BussesPane(agency);
 		tabbedPane.setComponentAt(2, tabPanels[2]);
+		
+		
 		repaint();
 		
 		//i dont get it
