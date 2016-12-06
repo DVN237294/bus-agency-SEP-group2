@@ -8,9 +8,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
-
-import org.omg.CORBA.PRIVATE_MEMBER;
+import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class BussesPane extends JPanel
 {
@@ -23,6 +23,7 @@ public class BussesPane extends JPanel
    private JExtendedComboBox<Chauffeur> chauffeurBox;
    private JButton searchButton;
    private JList<Bus> busList;
+   private JTextArea infoBusList;
    private JButton deleteButton;
 
    JPanel bussesNorthPanel = new JPanel();
@@ -65,6 +66,8 @@ public class BussesPane extends JPanel
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
       busList = new JList<Bus>();
+      infoBusList = new JTextArea();
+      infoBusList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
 
@@ -76,7 +79,9 @@ public class BussesPane extends JPanel
       bussesWestPanel.add(busList);
       bussesNorthPanel.add(searchButton);
       bussesSouthPanel.add(deleteButton);
+      bussesWestPanel.add(infoBusList);
       searchButton.addActionListener(new SearchAllListener());
+      busList.addListSelectionListener(new InformationListener());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
@@ -95,6 +100,20 @@ public class BussesPane extends JPanel
          busList.setModel(model);
          busList.setVisible(true);
          deleteButton.setVisible(true);
+      }
+
+   }
+
+   private class InformationListener implements ListSelectionListener
+   {
+
+      @Override
+      public void valueChanged(ListSelectionEvent e)
+      {
+         infoBusList.setText(busList.getSelectedValue().toString());
+         infoBusList.setEditable(false);
+         System.out.println("YES IT WORKED");
+         infoBusList.setVisible(true);
       }
 
    }
