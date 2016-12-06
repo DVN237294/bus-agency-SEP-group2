@@ -5,7 +5,8 @@ import javax.swing.*;
 
 public class TravelAgencyGUI extends JFrame
 {
-	private TravelAgency agency;
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
 	private JMenuBar menuBar;
 	private JMenu fileMenu;
 	private JMenuItem exitItem;
