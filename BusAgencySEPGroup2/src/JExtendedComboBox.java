@@ -4,23 +4,48 @@ import java.awt.event.*;
 public class JExtendedComboBox<T> extends JComboBox<T>
 {
 	private static final long serialVersionUID = 1L;
-	private T defaultDisplayedValue;
+	private T defaultDisplayedItem;
 	public JExtendedComboBox(T[] arg0)
 	{
 		super(arg0);
 		addFocusListener(new FocusListen());
 	}
 	
-	public T getDefaultDisplayedValue()
+	public JExtendedComboBox()
 	{
-		return defaultDisplayedValue;
+		super();
+		addFocusListener(new FocusListen());
 	}
-	public void setDefaultDisplayedValue(T input)
+	
+	public T getDefaultDisplayedItem()
 	{
-		defaultDisplayedValue = input;
-		if(getItemAt(0) == null || !getItemAt(0).equals(defaultDisplayedValue))
+		return defaultDisplayedItem;
+	}
+	public void setDefaultDisplayedItem(T input)
+	{
+		defaultDisplayedItem = input;
+		if(getItemAt(0) == null || !getItemAt(0).equals(defaultDisplayedItem))
 		{
-			insertItemAt(defaultDisplayedValue, 0);
+			insertItemAt(defaultDisplayedItem, 0);
+			setSelectedIndex(0);
+		}
+	}
+	@Override 
+	public T getSelectedItem()
+	{
+		return super.getItemAt(super.getSelectedIndex());
+	}
+	public boolean isDefaultItemSelected()
+	{
+		return getSelectedItem().equals(getDefaultDisplayedItem());
+	}
+	public void reset()
+	{
+		if(defaultDisplayedItem != null)
+		{
+			if(getItemAt(0) == null || !getItemAt(0).equals(defaultDisplayedItem))
+				insertItemAt(defaultDisplayedItem, 0);
+
 			setSelectedIndex(0);
 		}
 	}
@@ -31,7 +56,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 		public void focusGained(FocusEvent arg0)
 		{
 			// TODO Auto-generated method stub
-			if(getItemAt(0) != null && getItemAt(0).equals(defaultDisplayedValue))
+			if(getItemAt(0) != null && getItemAt(0).equals(defaultDisplayedItem))
 			{
 				removeItemAt(0);
 			}
@@ -47,7 +72,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 			// TODO Auto-generated method stub
 			if(getItemCount() == 0)
 			{
-				insertItemAt(defaultDisplayedValue, 0);
+				insertItemAt(defaultDisplayedItem, 0);
 				setSelectedIndex(0);				
 			}
 		}
