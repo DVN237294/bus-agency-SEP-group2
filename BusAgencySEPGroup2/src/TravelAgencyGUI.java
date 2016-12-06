@@ -26,12 +26,6 @@ public class TravelAgencyGUI extends JFrame
 		agency.addBus("Volkswagen", "jdsskdj", "12323AB", 50);
 		agency.addBus("Volvo", "jdj", "1234", 20);
 		
-		
-		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setVisible(true);
-		setSize(960, 540);
-		
 		//Menu bar
 		menuBar = new JMenuBar();
 		fileMenu = new JMenu("File");
@@ -57,7 +51,9 @@ public class TravelAgencyGUI extends JFrame
 		tabPanels[2] = new BussesPane(agency);
 		tabbedPane.setComponentAt(2, tabPanels[2]);
 		
-		
+	   setDefaultCloseOperation(EXIT_ON_CLOSE);
+	   setVisible(true);
+	   setSize(960, 540);
 		repaint();
 		
 		//i dont get it
