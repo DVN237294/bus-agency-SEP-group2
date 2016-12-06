@@ -53,7 +53,6 @@ public class TravelAgencyGUI extends JFrame
 		
 	   setDefaultCloseOperation(EXIT_ON_CLOSE);
 	   setSize(960, 540);
-		repaint();
 		setVisible(true);
 		//i dont get it
 
