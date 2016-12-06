@@ -67,7 +67,7 @@ public class BussesPane extends JPanel
       chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
-      busList = new JList<Bus>();
+      busList = new JList<Bus>(new DefaultListModel<Bus>());
       fullBusList = new JList<Bus>(agency.getAllBusses());
       showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
@@ -102,10 +102,9 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         DefaultListModel<Bus> model = new DefaultListModel<>();
+         DefaultListModel<Bus> model = (DefaultListModel<Bus>)busList.getModel();
          model.addElement(agency.getBus(makeBox.getSelectedItem(),
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem()));
-         busList.setModel(model);
          busList.setVisible(true);
          deleteButton.setVisible(true);
          fullBusList.setVisible(false);
@@ -137,6 +136,7 @@ public class BussesPane extends JPanel
          infoBusList.setText(busList.getSelectedValue().toString());
          infoBusList.setEditable(false);
          infoBusList.setVisible(true);
+         System.out.println("yep");
       }
 
    }
