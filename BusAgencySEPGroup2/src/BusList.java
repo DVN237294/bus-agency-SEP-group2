@@ -31,4 +31,8 @@ public class BusList
       
       return temp;
    }
+   
+   public ArrayList<Bus> getAllBusses() {
+      return buses;
+   }
 }
