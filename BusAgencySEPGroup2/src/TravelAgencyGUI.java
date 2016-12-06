@@ -64,6 +64,21 @@ public class TravelAgencyGUI extends JFrame
 		tabPanels[0].setLayout(new BorderLayout());
 		tabPanels[0].add(toursNorthPanel, BorderLayout.NORTH);
 		
+		//Busses pane
+		JPanel bussesNorthPanel = new JPanel();
+      toursNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
+      toursNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      destinations = agency.getAllDestinations();
+      destiBox = new JExtendedComboBox<String>(destinations);
+      destiBox.setPrototypeDisplayValue("Destination");
+      destiBox.setDefaultDisplayedValue("Destination");
+      chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
+      
+      toursNorthPanel.add(destiBox);   
+      toursNorthPanel.add(chauffeurBox);
+      tabPanels[2].setLayout(new BorderLayout());
+      tabPanels[2].add(bussesNorthPanel, BorderLayout.NORTH);
+		
 		repaint();
 
 	}
