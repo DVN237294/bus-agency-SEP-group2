@@ -22,7 +22,9 @@ public class BussesPane extends JPanel
    private JExtendedComboBox<String> licensePlateBox;
    private JExtendedComboBox<Chauffeur> chauffeurBox;
    private JButton searchButton;
+   private JButton showAllBussesButton;
    private JList<Bus> busList;
+   private JList<Bus> fullBusList;
    private JTextArea infoBusList;
    private JButton deleteButton;
 
@@ -66,7 +68,10 @@ public class BussesPane extends JPanel
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
       busList = new JList<Bus>();
+      fullBusList = new JList<Bus>(agency.getAllBusses());
+      showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
+      fullBusList.setVisible(false);
       infoBusList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
@@ -76,19 +81,22 @@ public class BussesPane extends JPanel
       bussesNorthPanel.add(makeBox);
       bussesNorthPanel.add(modelBox);
       bussesNorthPanel.add(licensePlateBox);
+      bussesWestPanel.add(fullBusList);
       bussesWestPanel.add(busList);
       bussesNorthPanel.add(searchButton);
+      bussesNorthPanel.add(showAllBussesButton);
       bussesSouthPanel.add(deleteButton);
       bussesWestPanel.add(infoBusList);
-      searchButton.addActionListener(new SearchAllListener());
+      searchButton.addActionListener(new SearchListener());
       busList.addListSelectionListener(new InformationListener());
+      showAllBussesButton.addActionListener(new SearchAllListener());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
       this.add(bussesSouthPanel, BorderLayout.SOUTH);
    }
 
-   private class SearchAllListener implements ActionListener
+   private class SearchListener implements ActionListener
    {
 
       @Override
@@ -100,8 +108,22 @@ public class BussesPane extends JPanel
          busList.setModel(model);
          busList.setVisible(true);
          deleteButton.setVisible(true);
+         fullBusList.setVisible(false);
       }
 
+   }
+   
+   private class SearchAllListener implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         fullBusList.setVisible(true);
+         deleteButton.setVisible(true);
+         busList.setVisible(false);
+      }
+      
    }
 
    private class InformationListener implements ListSelectionListener
