@@ -17,6 +17,15 @@ public class TravelAgencyGUI extends JFrame
 	{
 		super("VIA Bus");
 		agency = new TravelAgency();
+		
+		//Dummy data, to test layout:
+		agency.addDestination("xyz");
+		agency.addDestination("abcd");
+		agency.addChauffeur("Hans", "Hansen", 666);
+		agency.addChauffeur("Afonso", "Taborda", 999);
+		
+		
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setSize(960, 540);
@@ -45,16 +54,17 @@ public class TravelAgencyGUI extends JFrame
 		toursNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		toursNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		String[] destinations = agency.getAllDestinations();
-		String[] temp = new String[destinations.length + 1];
-		temp[0] = "Destination";
-		for(int i = 0, index = 1; i < destinations.length;i++)
-			temp[index++] = destinations[i];
-			
-		JComboBox destiBox = new JComboBox<String>(temp);
-		destiBox.addFocusListener(new DropDownFocusListener());
+		JExtendedComboBox<String> destiBox = new JExtendedComboBox<String>(destinations);
+		destiBox.setPrototypeDisplayValue("Destination");
+		destiBox.setDefaultDisplayedValue("Destination");
+		JExtendedComboBox<Chauffeur> chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
+		
 		toursNorthPanel.add(destiBox);	
+		toursNorthPanel.add(chauffeurBox);
 		tabPanels[0].setLayout(new BorderLayout());
 		tabPanels[0].add(toursNorthPanel, BorderLayout.NORTH);
+		
+		repaint();
 
 	}
 
@@ -66,32 +76,4 @@ public class TravelAgencyGUI extends JFrame
 			TravelAgencyGUI.this.dispose();
 		}
 	}
-	
-	class DropDownFocusListener implements FocusListener
-	{
-		@Override
-		public void focusGained(FocusEvent arg0)
-		{
-			if(arg0.getSource() instanceof JComboBox)
-			{
-				JComboBox cBox = (JComboBox)arg0.getSource();
-				
-				/*if(cBox.getItemAt(0) instanceof String && cBox.getItemAt(0))
-				{
-					
-				}*/
-			}
-		
-		}
-
-		@Override
-		public void focusLost(FocusEvent arg0)
-		{
-			// TODO Auto-generated method stub
-			
-		}
-		
-		
-	}
-
 }

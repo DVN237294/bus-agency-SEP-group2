@@ -98,5 +98,10 @@ public class Chauffeur
 		
 		return false;
 	}
+	@Override
+	public String toString()
+	{
+		return lastName +", " + firstName + " (" + chauffeurID + ")";
+	}
 	
 }

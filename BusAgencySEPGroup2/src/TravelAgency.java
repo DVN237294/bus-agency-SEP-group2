@@ -93,4 +93,16 @@ public class TravelAgency
 	{
 		return destinationsList.getAllDestinations();
 	}
+	public void addDestination(String destination)
+	{
+		destinationsList.add(destination);
+	}
+	public Chauffeur[] getAllChauffeurs()
+	{
+		return chauffeurList.getAllChauffeurs();
+	}
+	public void addChauffeur(String firstName, String lastName, int chauffeurID)
+	{
+		chauffeurList.addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
+	}
 }
