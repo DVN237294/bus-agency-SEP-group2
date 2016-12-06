@@ -61,5 +61,11 @@ public class Bus
    {
       return other.getLicensePlate().equals(this.licensePlate);
    }
+   
+   @Override
+   public String toString()
+   {
+      return make +", " + model + ", " + licensePlate + ", " + maxCapacity;
+   }
 
 }
