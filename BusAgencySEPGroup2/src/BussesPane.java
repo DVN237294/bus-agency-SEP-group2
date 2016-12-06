@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 
@@ -38,6 +39,7 @@ public class BussesPane extends JPanel
 	      destiBox.setDefaultDisplayedValue("Destination");
 	      chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
 	      busList = new JList<Bus>(agency.getAllBusses());
+	      busList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	      searchButton = new JButton("Search");
 	      deleteButton = new JButton("Delete");
 	      
@@ -45,13 +47,13 @@ public class BussesPane extends JPanel
 	      bussesNorthPanel.add(busBox);
 	      bussesNorthPanel.add(chauffeurBox);
 	      bussesNorthPanel.add(searchButton);
-	      searchButton.addActionListener(new SearchListener());
+	      searchButton.addActionListener(new SearchAllListener());
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
 	      this.add(bussesEastPanel, BorderLayout.EAST);
 	}
 	
-	private class SearchListener implements ActionListener
+	private class SearchAllListener implements ActionListener
 	{
 
       @Override
