@@ -101,6 +101,9 @@ public class TravelAgency
 	{
 		return chauffeurList.getAllChauffeurs();
 	}
+	public Bus[] getAllBusses() {
+	   return busList.getAllBusses();
+	}
 	public void addChauffeur(String firstName, String lastName, int chauffeurID)
 	{
 		chauffeurList.addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
