@@ -68,6 +68,7 @@ public class TravelAgencyGUI extends JFrame
       
       bussesNorthPanel.add(destiBox);   
       bussesNorthPanel.add(busBox);
+      bussesNorthPanel.add(chauffeurBox);
       tabPanels[2].setLayout(new BorderLayout());
       tabPanels[2].add(bussesNorthPanel, BorderLayout.NORTH);
 		*/
