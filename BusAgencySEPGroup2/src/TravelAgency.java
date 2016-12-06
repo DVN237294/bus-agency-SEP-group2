@@ -122,4 +122,8 @@ public class TravelAgency
       chauffeurList
             .addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
    }
+   
+   public void addBus(String make, String model, String licensePlate, int maxCapacity) {
+      busList.addBus(new Bus(make, model, licensePlate, maxCapacity));
+   }
 }
