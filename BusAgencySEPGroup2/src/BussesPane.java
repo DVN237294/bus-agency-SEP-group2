@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 public class BussesPane extends JPanel
 {
    private static final long serialVersionUID = 1L;
@@ -29,16 +31,6 @@ public class BussesPane extends JPanel
 	      JExtendedComboBox<Chauffeur> chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
 	      JList<Bus> busList = new JList<Bus>(agency.getAllBusses());
 	      JButton searchButton = new JButton("Search");
-	      
-	      searchButton.addActionListener(new ActionListener()
-         {
-            
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-               bussesEastPanel.add(busList);
-            }
-         });
 	      
 	      bussesNorthPanel.add(destiBox);   
 	      bussesNorthPanel.add(busBox);
