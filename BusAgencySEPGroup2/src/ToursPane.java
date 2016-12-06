@@ -9,6 +9,7 @@ public class ToursPane extends JPanel
 	private TravelAgency agency;
 	public ToursPane(TravelAgency agency)
 	{
+		super();
 		this.agency = agency;
 		// Tour pane
 		JPanel toursNorthPanel = new JPanel();
