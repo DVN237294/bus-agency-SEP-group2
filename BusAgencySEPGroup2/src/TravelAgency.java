@@ -116,6 +116,10 @@ public class TravelAgency
    {
       return busList.getAllBusses();
    }
+   
+   public Bus getBus(String make, String model, String licensePlate) {
+      return busList.getBus(make, model, licensePlate);
+   }
 
    public void addChauffeur(String firstName, String lastName, int chauffeurID)
    {
