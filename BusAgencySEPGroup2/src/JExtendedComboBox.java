@@ -1,5 +1,4 @@
 import javax.swing.JComboBox;
-
 import java.awt.event.*;
 
 public class JExtendedComboBox<T> extends JComboBox<T>

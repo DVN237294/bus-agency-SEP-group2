@@ -62,7 +62,6 @@ public class Bus
       return other.getLicensePlate().equals(this.licensePlate);
    }
    
-   @Override
    public String toString()
    {
 	   if(model == null && licensePlate == null && maxCapacity == Integer.MIN_VALUE)
