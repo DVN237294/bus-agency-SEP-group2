@@ -16,7 +16,9 @@ public class BussesPane extends JPanel
    private static final long serialVersionUID = 1L;
    private TravelAgency agency;
    private JExtendedComboBox<String> destiBox;
-   private JExtendedComboBox<Bus> busBox;
+   private JExtendedComboBox<String> makeBox;
+   private JExtendedComboBox<String> modelBox;
+   private JExtendedComboBox<String> licensePlateBox;
    private JExtendedComboBox<Chauffeur> chauffeurBox;
    private JButton searchButton;
    private JList<Bus> busList;
@@ -30,14 +32,34 @@ public class BussesPane extends JPanel
 	{
 		super();
 		this.agency = agency;
+		Bus[] allBusses = agency.getAllBusses();
+		
+		String[] makeArray = new String[allBusses.length];
+		String[] modelArray = new String[allBusses.length];
+		String[] licensePlateArray = new String[allBusses.length];
+		
+		   for (int i = 0; i < allBusses.length; i++)
+         {
+            makeArray[i] = allBusses[i].getMake();
+            modelArray[i] = allBusses[i].getModel();
+            licensePlateArray[i] = allBusses[i].getLicensePlate();
+         }
 		
 	      bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 	      bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 	      bussesWestPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-	      busBox = new JExtendedComboBox<>(agency.getAllBusses());
 	      destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
 	      destiBox.setPrototypeDisplayValue("Destination");
 	      destiBox.setDefaultDisplayedValue("Destination");
+	      makeBox = new JExtendedComboBox<>(makeArray);
+	      makeBox.setPrototypeDisplayValue("Make");
+	      makeBox.setDefaultDisplayedValue("Make");
+	      modelBox = new JExtendedComboBox<>(modelArray);
+	      modelBox.setPrototypeDisplayValue("Model");
+	      modelBox.setDefaultDisplayedValue("Model");
+	      licensePlateBox = new JExtendedComboBox<>(licensePlateArray);
+	      licensePlateBox.setPrototypeDisplayValue("License Plate");
+	      licensePlateBox.setDefaultDisplayedValue("License Plate");
 	      chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
 	      busList = new JList<Bus>(agency.getAllBusses());
 	      busList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -46,11 +68,13 @@ public class BussesPane extends JPanel
 	      busList.setVisible(false);
 	      deleteButton.setVisible(false);
 	      
-	      bussesNorthPanel.add(destiBox);   
-	      bussesNorthPanel.add(busBox);
+	      bussesNorthPanel.add(destiBox);
 	      bussesNorthPanel.add(chauffeurBox);
-	      bussesNorthPanel.add(searchButton);
+	      bussesNorthPanel.add(makeBox);
+	      bussesNorthPanel.add(modelBox);
+	      bussesNorthPanel.add(licensePlateBox);
 	      bussesWestPanel.add(busList);
+	      bussesNorthPanel.add(searchButton);
          bussesSouthPanel.add(deleteButton);
 	      searchButton.addActionListener(new SearchAllListener());
 	      this.setLayout(new BorderLayout());
