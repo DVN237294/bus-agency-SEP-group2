@@ -24,6 +24,7 @@ public class TravelAgencyGUI extends JFrame
 		agency.addDestination("abcd");
 		agency.addChauffeur("Hans", "Hansen", 666);
 		agency.addChauffeur("Afonso", "Taborda", 999);
+		agency.addBus("Volkswagen", "jdsskdj", "12323AB", 50);
 		
 		
 		
