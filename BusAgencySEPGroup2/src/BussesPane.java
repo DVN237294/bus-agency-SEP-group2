@@ -23,7 +23,7 @@ public class BussesPane extends JPanel
    private JButton deleteButton;
    
    JPanel bussesNorthPanel = new JPanel();
-   JPanel bussesEastPanel = new JPanel();
+   JPanel bussesWestPanel = new JPanel();
    
 	public BussesPane(TravelAgency agency)
 	{
@@ -32,7 +32,7 @@ public class BussesPane extends JPanel
 		
 	      bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 	      bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-	      bussesEastPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+	      bussesWestPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 	      busBox = new JExtendedComboBox<>(agency.getAllBusses());
 	      destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
 	      destiBox.setPrototypeDisplayValue("Destination");
@@ -42,15 +42,19 @@ public class BussesPane extends JPanel
 	      busList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	      searchButton = new JButton("Search");
 	      deleteButton = new JButton("Delete");
+	      busList.setVisible(false);
+	      deleteButton.setVisible(false);
 	      
 	      bussesNorthPanel.add(destiBox);   
 	      bussesNorthPanel.add(busBox);
 	      bussesNorthPanel.add(chauffeurBox);
 	      bussesNorthPanel.add(searchButton);
+	      bussesWestPanel.add(busList);
+         bussesWestPanel.add(deleteButton);
 	      searchButton.addActionListener(new SearchAllListener());
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
-	      this.add(bussesEastPanel, BorderLayout.EAST);
+	      this.add(bussesWestPanel, BorderLayout.WEST);
 	}
 	
 	private class SearchAllListener implements ActionListener
@@ -59,8 +63,8 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         bussesEastPanel.add(busList);
-         bussesEastPanel.add(deleteButton);
+         busList.setVisible(true);
+         deleteButton.setVisible(true);
       }
 	   
 	}
