@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -28,11 +30,20 @@ public class BussesPane extends JPanel
 	      JList<Bus> busList = new JList<Bus>(agency.getAllBusses());
 	      JButton searchButton = new JButton("Search");
 	      
+	      searchButton.addActionListener(new ActionListener()
+         {
+            
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+               bussesEastPanel.add(busList);  
+            }
+         });
+	      
 	      bussesNorthPanel.add(destiBox);   
 	      bussesNorthPanel.add(busBox);
 	      bussesNorthPanel.add(chauffeurBox);
 	      bussesNorthPanel.add(searchButton);
-	      bussesEastPanel.add(busList);
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
 	      this.add(bussesEastPanel, BorderLayout.EAST);
