@@ -112,7 +112,6 @@ public class BussesPane extends JPanel
       {
          infoBusList.setText(busList.getSelectedValue().toString());
          infoBusList.setEditable(false);
-         System.out.println("YES IT WORKED");
          infoBusList.setVisible(true);
       }
 
