@@ -24,11 +24,12 @@ public class BussesPane extends JPanel
 	      destiBox.setPrototypeDisplayValue("Destination");
 	      destiBox.setDefaultDisplayedValue("Destination");
 	      JExtendedComboBox<Chauffeur> chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
-	      
+	      JList<Bus> busList = new JList<Bus>(agency.getAllBusses());
 	      
 	      bussesNorthPanel.add(destiBox);   
 	      bussesNorthPanel.add(busBox);
 	      bussesNorthPanel.add(chauffeurBox);
+	      bussesWestPanel.add(busList);
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
 	}
