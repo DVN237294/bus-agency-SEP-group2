@@ -1,6 +1,6 @@
 import javax.swing.JComboBox;
-
 import java.awt.event.*;
+
 public class JExtendedComboBox<T> extends JComboBox<T>
 {
 	private static final long serialVersionUID = 1L;
