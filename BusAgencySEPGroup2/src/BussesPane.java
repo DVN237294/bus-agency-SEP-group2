@@ -6,7 +6,8 @@ import javax.swing.JPanel;
 
 public class BussesPane extends JPanel
 {
-	private TravelAgency agency;
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
 	public BussesPane(TravelAgency agency)
 	{
 		super();
