@@ -15,10 +15,10 @@ public class BussesPane extends JPanel
 		this.agency = agency;
 		
 		JPanel bussesNorthPanel = new JPanel();
-		JPanel bussesWestPanel = new JPanel();
+		JPanel bussesEastPanel = new JPanel();
 	      bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 	      bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-	      bussesWestPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+	      bussesEastPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 	      JExtendedComboBox<Bus> busBox = new JExtendedComboBox<>(agency.getAllBusses());
 	      JExtendedComboBox<String> destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
 	      destiBox.setPrototypeDisplayValue("Destination");
@@ -29,8 +29,9 @@ public class BussesPane extends JPanel
 	      bussesNorthPanel.add(destiBox);   
 	      bussesNorthPanel.add(busBox);
 	      bussesNorthPanel.add(chauffeurBox);
-	      bussesWestPanel.add(busList);
+	      bussesEastPanel.add(busList);
 	      this.setLayout(new BorderLayout());
 	      this.add(bussesNorthPanel, BorderLayout.NORTH);
+	      this.add(bussesEastPanel, BorderLayout.EAST);
 	}
 }
