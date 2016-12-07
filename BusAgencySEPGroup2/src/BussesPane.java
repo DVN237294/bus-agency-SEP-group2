@@ -26,6 +26,7 @@ public class BussesPane extends JPanel
    private JList<Bus> busList;
    private JTextArea infoBusList;
    private JButton deleteButton;
+   private JButton addBusFrameButton;
 
    JPanel bussesNorthPanel = new JPanel();
    JPanel bussesWestPanel = new JPanel();
@@ -71,12 +72,14 @@ public class BussesPane extends JPanel
       chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
+      addBusFrameButton = new JButton("Add Bus");
       busList = new JList<Bus>(new DefaultListModel<Bus>());
       showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
       infoBusList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
+      addBusFrameButton.setVisible(true);
 
       bussesNorthPanel.add(destiBox);
       bussesNorthPanel.add(chauffeurBox);
@@ -88,11 +91,13 @@ public class BussesPane extends JPanel
       bussesNorthPanel.add(searchButton);
       bussesNorthPanel.add(showAllBussesButton);
       bussesSouthPanel.add(deleteButton);
+      bussesSouthPanel.add(addBusFrameButton);
       bussesWestPanel.add(infoBusList);
       searchButton.addActionListener(new SearchListener());
       busList.addListSelectionListener(new InformationListener());
       showAllBussesButton.addActionListener(new SearchAllListener());
       deleteButton.addActionListener(new DeleteItem());
+      addBusFrameButton.addActionListener(new AddBusFrameAction());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
@@ -168,5 +173,16 @@ public class BussesPane extends JPanel
          }
       }
 
+   }
+   
+   private class AddBusFrameAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         AddBusFrame frame = new AddBusFrame();
+      }
+      
    }
 }
