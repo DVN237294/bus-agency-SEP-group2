@@ -24,7 +24,6 @@ public class BussesPane extends JPanel
    private JButton searchButton;
    private JButton showAllBussesButton;
    private JList<Bus> busList;
-   private JList<Bus> fullBusList;
    private JTextArea infoBusList;
    private JButton deleteButton;
 
@@ -73,10 +72,8 @@ public class BussesPane extends JPanel
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
       busList = new JList<Bus>(new DefaultListModel<Bus>());
-      fullBusList = new JList<Bus>(agency.getAllBusses());
       showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
-      fullBusList.setVisible(false);
       infoBusList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
@@ -87,7 +84,6 @@ public class BussesPane extends JPanel
       bussesNorthPanel.add(modelBox);
       bussesNorthPanel.add(licensePlateBox);
       bussesNorthPanel.add(maxCapacityBox);
-      bussesWestPanel.add(fullBusList);
       bussesWestPanel.add(busList);
       bussesNorthPanel.add(searchButton);
       bussesNorthPanel.add(showAllBussesButton);
@@ -116,7 +112,6 @@ public class BussesPane extends JPanel
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
-         fullBusList.setVisible(false);
          infoBusList.setVisible(false);
       }
 
@@ -135,7 +130,6 @@ public class BussesPane extends JPanel
          agency.deleteBus(temp);
          busList.setVisible(true);
          deleteButton.setVisible(true);
-         fullBusList.setVisible(false);
          infoBusList.setVisible(false);
       }
 
@@ -147,9 +141,14 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         fullBusList.setVisible(true);
+         DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
+               .getModel();
+         for (Bus bus : agency.getAllBusses())
+         {
+            model.addElement(bus);
+         }
          deleteButton.setVisible(true);
-         busList.setVisible(false);
+         busList.setVisible(true);
          infoBusList.setVisible(false);
       }
 
