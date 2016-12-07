@@ -19,6 +19,7 @@ public class BussesPane extends JPanel
    private JExtendedComboBox<String> makeBox;
    private JExtendedComboBox<String> modelBox;
    private JExtendedComboBox<String> licensePlateBox;
+   private JExtendedComboBox<Integer> maxCapacityBox;
    private JExtendedComboBox<Chauffeur> chauffeurBox;
    private JButton searchButton;
    private JButton showAllBussesButton;
@@ -40,12 +41,14 @@ public class BussesPane extends JPanel
       String[] makeArray = new String[allBusses.length];
       String[] modelArray = new String[allBusses.length];
       String[] licensePlateArray = new String[allBusses.length];
+      Integer[] maxCapacityArray = new Integer[allBusses.length];
 
       for (int i = 0; i < allBusses.length; i++)
       {
          makeArray[i] = allBusses[i].getMake();
          modelArray[i] = allBusses[i].getModel();
          licensePlateArray[i] = allBusses[i].getLicensePlate();
+         maxCapacityArray[i] = allBusses[i].getMaxCapacity();
       }
 
       bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
@@ -63,6 +66,9 @@ public class BussesPane extends JPanel
       licensePlateBox = new JExtendedComboBox<>(licensePlateArray);
       licensePlateBox.setPrototypeDisplayValue("License Plate");
       licensePlateBox.setDefaultDisplayedItem("License Plate");
+      maxCapacityBox = new JExtendedComboBox<>(maxCapacityArray);
+      maxCapacityBox.setPrototypeDisplayValue(0);
+      maxCapacityBox.setDefaultDisplayedItem(0);
       chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
@@ -80,6 +86,7 @@ public class BussesPane extends JPanel
       bussesNorthPanel.add(makeBox);
       bussesNorthPanel.add(modelBox);
       bussesNorthPanel.add(licensePlateBox);
+      bussesNorthPanel.add(maxCapacityBox);
       bussesWestPanel.add(fullBusList);
       bussesWestPanel.add(busList);
       bussesNorthPanel.add(searchButton);
@@ -102,36 +109,40 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         DefaultListModel<Bus> model = (DefaultListModel<Bus>)busList.getModel();
+         DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
+               .getModel();
          model.removeAllElements();
          model.addElement(agency.getBus(makeBox.getSelectedItem(),
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
          fullBusList.setVisible(false);
-         infoBusList.setVisible(false);         
+         infoBusList.setVisible(false);
       }
 
    }
-   
+
    private class DeleteItem implements ActionListener
    {
 
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         DefaultListModel<Bus> model = (DefaultListModel<Bus>)busList.getModel();
-         model.removeElement(busList.getSelectedValue());
+         DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
+               .getModel();
+         Bus temp = busList.getSelectedValue();
+         model.removeElement(temp);
+         agency.deleteBus(temp);
          busList.setVisible(true);
          deleteButton.setVisible(true);
          fullBusList.setVisible(false);
          infoBusList.setVisible(false);
       }
-      
+
    }
-   
-	private class SearchAllListener implements ActionListener
-   	{
+
+   private class SearchAllListener implements ActionListener
+   {
 
       @Override
       public void actionPerformed(ActionEvent e)
@@ -141,7 +152,7 @@ public class BussesPane extends JPanel
          busList.setVisible(false);
          infoBusList.setVisible(false);
       }
-      
+
    }
 
    private class InformationListener implements ListSelectionListener
@@ -150,10 +161,11 @@ public class BussesPane extends JPanel
       @Override
       public void valueChanged(ListSelectionEvent e)
       {
-         if(!busList.isSelectionEmpty() && !busList.isSelectionEmpty()) {
-         infoBusList.setText(busList.getSelectedValue().toString());
-         infoBusList.setEditable(false);
-         infoBusList.setVisible(true);
+         if (!busList.isSelectionEmpty() && !busList.isSelectionEmpty())
+         {
+            infoBusList.setText(busList.getSelectedValue().toString());
+            infoBusList.setEditable(false);
+            infoBusList.setVisible(true);
          }
       }
 

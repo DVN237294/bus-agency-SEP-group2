@@ -17,6 +17,7 @@ public class BusList
    public void deleteBus(Bus bus)
    {
       buses.remove(bus);
+      System.out.println();
    }
 
    public ArrayList<Bus> getBusses(int minCapacity)

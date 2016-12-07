@@ -130,6 +130,15 @@ public class TravelAgency
    public void addBus(String make, String model, String licensePlate, int maxCapacity) {
       busList.addBus(new Bus(make, model, licensePlate, maxCapacity));
    }
+   
+   public void deleteBus(String make, String model, String licensePlate, int maxCapacity) {
+      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity));
+   }
+   
+   public void deleteBus(Bus bus) {
+      busList.deleteBus(bus);
+   }
+   
    public Travel[] searchTravel(String destination, Chauffeur chauffeur, Bus bus)
    {
 	   return travelsList.searchTravel(destination, chauffeur, bus);
