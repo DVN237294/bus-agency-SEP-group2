@@ -183,7 +183,6 @@ public class BussesPane extends JPanel
       public void actionPerformed(ActionEvent e)
       {
          AddBusFrame frame = new AddBusFrame(agency);
-         repaint();
       }
       
    }

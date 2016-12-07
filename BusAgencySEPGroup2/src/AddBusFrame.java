@@ -69,6 +69,7 @@ public class AddBusFrame extends JFrame
       {
             agency.addBus(makeArea.getText(), modelArea.getText(),
                   licensePlateArea.getText(), Integer.parseInt(maxCapacityArea.getText()));
+            AddBusFrame.this.dispose();
       }
 
    }
