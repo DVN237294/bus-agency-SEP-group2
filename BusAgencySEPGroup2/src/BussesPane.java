@@ -148,6 +148,7 @@ public class BussesPane extends JPanel
       {
          DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
                .getModel();
+         model.removeAllElements();
          for (Bus bus : agency.getAllBusses())
          {
             model.addElement(bus);
@@ -181,7 +182,8 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         AddBusFrame frame = new AddBusFrame();
+         AddBusFrame frame = new AddBusFrame(agency);
+         repaint();
       }
       
    }
