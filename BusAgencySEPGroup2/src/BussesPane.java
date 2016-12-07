@@ -89,6 +89,7 @@ public class BussesPane extends JPanel
       searchButton.addActionListener(new SearchListener());
       busList.addListSelectionListener(new InformationListener());
       showAllBussesButton.addActionListener(new SearchAllListener());
+      deleteButton.addActionListener(new DeleteItem());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
@@ -102,14 +103,31 @@ public class BussesPane extends JPanel
       public void actionPerformed(ActionEvent e)
       {
          DefaultListModel<Bus> model = (DefaultListModel<Bus>)busList.getModel();
+         model.removeAllElements();
          model.addElement(agency.getBus(makeBox.getSelectedItem(),
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
          fullBusList.setVisible(false);
-         infoBusList.setVisible(false);
+         infoBusList.setVisible(false);         
       }
 
+   }
+   
+   private class DeleteItem implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         DefaultListModel<Bus> model = (DefaultListModel<Bus>)busList.getModel();
+         model.removeElement(busList.getSelectedValue());
+         busList.setVisible(true);
+         deleteButton.setVisible(true);
+         fullBusList.setVisible(false);
+         infoBusList.setVisible(false);
+      }
+      
    }
    
 	private class SearchAllListener implements ActionListener
@@ -132,9 +150,11 @@ public class BussesPane extends JPanel
       @Override
       public void valueChanged(ListSelectionEvent e)
       {
+         if(!busList.isSelectionEmpty() && !busList.isSelectionEmpty()) {
          infoBusList.setText(busList.getSelectedValue().toString());
          infoBusList.setEditable(false);
          infoBusList.setVisible(true);
+         }
       }
 
    }
