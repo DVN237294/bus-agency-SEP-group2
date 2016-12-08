@@ -4,10 +4,14 @@ import java.awt.GridLayout;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,6 +24,9 @@ public class ToursPane extends JPanel
 	private TravelAgency agency;
 	private JPanel toursNorthPanel;
 	private JPanel toursCenterPanel;
+	private JPanel toursSouthPanel;
+	private JPanel southWestPanel;
+	private JPanel southEastPanel;
 	private JList<Tour> centerWestList;
 	private JTextArea centerEastJTextArea;
 	private JExtendedComboBox<String> destinationBox;
@@ -27,6 +34,9 @@ public class ToursPane extends JPanel
 	private JExtendedComboBox<Bus> busBox;
 	private JButton searchButton;
 	private JButton resetButton;
+	private JButton addTourButton;
+	private JButton editTourButton;
+	private JButton deleteTourButton;
 	public ToursPane(TravelAgency agency)
 	{
 		super();
@@ -34,6 +44,13 @@ public class ToursPane extends JPanel
 		// Tour pane
 		toursNorthPanel = new JPanel();
 		toursCenterPanel = new JPanel();
+		toursSouthPanel = new JPanel();
+		southEastPanel = new JPanel();
+		southWestPanel = new JPanel();
+		addTourButton = new JButton("Add Tour");
+		editTourButton = new JButton("Edit Tour");
+		deleteTourButton = new JButton("Delete Tour");
+		
 		centerWestList = new JList<Tour>(new DefaultListModel<Tour>());
 		centerWestList.setVisible(false);
 		centerEastJTextArea = new JTextArea();
@@ -60,9 +77,21 @@ public class ToursPane extends JPanel
 		toursNorthPanel.add(busBox);
 		toursNorthPanel.add(searchButton);
 		toursNorthPanel.add(resetButton);
+		
+		toursSouthPanel.setLayout(new GridLayout(1, 2));
+		toursSouthPanel.add(southWestPanel);
+		toursSouthPanel.add(southEastPanel);
+		
+		southWestPanel.add(addTourButton);
+		southWestPanel.add(editTourButton);
+		southWestPanel.add(deleteTourButton);
+		
+		addTourButton.addActionListener(new AddTourAction());
+		
 		this.setLayout(new BorderLayout());
 		this.add(toursNorthPanel, BorderLayout.NORTH);
 		this.add(toursCenterPanel, BorderLayout.CENTER);
+		this.add(toursSouthPanel, BorderLayout.SOUTH);
 	}
 	
 	private class ResetAction implements ActionListener
@@ -78,7 +107,6 @@ public class ToursPane extends JPanel
 			busBox.reset();
 			
 		}
-		
 	}
 	private class SearchAction implements ActionListener
 	{
@@ -86,7 +114,6 @@ public class ToursPane extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO Auto-generated method stub
 			centerWestList.setVisible(true);
 			Travel[] searchResult = agency.searchTravel(destinationBox.getSelectedItem(), chauffeurBox.getSelectedItem(), busBox.getSelectedItem());
 			DefaultListModel<Tour> listModel = (DefaultListModel<Tour>)centerWestList.getModel();
@@ -100,13 +127,82 @@ public class ToursPane extends JPanel
 		}
 		
 	}
+	private class AddTourAction implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			AddTourFrame frame = new AddTourFrame();
+			frame.addWindowListener(new WindowStateChangedHandler());
+		}
+	}
+	private class WindowStateChangedHandler implements WindowListener
+	{
+
+		@Override
+		public void windowActivated(WindowEvent e)
+		{
+			if(e.getID() == WindowEvent.WINDOW_CLOSED)
+			{
+				System.out.println("you closed the window");
+			}
+			System.out.println("something");
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e)
+		{
+			// TODO Auto-generated method stub
+
+			System.out.println("closed");
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e)
+		{
+			// TODO Auto-generated method stub
+
+			System.out.println("closing");
+			//((JFrame)e.getSource()).dispose();
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e)
+		{
+			// TODO Auto-generated method stub
+
+			System.out.println("opened");
+		}
+		
+	}
 	private class ListSelection implements ListSelectionListener
 	{
 
 		@Override
 		public void valueChanged(ListSelectionEvent arg0)
 		{
-			// TODO Auto-generated method stub
 		}
 		
 	}
