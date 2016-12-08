@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +24,7 @@ public class AddBusFrame extends JFrame
    private JLabel modelJLabel;
    private JLabel licensePlateJLabel;
    private JLabel maxCapacityJLabel;
+   private JExtendedComboBox<Chauffeur> chauffeurBox;
 
    JPanel addBusNorthPanel = new JPanel();
 
@@ -43,6 +45,8 @@ public class AddBusFrame extends JFrame
       licensePlateJLabel = new JLabel("License Plate");
       maxCapacityJLabel = new JLabel("Max Capacity");
       saveButton = new JButton("Save");
+      chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
+      addBusNorthPanel.add(chauffeurBox);
       addBusNorthPanel.add(makeJLabel);
       addBusNorthPanel.add(makeArea);
       addBusNorthPanel.add(modelJLabel);
@@ -68,7 +72,7 @@ public class AddBusFrame extends JFrame
       public void actionPerformed(ActionEvent e)
       {
             agency.addBus(makeArea.getText(), modelArea.getText(),
-                  licensePlateArea.getText(), Integer.parseInt(maxCapacityArea.getText()));
+                  licensePlateArea.getText(), Integer.parseInt(maxCapacityArea.getText()), chauffeurBox.getSelectedItem());
             AddBusFrame.this.dispose();
       }
 

@@ -111,6 +111,11 @@ public class TravelAgency
    {
       return chauffeurList.getAllChauffeurs();
    }
+   
+   public Chauffeur getChauffeur(String firstName, String lastName, int chauffeurID)
+   {
+      return chauffeurList.getChauffeur(firstName, lastName, chauffeurID);
+   }
 
    public Bus[] getAllBusses()
    {
@@ -127,12 +132,12 @@ public class TravelAgency
             .addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
    }
    
-   public void addBus(String make, String model, String licensePlate, int maxCapacity) {
-      busList.addBus(new Bus(make, model, licensePlate, maxCapacity));
+   public void addBus(String make, String model, String licensePlate, int maxCapacity, Chauffeur chauffeur) {
+      busList.addBus(new Bus(make, model, licensePlate, maxCapacity, chauffeur));
    }
    
-   public void deleteBus(String make, String model, String licensePlate, int maxCapacity) {
-      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity));
+   public void deleteBus(String make, String model, String licensePlate, int maxCapacity, Chauffeur chauffeur) {
+      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity, chauffeur));
    }
    
    public void deleteBus(Bus bus) {
