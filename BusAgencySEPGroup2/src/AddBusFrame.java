@@ -31,7 +31,7 @@ public class AddBusFrame extends JFrame
       super("Add Bus");
       this.agency = agency;
       addBusNorthPanel.setBorder(BorderFactory
-            .createTitledBorder("Input Information"));
+            .createTitledBorder("Input Bus Information"));
       addBusNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
       addBusNorthPanel.setPreferredSize(new Dimension(400, 100));
       makeArea = new TextField(10);
