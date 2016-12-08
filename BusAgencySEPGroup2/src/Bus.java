@@ -6,8 +6,10 @@ public class Bus
    private String color;
    private String[] specialFeatures;
    private int maxCapacity;
+   private Chauffeur chauffeur;
 
-   public Bus(String make, String model, String licensePlate, int maxCapacity)
+   public Bus(String make, String model, String licensePlate, int maxCapacity,
+         Chauffeur chauffeur)
    {
       this.make = make;
       this.model = model;
@@ -15,6 +17,7 @@ public class Bus
       this.maxCapacity = maxCapacity;
       this.color = null;
       this.specialFeatures = null;
+      this.chauffeur = chauffeur;
    }
 
    public int getMaxCapacity()
@@ -57,17 +60,23 @@ public class Bus
       return licensePlate;
    }
 
+   public Chauffeur getChauffeur()
+   {
+      return chauffeur;
+   }
+
    public boolean equals(Bus other)
    {
       return other.getLicensePlate().equals(this.licensePlate);
    }
-   
+
    public String toString()
    {
-	   if(model == null && licensePlate == null && maxCapacity == Integer.MIN_VALUE)
-		   return make;
-	   
-      return make + ", " + model + ", " + licensePlate + ", " + maxCapacity;
+      if (model == null && licensePlate == null
+            && maxCapacity == Integer.MIN_VALUE)
+         return make;
+
+      return make + ", " + model + ", " + licensePlate + ", " + maxCapacity + ", " + chauffeur;
    }
 
 }

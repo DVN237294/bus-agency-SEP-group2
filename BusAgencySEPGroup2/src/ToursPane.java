@@ -21,7 +21,8 @@ import javax.swing.event.ListSelectionListener;
 
 public class ToursPane extends JPanel
 {
-	private TravelAgency agency;
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
 	private JPanel toursNorthPanel;
 	private JPanel toursCenterPanel;
 	private JPanel toursSouthPanel;
@@ -71,7 +72,7 @@ public class ToursPane extends JPanel
 		chauffeurBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE)); //is this cheating?
 		
 		busBox = new JExtendedComboBox<>(agency.getAllBusses());
-		busBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE));
+		busBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, chauffeurBox.getSelectedItem()));
 		toursNorthPanel.add(destinationBox);
 		toursNorthPanel.add(chauffeurBox);
 		toursNorthPanel.add(busBox);
