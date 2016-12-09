@@ -278,23 +278,31 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         if (makeField.getText().equals(null)
-               && modelField.getText().equals(null)
-               && licensePlateField.getText().equals(null)
-               && maxCapacityField.getText().equals(null))
+         try
          {
-            
-         }else{
-
-         agency.addBus(makeField.getText(), modelField.getText(),
-               licensePlateField.getText(),
-               Integer.parseInt(maxCapacityField.getText()),
-               chauffeurEditBox.getSelectedItem());
-         DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
-               .getModel();
-         Bus temp = busList.getSelectedValue();
-         model.removeElement(temp);
-         agency.deleteBus(temp);
+            agency.addBus(makeField.getText(), modelField.getText(),
+                  licensePlateField.getText(),
+                  Integer.parseInt(maxCapacityField.getText()),
+                  chauffeurEditBox.getSelectedItem());
+            DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
+                  .getModel();
+            Bus temp = busList.getSelectedValue();
+            model.removeElement(temp);
+            agency.deleteBus(temp);
+         }
+         catch (Exception e1)
+         {
+            editBusFrameButton.setVisible(false);
+            makeLabel.setVisible(false);
+            saveEditBus.setVisible(false);
+            modelLabel.setVisible(false);
+            licensePlateLabel.setVisible(false);
+            maxCapacityLabel.setVisible(false);
+            bussesEditBusPanel.setVisible(false);
+            chauffeurEditBox.setVisible(false);
+            infoBusEditList.setVisible(false);
+            System.out.println(e1.getMessage()
+                  + "Please fill up all the empty fields");
          }
          editBusFrameButton.setVisible(false);
          makeLabel.setVisible(false);
@@ -306,6 +314,5 @@ public class BussesPane extends JPanel
          chauffeurEditBox.setVisible(false);
          infoBusEditList.setVisible(false);
       }
-
    }
 }
