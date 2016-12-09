@@ -7,9 +7,10 @@ public class Bus
    private String[] specialFeatures;
    private int maxCapacity;
    private Chauffeur chauffeur;
+   private String destination;
 
    public Bus(String make, String model, String licensePlate, int maxCapacity,
-         Chauffeur chauffeur)
+         Chauffeur chauffeur, String destination)
    {
       this.make = make;
       this.model = model;
@@ -18,6 +19,7 @@ public class Bus
       this.color = null;
       this.specialFeatures = null;
       this.chauffeur = chauffeur;
+      this.destination = destination;
    }
 
    public int getMaxCapacity()
@@ -63,6 +65,11 @@ public class Bus
    public Chauffeur getChauffeur()
    {
       return chauffeur;
+   }
+   
+   public String getDestination()
+   {
+      return destination;
    }
 
    public boolean equals(Bus other)

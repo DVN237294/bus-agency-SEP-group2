@@ -20,7 +20,8 @@ import javax.swing.SpinnerDateModel;
 
 public class AddTourFrame extends JFrame
 {
-	private TravelAgency agency;
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
 	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	private JPanel westPanel;
 	private JPanel eastPanel;
@@ -133,8 +134,8 @@ public class AddTourFrame extends JFrame
 		chauffeurCBox.setEnabled(false);
 		
 		busCBox = new JExtendedComboBox<Bus>();
-		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
-		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
+		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, null, null));
+		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE, null, null));
 		busCBox.setEnabled(false);
 		
 		destinationCBox = new JExtendedComboBox<String>(new String[] { "teest", "Teest", "ll" });

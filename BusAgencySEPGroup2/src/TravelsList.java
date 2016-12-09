@@ -82,4 +82,11 @@ public class TravelsList
 
 		return temp.toArray(tempArray);
 	}
+	
+	public Travel[] getAllTravels() 
+	{
+	   Travel[] temp = new Travel[travels.size()];
+      travels.toArray(temp);
+      return temp;
+	}
 }
