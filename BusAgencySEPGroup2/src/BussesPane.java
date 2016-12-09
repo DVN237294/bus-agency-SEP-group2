@@ -21,6 +21,7 @@ public class BussesPane extends JPanel
    private static final long serialVersionUID = 1L;
    private TravelAgency agency;
    private JExtendedComboBox<String> destiBox;
+   private JExtendedComboBox<String> destiEditBox;
    private JExtendedComboBox<String> makeBox;
    private JExtendedComboBox<String> modelBox;
    private JExtendedComboBox<String> licensePlateBox;
@@ -31,7 +32,6 @@ public class BussesPane extends JPanel
    private JButton showAllBussesButton;
    private JList<Bus> busList;
    private JTextArea infoBusList;
-   private JTextArea infoBusEditList;
    private JButton deleteButton;
    private JButton addBusFrameButton;
    private JButton editBusFrameButton;
@@ -72,11 +72,14 @@ public class BussesPane extends JPanel
       bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
       bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
       bussesWestPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-      bussesEditBusPanel.setLayout(new GridLayout(6, 1));
+      bussesEditBusPanel.setLayout(new GridLayout(6, 2));
       bussesEditBusPanel.setBorder(BorderFactory.createTitledBorder("Edit"));
       destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
       destiBox.setPrototypeDisplayValue("Destination");
       destiBox.setDefaultDisplayedItem("Destination");
+      destiEditBox = new JExtendedComboBox<String>(agency.getAllDestinations());
+      destiEditBox.setPrototypeDisplayValue("Destination");
+      destiEditBox.setDefaultDisplayedItem("Destination");
       makeBox = new JExtendedComboBox<>(makeArray);
       makeBox.setPrototypeDisplayValue("Make");
       makeBox.setDefaultDisplayedItem("Make");
@@ -99,7 +102,6 @@ public class BussesPane extends JPanel
       busList = new JList<Bus>(new DefaultListModel<Bus>());
       showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
-      infoBusEditList = new JTextArea();
       makeField = new TextField(10);
       modelField = new TextField(10);
       licensePlateField = new TextField(10);
@@ -111,12 +113,12 @@ public class BussesPane extends JPanel
       saveEditBus = new JButton("Save");
       saveEditBus.setVisible(false);
       infoBusList.setVisible(false);
-      infoBusEditList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
       chauffeurEditBox.setVisible(false);
       editBusFrameButton.setVisible(false);
       bussesEditBusPanel.setVisible(false);
+      destiEditBox.setVisible(false);
       addBusFrameButton.setVisible(true);
       makeLabel.setVisible(false);
       modelLabel.setVisible(false);
@@ -136,7 +138,7 @@ public class BussesPane extends JPanel
       bussesSouthPanel.add(addBusFrameButton);
       bussesSouthPanel.add(editBusFrameButton);
       bussesWestPanel.add(infoBusList);
-      bussesEditBusPanel.add(infoBusEditList);
+      bussesEditBusPanel.add(destiEditBox);
       bussesEditBusPanel.add(chauffeurEditBox);
       bussesEditBusPanel.add(makeLabel);
       bussesEditBusPanel.add(makeField);
@@ -195,6 +197,16 @@ public class BussesPane extends JPanel
          busList.setVisible(true);
          deleteButton.setVisible(true);
          infoBusList.setVisible(false);
+         bussesEditBusPanel.setVisible(false);
+         editBusFrameButton.setVisible(false);
+         makeLabel.setVisible(false);
+         saveEditBus.setVisible(false);
+         modelLabel.setVisible(false);
+         licensePlateLabel.setVisible(false);
+         maxCapacityLabel.setVisible(false);
+         bussesEditBusPanel.setVisible(false);
+         chauffeurEditBox.setVisible(false);
+         destiEditBox.setVisible(false);
       }
 
    }
@@ -253,21 +265,15 @@ public class BussesPane extends JPanel
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         if (!busList.isSelectionEmpty() && !busList.isSelectionEmpty())
-         {
-            infoBusEditList.setText(busList.getSelectedValue().toString());
-            infoBusEditList.setEditable(false);
-            infoBusEditList.setVisible(true);
-         }
          infoBusList.setVisible(false);
          makeLabel.setVisible(true);
          saveEditBus.setVisible(true);
+         destiEditBox.setVisible(true);
          modelLabel.setVisible(true);
          licensePlateLabel.setVisible(true);
          maxCapacityLabel.setVisible(true);
          bussesEditBusPanel.setVisible(true);
          chauffeurEditBox.setVisible(true);
-         infoBusEditList.setVisible(true);
       }
 
    }
@@ -300,7 +306,7 @@ public class BussesPane extends JPanel
             maxCapacityLabel.setVisible(false);
             bussesEditBusPanel.setVisible(false);
             chauffeurEditBox.setVisible(false);
-            infoBusEditList.setVisible(false);
+            destiEditBox.setVisible(false);
             System.out.println(e1.getMessage()
                   + "Please fill up all the empty fields");
          }
@@ -312,7 +318,7 @@ public class BussesPane extends JPanel
          maxCapacityLabel.setVisible(false);
          bussesEditBusPanel.setVisible(false);
          chauffeurEditBox.setVisible(false);
-         infoBusEditList.setVisible(false);
+         destiEditBox.setVisible(false);
       }
    }
 }

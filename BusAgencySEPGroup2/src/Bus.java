@@ -83,7 +83,7 @@ public class Bus
             && maxCapacity == Integer.MIN_VALUE)
          return make;
 
-      return make + ", " + model + ", " + licensePlate + ", " + maxCapacity + ", " + chauffeur;
+      return make + ", " + model + ", " + licensePlate + ", " + maxCapacity + ", " + chauffeur + ", " + destination;
    }
 
 }
