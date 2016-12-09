@@ -58,6 +58,7 @@ public class AddTourFrame extends JFrame
 		resvStartYearCBox.addItemListener(handler);
 		resvStartMonthCBox.addItemListener(handler);
 		
+		
 		westNorthPanel.add(resvStartYearCBox);
 		westNorthPanel.add(resvStartMonthCBox);
 		westNorthPanel.add(resvStartDayCBox);
@@ -92,9 +93,10 @@ public class AddTourFrame extends JFrame
 			{
 				int year = Integer.parseInt(yearBox.getSelectedItem());
 				int daysThisMonth = (new GregorianCalendar(year, java.util.Arrays.asList(months).indexOf(monthBox.getSelectedItem()), 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
-				System.out.println(daysThisMonth);
+				
+				//System.out.println(daysThisMonth);
 			}
-			System.out.println(e.getID());
+			//System.out.println(e.getID());
 		}
 	}
 }

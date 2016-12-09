@@ -10,65 +10,14 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 	{
 		super(arg0);
 		addFocusListener(new FocusListen());
-		addMouseListener(new TestAction());
-	}
-
-	private class TestAction implements MouseListener
-	{
-		@Override
-		public void mouseClicked(MouseEvent e)
-		{
-			if (e.getButton() == MouseEvent.BUTTON3 && !JExtendedComboBox.this.isPopupVisible())
-			{
-				JExtendedComboBox.this.reset();
-			}
-			if (e.getButton() == MouseEvent.BUTTON1 && JExtendedComboBox.this.hasFocus() && defaultDisplayedItem != null)
-			{
-				if (getItemAt(0) != null && getItemAt(0).equals(defaultDisplayedItem))
-				{
-					removeItemAt(0);
-				}
-				if (getItemCount() != 0)
-				{
-					setSelectedIndex(0);
-				}
-			}
-			System.out.println(e.getButton());
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e)
-		{
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e)
-		{
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e)
-		{
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e)
-		{
-			// TODO Auto-generated method stub
-
-		}
+		addMouseListener(new MouseClickAction());
 	}
 
 	public JExtendedComboBox()
 	{
 		super();
 		addFocusListener(new FocusListen());
-		addMouseListener(new TestAction());
+		addMouseListener(new MouseClickAction());
 	}
 
 	public T getDefaultDisplayedItem()
@@ -107,7 +56,58 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 			getModel().setSelectedItem(defaultDisplayedItem);
 		}
 	}
+	
+	
+	
+	private class MouseClickAction implements MouseListener
+	{
+		@Override
+		public void mouseClicked(MouseEvent e)
+		{
+			if (e.getButton() == MouseEvent.BUTTON3 && !JExtendedComboBox.this.isPopupVisible())
+			{
+				JExtendedComboBox.this.reset();
+			}
+			if (e.getButton() == MouseEvent.BUTTON1 && JExtendedComboBox.this.hasFocus() && defaultDisplayedItem != null)
+			{
+				if (getItemAt(0) != null && getItemAt(0).equals(defaultDisplayedItem))
+				{
+					removeItemAt(0);
+				}
+				if (getItemCount() != 0)
+				{
+					setSelectedIndex(0);
+				}
+			}
+		}
 
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+
+		}
+	}
 	private class FocusListen implements FocusListener
 	{
 		@Override
