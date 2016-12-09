@@ -1,15 +1,4 @@
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.plaf.basic.BasicArrowButton;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.metal.MetalComboBoxUI;
-
-import com.sun.javafx.scene.traversal.Direction;
-
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.*;
 
 public class JExtendedComboBox<T> extends JComboBox<T>
@@ -44,6 +33,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 					setSelectedIndex(0);
 				}
 			}
+			System.out.println(e.getButton());
 		}
 
 		@Override
@@ -78,6 +68,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 	{
 		super();
 		addFocusListener(new FocusListen());
+		addMouseListener(new TestAction());
 	}
 
 	public T getDefaultDisplayedItem()
