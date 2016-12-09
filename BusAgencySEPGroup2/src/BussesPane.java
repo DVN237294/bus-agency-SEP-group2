@@ -81,6 +81,7 @@ public class BussesPane extends JPanel
       infoBusList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
+      editBusFrameButton.setVisible(false);
       addBusFrameButton.setVisible(true);
 
       bussesNorthPanel.add(destiBox);
@@ -101,6 +102,7 @@ public class BussesPane extends JPanel
       showAllBussesButton.addActionListener(new SearchAllListener());
       deleteButton.addActionListener(new DeleteItem());
       addBusFrameButton.addActionListener(new AddBusFrameAction());
+      editBusFrameButton.addActionListener(new EditBusFrameAction());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
@@ -138,6 +140,7 @@ public class BussesPane extends JPanel
          agency.deleteBus(temp);
          busList.setVisible(true);
          deleteButton.setVisible(true);
+         editBusFrameButton.setVisible(true);
          infoBusList.setVisible(false);
       }
 
@@ -158,6 +161,7 @@ public class BussesPane extends JPanel
          }
          deleteButton.setVisible(true);
          busList.setVisible(true);
+         editBusFrameButton.setVisible(true);
          infoBusList.setVisible(false);
       }
 
@@ -186,6 +190,17 @@ public class BussesPane extends JPanel
       public void actionPerformed(ActionEvent e)
       {
          AddBusFrame frame = new AddBusFrame(agency);
+      }
+      
+   }
+   
+   private class EditBusFrameAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         EditBusFrame frame2 = new EditBusFrame(agency);
       }
       
    }
