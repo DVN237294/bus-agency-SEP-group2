@@ -1,13 +1,17 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -21,16 +25,27 @@ public class BussesPane extends JPanel
    private JExtendedComboBox<String> licensePlateBox;
    private JExtendedComboBox<Integer> maxCapacityBox;
    private JExtendedComboBox<Chauffeur> chauffeurBox;
+   private JExtendedComboBox<Chauffeur> chauffeurEditBox;
    private JButton searchButton;
    private JButton showAllBussesButton;
    private JList<Bus> busList;
    private JTextArea infoBusList;
+   private JTextArea infoBusEditList;
    private JButton deleteButton;
    private JButton addBusFrameButton;
    private JButton editBusFrameButton;
+   private TextField makeField;
+   private TextField modelField;
+   private TextField licensePlateField;
+   private TextField maxCapacityField;
+   private JLabel makeLabel;
+   private JLabel modelLabel;
+   private JLabel licensePlateLabel;
+   private JLabel maxCapacityLabel;
 
    JPanel bussesNorthPanel = new JPanel();
    JPanel bussesWestPanel = new JPanel();
+   JPanel bussesEditBusPanel = new JPanel();
    JPanel bussesSouthPanel = new JPanel();
 
    public BussesPane(TravelAgency agency)
@@ -55,6 +70,8 @@ public class BussesPane extends JPanel
       bussesNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
       bussesNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
       bussesWestPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+      bussesEditBusPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+      bussesEditBusPanel.setBorder(BorderFactory.createTitledBorder("Edit"));
       destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
       destiBox.setPrototypeDisplayValue("Destination");
       destiBox.setDefaultDisplayedItem("Destination");
@@ -71,6 +88,7 @@ public class BussesPane extends JPanel
       maxCapacityBox.setPrototypeDisplayValue(0);
       maxCapacityBox.setDefaultDisplayedItem(0);
       chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
+      chauffeurEditBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
       addBusFrameButton = new JButton("Add Bus");
@@ -78,11 +96,27 @@ public class BussesPane extends JPanel
       busList = new JList<Bus>(new DefaultListModel<Bus>());
       showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
+      infoBusEditList = new JTextArea();
+      makeField = new TextField(10);
+      modelField = new TextField(10);
+      licensePlateField = new TextField(10);
+      maxCapacityField = new TextField(10);
+      makeLabel = new JLabel("Make");
+      modelLabel = new JLabel("Model");
+      licensePlateLabel = new JLabel("License Plate");
+      maxCapacityLabel = new JLabel("Max Capacity");
       infoBusList.setVisible(false);
+      infoBusEditList.setVisible(false);
       busList.setVisible(false);
       deleteButton.setVisible(false);
+      chauffeurEditBox.setVisible(false);
       editBusFrameButton.setVisible(false);
+      bussesEditBusPanel.setVisible(false);
       addBusFrameButton.setVisible(true);
+      makeLabel.setVisible(false);
+      modelLabel.setVisible(false);
+      licensePlateLabel.setVisible(false);
+      maxCapacityLabel.setVisible(false);
 
       bussesNorthPanel.add(destiBox);
       bussesNorthPanel.add(chauffeurBox);
@@ -97,16 +131,27 @@ public class BussesPane extends JPanel
       bussesSouthPanel.add(addBusFrameButton);
       bussesSouthPanel.add(editBusFrameButton);
       bussesWestPanel.add(infoBusList);
+      bussesEditBusPanel.add(infoBusEditList);
+      bussesEditBusPanel.add(chauffeurEditBox);
+      bussesEditBusPanel.add(makeLabel);
+      bussesEditBusPanel.add(makeField);
+      bussesEditBusPanel.add(modelLabel);
+      bussesEditBusPanel.add(modelField);
+      bussesEditBusPanel.add(licensePlateLabel);
+      bussesEditBusPanel.add(licensePlateField);
+      bussesEditBusPanel.add(maxCapacityLabel);
+      bussesEditBusPanel.add(maxCapacityField);
       searchButton.addActionListener(new SearchListener());
       busList.addListSelectionListener(new InformationListener());
       showAllBussesButton.addActionListener(new SearchAllListener());
       deleteButton.addActionListener(new DeleteItem());
       addBusFrameButton.addActionListener(new AddBusFrameAction());
-      editBusFrameButton.addActionListener(new EditBusFrameAction());
+      editBusFrameButton.addActionListener(new EditBusAction());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
       this.add(bussesSouthPanel, BorderLayout.SOUTH);
+      this.add(bussesEditBusPanel, BorderLayout.CENTER);
    }
 
    private class SearchListener implements ActionListener
@@ -122,6 +167,7 @@ public class BussesPane extends JPanel
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem(), chauffeurBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
+         editBusFrameButton.setVisible(true);
          infoBusList.setVisible(false);
       }
 
@@ -140,7 +186,6 @@ public class BussesPane extends JPanel
          agency.deleteBus(temp);
          busList.setVisible(true);
          deleteButton.setVisible(true);
-         editBusFrameButton.setVisible(true);
          infoBusList.setVisible(false);
       }
 
@@ -194,13 +239,26 @@ public class BussesPane extends JPanel
       
    }
    
-   private class EditBusFrameAction implements ActionListener
+   private class EditBusAction implements ActionListener
    {
 
       @Override
       public void actionPerformed(ActionEvent e)
       {
-         EditBusFrame frame2 = new EditBusFrame(agency);
+         if (!busList.isSelectionEmpty() && !busList.isSelectionEmpty())
+         {
+            infoBusEditList.setText(busList.getSelectedValue().toString());
+            infoBusEditList.setEditable(false);
+            infoBusEditList.setVisible(true);
+         }
+         infoBusList.setVisible(false);
+         makeLabel.setVisible(true);
+         modelLabel.setVisible(true);
+         licensePlateLabel.setVisible(true);
+         maxCapacityLabel.setVisible(true);
+         bussesEditBusPanel.setVisible(true);
+         chauffeurEditBox.setVisible(true);
+         infoBusEditList.setVisible(true);
       }
       
    }
