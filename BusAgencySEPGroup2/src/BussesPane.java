@@ -114,7 +114,7 @@ public class BussesPane extends JPanel
                .getModel();
          model.removeAllElements();
          model.addElement(agency.getBus(makeBox.getSelectedItem(),
-               modelBox.getSelectedItem(), licensePlateBox.getSelectedItem()));
+               modelBox.getSelectedItem(), licensePlateBox.getSelectedItem(), chauffeurBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
          infoBusList.setVisible(false);

@@ -41,13 +41,14 @@ public class BusList
       return temp;
    }
 
-   public Bus getBus(String make, String model, String licensePlate)
+   public Bus getBus(String make, String model, String licensePlate, Chauffeur chauffeur)
    {
       for (int i = 0; i < buses.size(); i++)
       {
          if (buses.get(i).getMake().equals(make)
                || buses.get(i).getModel().equals(model)
-               || buses.get(i).getLicensePlate().equals(licensePlate))
+               || buses.get(i).getLicensePlate().equals(licensePlate)
+               || buses.get(i).getChauffeur().equals(chauffeur))
          {
             return buses.get(i);
          }
