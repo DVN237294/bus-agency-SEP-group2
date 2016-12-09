@@ -27,6 +27,7 @@ public class BussesPane extends JPanel
    private JTextArea infoBusList;
    private JButton deleteButton;
    private JButton addBusFrameButton;
+   private JButton editBusFrameButton;
 
    JPanel bussesNorthPanel = new JPanel();
    JPanel bussesWestPanel = new JPanel();
@@ -73,6 +74,7 @@ public class BussesPane extends JPanel
       searchButton = new JButton("Search");
       deleteButton = new JButton("Delete");
       addBusFrameButton = new JButton("Add Bus");
+      editBusFrameButton = new JButton("Edit Bus");
       busList = new JList<Bus>(new DefaultListModel<Bus>());
       showAllBussesButton = new JButton("Show all Busses");
       infoBusList = new JTextArea();
@@ -92,6 +94,7 @@ public class BussesPane extends JPanel
       bussesNorthPanel.add(showAllBussesButton);
       bussesSouthPanel.add(deleteButton);
       bussesSouthPanel.add(addBusFrameButton);
+      bussesSouthPanel.add(editBusFrameButton);
       bussesWestPanel.add(infoBusList);
       searchButton.addActionListener(new SearchListener());
       busList.addListSelectionListener(new InformationListener());
