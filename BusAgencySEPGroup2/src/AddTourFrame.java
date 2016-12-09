@@ -20,11 +20,14 @@ import javax.swing.SpinnerDateModel;
 
 public class AddTourFrame extends JFrame
 {
+	private TravelAgency agency;
 	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	private JPanel westPanel;
 	private JPanel eastPanel;
 	private JPanel resvStartDatePanel;
 	private JPanel resvEndDatePanel;
+	private JPanel middlePanel;
+	private JPanel middleDestinationPanel;
 	private JExtendedComboBox<String> resvStartYearCBox;
 	private JExtendedComboBox<String> resvStartMonthCBox;
 	private JExtendedComboBox<String> resvStartDayCBox;
@@ -35,15 +38,23 @@ public class AddTourFrame extends JFrame
 	private JExtendedComboBox<String> resvEndDayCBox;
 	private JExtendedComboBox<String> resvEndHourCBox;
 	private JExtendedComboBox<String> resvEndMinCBox;
-	public AddTourFrame()
+	private JExtendedComboBox<Chauffeur> chauffeurCBox;
+	private JExtendedComboBox<Bus> busCBox;
+	private JExtendedComboBox<String> destinationCBox;
+	public AddTourFrame(TravelAgency agency)
 	{
 		super("Add Tour");
+		this.agency = agency;
 		setSize(960, 540);
 		setLayout(new GridLayout());
 		westPanel = new JPanel();
 		eastPanel = new JPanel();
 		resvStartDatePanel = new JPanel();
 		resvEndDatePanel = new JPanel();
+		middlePanel = new JPanel();
+		middleDestinationPanel = new JPanel();
+		middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
+		middlePanel.setBorder(BorderFactory.createTitledBorder("blablabla"));
 		resvStartDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation start date"));
 		resvEndDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation end date"));
 		resvStartDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -115,6 +126,28 @@ public class AddTourFrame extends JFrame
 		resvEndDatePanel.add(resvEndHourCBox);
 		resvEndDatePanel.add(resvEndMinCBox);
 		
+		//middle panel
+		chauffeurCBox = new JExtendedComboBox<Chauffeur>();
+		chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.setEnabled(false);
+		
+		busCBox = new JExtendedComboBox<Bus>();
+		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
+		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
+		busCBox.setEnabled(false);
+		
+		destinationCBox = new JExtendedComboBox<String>(new String[] { "teest", "Teest", "ll" });
+		destinationCBox.setDefaultDisplayedItem("Destination");
+		destinationCBox.setPrototypeDisplayValue("Destination");
+		destinationCBox.setEditable(true);
+		
+		
+		middlePanel.add(chauffeurCBox);
+		middlePanel.add(busCBox);
+		middlePanel.add(destinationCBox);
+		
+		
 		add(westPanel);
 		add(eastPanel);
 		
@@ -123,6 +156,7 @@ public class AddTourFrame extends JFrame
 		
 		westPanel.add(resvStartDatePanel);
 		westPanel.add(resvEndDatePanel);
+		westPanel.add(middlePanel);
 		
 		setVisible(true);
 	}

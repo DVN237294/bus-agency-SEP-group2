@@ -134,7 +134,7 @@ public class ToursPane extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			AddTourFrame frame = new AddTourFrame();
+			AddTourFrame frame = new AddTourFrame(agency);
 			frame.addWindowListener(new WindowStateChangedHandler());
 		}
 	}
