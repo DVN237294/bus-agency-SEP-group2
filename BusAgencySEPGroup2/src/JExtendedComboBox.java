@@ -1,4 +1,5 @@
 import javax.swing.JComboBox;
+
 import java.awt.event.*;
 
 public class JExtendedComboBox<T> extends JComboBox<T>
@@ -11,6 +12,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 		super(arg0);
 		addFocusListener(new FocusListen());
 		addMouseListener(new MouseClickAction());
+		addMouseWheelListener(new MouseScroll());
 	}
 
 	public JExtendedComboBox()
@@ -18,6 +20,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 		super();
 		addFocusListener(new FocusListen());
 		addMouseListener(new MouseClickAction());
+		addMouseWheelListener(new MouseScroll());
 	}
 
 	public T getDefaultDisplayedItem()
@@ -57,8 +60,16 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 		}
 	}
 	
-	
-	
+	private class MouseScroll implements MouseWheelListener
+	{
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e)
+		{
+			if((JExtendedComboBox.this.getSelectedIndex() > 0 && e.getPreciseWheelRotation() < 0) || (JExtendedComboBox.this.getSelectedIndex() < JExtendedComboBox.this.getItemCount() - 1 && e.getPreciseWheelRotation() > 0))
+				JExtendedComboBox.this.setSelectedIndex(JExtendedComboBox.this.getSelectedIndex() + (int)e.getPreciseWheelRotation());
+		}	
+	}
 	private class MouseClickAction implements MouseListener
 	{
 		@Override

@@ -23,10 +23,18 @@ public class AddTourFrame extends JFrame
 	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 	private JPanel westPanel;
 	private JPanel eastPanel;
-	private JPanel westNorthPanel;
+	private JPanel resvStartDatePanel;
+	private JPanel resvEndDatePanel;
 	private JExtendedComboBox<String> resvStartYearCBox;
 	private JExtendedComboBox<String> resvStartMonthCBox;
 	private JExtendedComboBox<String> resvStartDayCBox;
+	private JExtendedComboBox<String> resvStartHourCBox;
+	private JExtendedComboBox<String> resvStartMinCBox;
+	private JExtendedComboBox<String> resvEndYearCBox;
+	private JExtendedComboBox<String> resvEndMonthCBox;
+	private JExtendedComboBox<String> resvEndDayCBox;
+	private JExtendedComboBox<String> resvEndHourCBox;
+	private JExtendedComboBox<String> resvEndMinCBox;
 	public AddTourFrame()
 	{
 		super("Add Tour");
@@ -34,41 +42,87 @@ public class AddTourFrame extends JFrame
 		setLayout(new GridLayout());
 		westPanel = new JPanel();
 		eastPanel = new JPanel();
-		westNorthPanel = new JPanel();
-		westNorthPanel.setBorder(BorderFactory.createTitledBorder("Reservation start date"));
-		westNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		resvStartDatePanel = new JPanel();
+		resvEndDatePanel = new JPanel();
+		resvStartDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation start date"));
+		resvEndDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation end date"));
+		resvStartDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		resvEndDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		
+		//Start date
 		resvStartYearCBox = new JExtendedComboBox<String>();
 		for(int i = 0, year = LocalDateTime.now().getYear(); i < 10; i++, year++)
 			resvStartYearCBox.addItem(Integer.toString(year));
 		resvStartYearCBox.setDefaultDisplayedItem("Year");
 		resvStartYearCBox.setPrototypeDisplayValue("2016");
-		
 		resvStartMonthCBox = new JExtendedComboBox<String>(months);
 		resvStartMonthCBox.setDefaultDisplayedItem("Month");
 		resvStartMonthCBox.setPrototypeDisplayValue(months[8]);
-		
 		resvStartDayCBox = new JExtendedComboBox<String>();
 		resvStartDayCBox.setDefaultDisplayedItem("Day");
 		resvStartDayCBox.setPrototypeDisplayValue("Day");
 		resvStartDayCBox.setEnabled(false);
-		
 		YearMonthSelectionChangedHandler handler = new YearMonthSelectionChangedHandler(resvStartYearCBox, resvStartMonthCBox, resvStartDayCBox);
 		resvStartYearCBox.addItemListener(handler);
 		resvStartMonthCBox.addItemListener(handler);
+		resvStartHourCBox = new JExtendedComboBox<String>();
+		for(int i = 0; i < 24; i++)
+			resvStartHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
+		resvStartHourCBox.setDefaultDisplayedItem("Hour");
+		resvStartHourCBox.setPrototypeDisplayValue("Hour");
+		resvStartMinCBox = new JExtendedComboBox<String>();
+		for(int i = 0; i < 60; i++)
+			resvStartMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
+		resvStartMinCBox.setDefaultDisplayedItem("Minute");
+		resvStartMinCBox.setPrototypeDisplayValue("Minute");
 		
-		
-		westNorthPanel.add(resvStartYearCBox);
-		westNorthPanel.add(resvStartMonthCBox);
-		westNorthPanel.add(resvStartDayCBox);
+		//end date
+		resvEndYearCBox = new JExtendedComboBox<String>();
+		for(int i = 0, year = LocalDateTime.now().getYear(); i < 10; i++, year++)
+			resvEndYearCBox.addItem(Integer.toString(year));
+		resvEndYearCBox.setDefaultDisplayedItem("Year");
+		resvEndYearCBox.setPrototypeDisplayValue("2016");
+		resvEndMonthCBox = new JExtendedComboBox<String>(months);
+		resvEndMonthCBox.setDefaultDisplayedItem("Month");
+		resvEndMonthCBox.setPrototypeDisplayValue(months[8]);
+		resvEndDayCBox = new JExtendedComboBox<String>();
+		resvEndDayCBox.setDefaultDisplayedItem("Day");
+		resvEndDayCBox.setPrototypeDisplayValue("Day");
+		resvEndDayCBox.setEnabled(false);
+		YearMonthSelectionChangedHandler handler2 = new YearMonthSelectionChangedHandler(resvEndYearCBox, resvEndMonthCBox, resvEndDayCBox);
+		resvEndYearCBox.addItemListener(handler2);
+		resvEndMonthCBox.addItemListener(handler2);
+		resvEndHourCBox = new JExtendedComboBox<String>();
+		for(int i = 0; i < 24; i++)
+			resvEndHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
+		resvEndHourCBox.setDefaultDisplayedItem("Hour");
+		resvEndHourCBox.setPrototypeDisplayValue("Hour");
+		resvEndMinCBox = new JExtendedComboBox<String>();
+		for(int i = 0; i < 60; i++)
+			resvEndMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
+		resvEndMinCBox.setDefaultDisplayedItem("Minute");
+		resvEndMinCBox.setPrototypeDisplayValue("Minute");
+
+		resvStartDatePanel.add(resvStartYearCBox);
+		resvStartDatePanel.add(resvStartMonthCBox);
+		resvStartDatePanel.add(resvStartDayCBox);
+		resvStartDatePanel.add(resvStartHourCBox);
+		resvStartDatePanel.add(resvStartMinCBox);
+
+		resvEndDatePanel.add(resvEndYearCBox);
+		resvEndDatePanel.add(resvEndMonthCBox);
+		resvEndDatePanel.add(resvEndDayCBox);
+		resvEndDatePanel.add(resvEndHourCBox);
+		resvEndDatePanel.add(resvEndMinCBox);
 		
 		add(westPanel);
 		add(eastPanel);
 		
-		westPanel.setLayout(new GridLayout(5, 1));
-		westPanel.add(westNorthPanel);
+		FlowLayout westLayout = new FlowLayout(FlowLayout.LEFT);
+		westPanel.setLayout(westLayout);
 		
+		westPanel.add(resvStartDatePanel);
+		westPanel.add(resvEndDatePanel);
 		
 		setVisible(true);
 	}
@@ -89,14 +143,19 @@ public class AddTourFrame extends JFrame
 		public void itemStateChanged(ItemEvent e)
 		{
 			// TODO Auto-generated method stub
-			if(!yearBox.isDefaultItemSelected() && !monthBox.isDefaultItemSelected())
+			if(!yearBox.isDefaultItemSelected() && !monthBox.isDefaultItemSelected() && yearBox.isPopupVisible() ^ monthBox.isPopupVisible())
 			{
 				int year = Integer.parseInt(yearBox.getSelectedItem());
 				int daysThisMonth = (new GregorianCalendar(year, java.util.Arrays.asList(months).indexOf(monthBox.getSelectedItem()), 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
 				
-				//System.out.println(daysThisMonth);
+				dayBox.removeAllItems();
+				for(int i = 1; i <= daysThisMonth; i++)
+					dayBox.addItem(Integer.toString(i));
+				
+				dayBox.setEnabled(true);
 			}
-			//System.out.println(e.getID());
+			if(yearBox.isDefaultItemSelected() || monthBox.isDefaultItemSelected())
+				dayBox.setEnabled(false);
 		}
 	}
 }
