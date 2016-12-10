@@ -294,7 +294,7 @@ public class BussesPane extends JPanel
             model.removeElement(temp);
             agency.deleteBus(temp);
          }
-         catch (Exception e1)
+         catch (Exception a)
          {
             editBusFrameButton.setVisible(false);
             makeLabel.setVisible(false);
@@ -305,7 +305,7 @@ public class BussesPane extends JPanel
             bussesEditBusPanel.setVisible(false);
             chauffeurEditBox.setVisible(false);
             destiEditBox.setVisible(false);
-            System.out.println(e1.getMessage()
+            System.out.println(a.getMessage()
                   + "Please fill up all the empty fields");
          }
          editBusFrameButton.setVisible(false);
