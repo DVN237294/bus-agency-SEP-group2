@@ -53,6 +53,9 @@ public class TravelAgencyGUI extends JFrame
       // Busses pane
       tabPanels[2] = new BussesPane(agency);
       tabbedPane.setComponentAt(2, tabPanels[2]);
+      
+      tabPanels[3] = new ChauffeursPane(agency);
+      tabbedPane.setComponentAt(3, tabPanels[3]);
 
       setDefaultCloseOperation(EXIT_ON_CLOSE);
       setSize(960, 540);

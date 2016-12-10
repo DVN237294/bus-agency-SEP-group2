@@ -122,6 +122,36 @@ public class TravelAgency
    {
       return chauffeurList.getChauffeur(firstName, lastName, chauffeurID);
    }
+   
+   public String getFirstName(String firstName)
+   {
+      return chauffeurList.getFirstName(firstName);
+   }
+   
+   public String[] getAllFirstNames()
+   {
+      return chauffeurList.getAllFirstNames();
+   }
+   
+   public String[] getAllLastNames()
+   {
+      return chauffeurList.getAllLastNames();
+   }
+   
+   public String[] getAllChauffeurIds()
+   {
+      return chauffeurList.getAllChauffeurIds();
+   }
+   
+   public String getLastName(String lastName)
+   {
+      return chauffeurList.getLastName(lastName);
+   }
+   
+   public int getChauffeurId(int ID)
+   {
+      return chauffeurList.getChauffeurId(ID);
+   }
 
    public Bus[] getAllBusses()
    {
