@@ -25,6 +25,7 @@ public class AddBusFrame extends JFrame
    private JLabel licensePlateJLabel;
    private JLabel maxCapacityJLabel;
    private JExtendedComboBox<Chauffeur> chauffeurBox;
+   private JExtendedComboBox<String> destinationBox;
 
    JPanel addBusNorthPanel = new JPanel();
 
@@ -46,6 +47,8 @@ public class AddBusFrame extends JFrame
       maxCapacityJLabel = new JLabel("Max Capacity");
       saveButton = new JButton("Save");
       chauffeurBox = new JExtendedComboBox<Chauffeur>(agency.getAllChauffeurs());
+      destinationBox = new JExtendedComboBox<String>(agency.getAllDestinations());
+      addBusNorthPanel.add(destinationBox);
       addBusNorthPanel.add(chauffeurBox);
       addBusNorthPanel.add(makeJLabel);
       addBusNorthPanel.add(makeArea);
@@ -71,11 +74,12 @@ public class AddBusFrame extends JFrame
       @Override
       public void actionPerformed(ActionEvent e)
       {
-            agency.addBus(makeArea.getText(), modelArea.getText(),
-                  licensePlateArea.getText(), Integer.parseInt(maxCapacityArea.getText()), chauffeurBox.getSelectedItem());
-            AddBusFrame.this.dispose();
+         agency.addBus(makeArea.getText(), modelArea.getText(),
+               licensePlateArea.getText(),
+               Integer.parseInt(maxCapacityArea.getText()),
+               chauffeurBox.getSelectedItem(), destinationBox.getSelectedItem());
+         AddBusFrame.this.dispose();
       }
-
    }
 
 }

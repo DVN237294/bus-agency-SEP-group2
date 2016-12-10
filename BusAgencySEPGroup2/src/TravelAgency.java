@@ -101,6 +101,11 @@ public class TravelAgency
    {
       return destinationsList.getAllDestinations();
    }
+   
+   public String getDestination(String destination)
+   {
+      return destinationsList.getDestination(destination);
+   }
 
    public void addDestination(String destination)
    {
@@ -111,19 +116,52 @@ public class TravelAgency
    {
       return chauffeurList.getAllChauffeurs();
    }
-   
-   public Chauffeur getChauffeur(String firstName, String lastName, int chauffeurID)
+
+   public Chauffeur getChauffeur(String firstName, String lastName,
+         int chauffeurID)
    {
       return chauffeurList.getChauffeur(firstName, lastName, chauffeurID);
+   }
+   
+   public String getFirstName(String firstName)
+   {
+      return chauffeurList.getFirstName(firstName);
+   }
+   
+   public String[] getAllFirstNames()
+   {
+      return chauffeurList.getAllFirstNames();
+   }
+   
+   public String[] getAllLastNames()
+   {
+      return chauffeurList.getAllLastNames();
+   }
+   
+   public String[] getAllChauffeurIds()
+   {
+      return chauffeurList.getAllChauffeurIds();
+   }
+   
+   public String getLastName(String lastName)
+   {
+      return chauffeurList.getLastName(lastName);
+   }
+   
+   public int getChauffeurId(int ID)
+   {
+      return chauffeurList.getChauffeurId(ID);
    }
 
    public Bus[] getAllBusses()
    {
       return busList.getAllBusses();
    }
-   
-   public Bus getBus(String make, String model, String licensePlate) {
-      return busList.getBus(make, model, licensePlate);
+
+   public Bus getBus(String make, String model, String licensePlate,
+         Chauffeur chauffeur, String destination)
+   {
+      return busList.getBus(make, model, licensePlate, chauffeur, destination);
    }
 
    public void addChauffeur(String firstName, String lastName, int chauffeurID)
@@ -131,21 +169,28 @@ public class TravelAgency
       chauffeurList
             .addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
    }
-   
-   public void addBus(String make, String model, String licensePlate, int maxCapacity, Chauffeur chauffeur) {
-      busList.addBus(new Bus(make, model, licensePlate, maxCapacity, chauffeur));
+
+   public void addBus(String make, String model, String licensePlate,
+         int maxCapacity, Chauffeur chauffeur, String destination)
+   {
+      busList.addBus(new Bus(make, model, licensePlate, maxCapacity, chauffeur,
+            destination));
    }
-   
-   public void deleteBus(String make, String model, String licensePlate, int maxCapacity, Chauffeur chauffeur) {
-      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity, chauffeur));
+
+   public void deleteBus(String make, String model, String licensePlate,
+         int maxCapacity, Chauffeur chauffeur, String destination)
+   {
+      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity,
+            chauffeur, destination));
    }
-   
-   public void deleteBus(Bus bus) {
+
+   public void deleteBus(Bus bus)
+   {
       busList.deleteBus(bus);
    }
-   
+
    public Travel[] searchTravel(String destination, Chauffeur chauffeur, Bus bus)
    {
-	   return travelsList.searchTravel(destination, chauffeur, bus);
+      return travelsList.searchTravel(destination, chauffeur, bus);
    }
 }

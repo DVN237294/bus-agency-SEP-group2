@@ -22,7 +22,8 @@ import javax.swing.SpinnerDateModel;
 
 public class AddTourFrame extends JFrame
 {
-	private TravelAgency agency;
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
 	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
 
 	private JPanel resvStartDatePanel;
@@ -188,6 +189,43 @@ public class AddTourFrame extends JFrame
 		resvEndDatePanel.add(resvEndDayCBox);
 		resvEndDatePanel.add(resvEndHourCBox);
 		resvEndDatePanel.add(resvEndMinCBox);
+<<<<<<< HEAD
+=======
+		
+		//middle panel
+		chauffeurCBox = new JExtendedComboBox<Chauffeur>();
+		chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.setEnabled(false);
+		
+		busCBox = new JExtendedComboBox<Bus>();
+		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, null, null));
+		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE, null, null));
+		busCBox.setEnabled(false);
+		
+		destinationCBox = new JExtendedComboBox<String>(new String[] { "teest", "Teest", "ll" });
+		destinationCBox.setDefaultDisplayedItem("Destination");
+		destinationCBox.setPrototypeDisplayValue("Destination");
+		destinationCBox.setEditable(true);
+		
+		
+		middlePanel.add(chauffeurCBox);
+		middlePanel.add(busCBox);
+		middlePanel.add(destinationCBox);
+		
+		
+		add(westPanel);
+		add(eastPanel);
+		
+		FlowLayout westLayout = new FlowLayout(FlowLayout.LEFT);
+		westPanel.setLayout(westLayout);
+		
+		westPanel.add(resvStartDatePanel);
+		westPanel.add(resvEndDatePanel);
+		westPanel.add(middlePanel);
+		
+		setVisible(true);
+>>>>>>> branch 'develop' of https://github.com/DVN237294/bus-agency-SEP-group2.git
 	}
 	private class YearMonthSelectionChangedHandler implements ItemListener
 	{
