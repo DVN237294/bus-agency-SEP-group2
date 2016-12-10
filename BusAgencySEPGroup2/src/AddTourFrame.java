@@ -12,7 +12,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -22,8 +24,7 @@ public class AddTourFrame extends JFrame
 {
 	private TravelAgency agency;
 	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-	private JPanel westPanel;
-	private JPanel eastPanel;
+
 	private JPanel resvStartDatePanel;
 	private JPanel resvEndDatePanel;
 	private JPanel middlePanel;
@@ -45,16 +46,78 @@ public class AddTourFrame extends JFrame
 	{
 		super("Add Tour");
 		this.agency = agency;
-		setSize(960, 540);
-		setLayout(new GridLayout());
-		westPanel = new JPanel();
-		eastPanel = new JPanel();
+		setSize(735, 540);
+		setResizable(false);
+		BorderLayout mainLayout = new BorderLayout();
+		setLayout(mainLayout);
+		middlePanel = new JPanel();
+		middlePanel.setLayout(new GridLayout(1, 2));
+		//middleDestinationPanel = new JPanel();
+		//middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
+		//middlePanel.setBorder(BorderFactory.createTitledBorder("Bus & Chauffeur"));
+		
+		
+		setUpDateCBoxes();
+		
+		//middle panel
+		chauffeurCBox = new JExtendedComboBox<Chauffeur>();
+		chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.setEnabled(false);
+		
+		busCBox = new JExtendedComboBox<Bus>();
+		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
+		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
+		busCBox.setEnabled(false);
+		
+		destinationCBox = new JExtendedComboBox<String>(new String[] { "teest", "Teest", "ll" });
+		destinationCBox.setDefaultDisplayedItem("Destination");
+		destinationCBox.setPrototypeDisplayValue("Destination");
+		destinationCBox.setEditable(true);
+		
+		
+		JPanel middleWestPanel = new JPanel();
+		JPanel middleEastPanel = new JPanel();
+		JPanel middleEastUpperPanel = new JPanel();
+		JPanel middleEastLowerPanel = new JPanel();
+		JPanel middleEastUpperNorthPanel = new JPanel();
+		JPanel middleEastUpperCenterPanel = new JPanel();
+		middleEastUpperPanel.setLayout(new BorderLayout());
+		middleEastUpperCenterPanel.setLayout(new GridLayout());
+		middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+		//middleEastUpperPanel.setBorder(BorderFactory.createEmptyBorder(3, 0, 6, 0));
+		middleEastPanel.setLayout(new GridLayout(2, 1));
+		middleEastPanel.add(middleEastUpperPanel);
+		middleEastPanel.add(middleEastLowerPanel);
+		middleEastUpperPanel.setBorder(BorderFactory.createTitledBorder("Destinations"));
+		middleEastUpperPanel.add(middleEastUpperNorthPanel, BorderLayout.NORTH);
+		middleEastUpperPanel.add(middleEastUpperCenterPanel, BorderLayout.CENTER);
+		JButton addDstButton = new JButton("Add destination");
+		JList<String> destinationsList = new JList<String>(new String[] { "hej", "hejsa" });
+
+		middleEastUpperCenterPanel.add(destinationsList);
+		middleEastUpperNorthPanel.add(destinationCBox);
+		middleEastUpperNorthPanel.add(addDstButton);
+		
+		
+
+		middlePanel.add(middleWestPanel);
+		middlePanel.add(middleEastPanel);
+		
+		
+		JPanel datePanel = new JPanel();
+		datePanel.add(resvStartDatePanel);
+		datePanel.add(resvEndDatePanel);
+		add(datePanel, BorderLayout.NORTH);
+		
+		add(middlePanel, BorderLayout.CENTER);
+		setVisible(true);
+	}
+	private void setUpDateCBoxes()
+	{
 		resvStartDatePanel = new JPanel();
 		resvEndDatePanel = new JPanel();
-		middlePanel = new JPanel();
-		middleDestinationPanel = new JPanel();
-		middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
-		middlePanel.setBorder(BorderFactory.createTitledBorder("blablabla"));
 		resvStartDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation start date"));
 		resvEndDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation end date"));
 		resvStartDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -125,42 +188,7 @@ public class AddTourFrame extends JFrame
 		resvEndDatePanel.add(resvEndDayCBox);
 		resvEndDatePanel.add(resvEndHourCBox);
 		resvEndDatePanel.add(resvEndMinCBox);
-		
-		//middle panel
-		chauffeurCBox = new JExtendedComboBox<Chauffeur>();
-		chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
-		chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
-		chauffeurCBox.setEnabled(false);
-		
-		busCBox = new JExtendedComboBox<Bus>();
-		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
-		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE, null));
-		busCBox.setEnabled(false);
-		
-		destinationCBox = new JExtendedComboBox<String>(new String[] { "teest", "Teest", "ll" });
-		destinationCBox.setDefaultDisplayedItem("Destination");
-		destinationCBox.setPrototypeDisplayValue("Destination");
-		destinationCBox.setEditable(true);
-		
-		
-		middlePanel.add(chauffeurCBox);
-		middlePanel.add(busCBox);
-		middlePanel.add(destinationCBox);
-		
-		
-		add(westPanel);
-		add(eastPanel);
-		
-		FlowLayout westLayout = new FlowLayout(FlowLayout.LEFT);
-		westPanel.setLayout(westLayout);
-		
-		westPanel.add(resvStartDatePanel);
-		westPanel.add(resvEndDatePanel);
-		westPanel.add(middlePanel);
-		
-		setVisible(true);
 	}
-	
 	private class YearMonthSelectionChangedHandler implements ItemListener
 	{
 		private JExtendedComboBox<String> yearBox;
