@@ -12,11 +12,14 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 
 
@@ -29,6 +32,7 @@ public class AddTourFrame extends JFrame
 	private JPanel resvStartDatePanel;
 	private JPanel resvEndDatePanel;
 	private JPanel middlePanel;
+	private JPanel lowerPanel;
 	private JPanel middleDestinationPanel;
 	private JExtendedComboBox<String> resvStartYearCBox;
 	private JExtendedComboBox<String> resvStartMonthCBox;
@@ -43,6 +47,11 @@ public class AddTourFrame extends JFrame
 	private JExtendedComboBox<Chauffeur> chauffeurCBox;
 	private JExtendedComboBox<Bus> busCBox;
 	private JExtendedComboBox<String> destinationCBox;
+	private JButton submitFormButton;
+	private JCheckBox busChauffeurCheckBox;
+	private JCheckBox enableDiscounts;
+	private JTextField basePriceField; 
+	private JTextField passengerCountField;
 	public AddTourFrame(TravelAgency agency)
 	{
 		super("Add Tour");
@@ -51,7 +60,17 @@ public class AddTourFrame extends JFrame
 		setResizable(false);
 		BorderLayout mainLayout = new BorderLayout();
 		setLayout(mainLayout);
+		
+		enableDiscounts = new JCheckBox("Use default discount rate");
+		passengerCountField = new JTextField("No. of passengers");
+		passengerCountField.setEnabled(false);
+		basePriceField = new JTextField("Price per seat");
+		busChauffeurCheckBox = new JCheckBox("<html>Bus & Chauffeur<br>reservation");
+		submitFormButton = new JButton("Submit");
 		middlePanel = new JPanel();
+		lowerPanel = new JPanel();
+		lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		lowerPanel.add(submitFormButton);
 		middlePanel.setLayout(new GridLayout(1, 2));
 		//middleDestinationPanel = new JPanel();
 		//middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
@@ -78,20 +97,44 @@ public class AddTourFrame extends JFrame
 		
 		
 		JPanel middleWestPanel = new JPanel();
+		GridLayout middleWestPanelLayout = new GridLayout();
+		middleWestPanelLayout.setColumns(1);
+		middleWestPanelLayout.setRows(9);
+		middleWestPanelLayout.setVgap(15);
+		middleWestPanel.setLayout(middleWestPanelLayout);
+		middleWestPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		JPanel middleEastPanel = new JPanel();
+		JPanel middleWestFirstPanel = new JPanel();
+		JPanel middleWestSecondPanel = new JPanel();
+		JPanel middleWestThirdPanel = new JPanel();
+		JPanel middleWestFourthPanel = new JPanel();
+		
 		JPanel middleEastUpperPanel = new JPanel();
 		JPanel middleEastLowerPanel = new JPanel();
 		JPanel middleEastUpperNorthPanel = new JPanel();
 		JPanel middleEastUpperCenterPanel = new JPanel();
+		JPanel middleEastLowerCenterPanel = new JPanel();
+		JPanel middleEastLowerSouthPanel = new JPanel();
+		middleEastLowerCenterPanel.setLayout(new GridLayout());
 		middleEastUpperPanel.setLayout(new BorderLayout());
 		middleEastUpperCenterPanel.setLayout(new GridLayout());
 		middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		middleEastLowerSouthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
+		JList<Customer> customerList = new JList<Customer>();
+		JButton addCustomerButton = new JButton("Add Customer");
+		middleEastLowerSouthPanel.add(addCustomerButton);
 		//middleEastUpperPanel.setBorder(BorderFactory.createEmptyBorder(3, 0, 6, 0));
 		middleEastPanel.setLayout(new GridLayout(2, 1));
 		middleEastPanel.add(middleEastUpperPanel);
 		middleEastPanel.add(middleEastLowerPanel);
 		middleEastUpperPanel.setBorder(BorderFactory.createTitledBorder("Destinations"));
+		middleEastLowerPanel.setLayout(new BorderLayout());
+		middleEastLowerCenterPanel.add(customerList);
+		middleEastLowerPanel.add(middleEastLowerCenterPanel, BorderLayout.CENTER);
+		middleEastLowerPanel.add(middleEastLowerSouthPanel, BorderLayout.SOUTH);
+		
+		middleEastLowerPanel.setBorder(BorderFactory.createTitledBorder("Customers"));
 		middleEastUpperPanel.add(middleEastUpperNorthPanel, BorderLayout.NORTH);
 		middleEastUpperPanel.add(middleEastUpperCenterPanel, BorderLayout.CENTER);
 		JButton addDstButton = new JButton("Add destination");
@@ -102,7 +145,23 @@ public class AddTourFrame extends JFrame
 		middleEastUpperNorthPanel.add(addDstButton);
 		
 		
-
+		middleWestFirstPanel.setLayout(new GridLayout());
+		middleWestSecondPanel.setLayout(new GridLayout());
+		middleWestThirdPanel.setLayout(new GridLayout());
+		
+		middleWestFirstPanel.add(busChauffeurCheckBox);
+		middleWestFirstPanel.add(passengerCountField);
+		
+		middleWestSecondPanel.add(chauffeurCBox);
+		middleWestSecondPanel.add(busCBox);
+		
+		middleWestThirdPanel.add(basePriceField);
+		middleWestThirdPanel.add(enableDiscounts);
+		
+		middleWestPanel.add(middleWestFirstPanel);
+		middleWestPanel.add(middleWestSecondPanel);
+		middleWestPanel.add(middleWestThirdPanel);
+		
 		middlePanel.add(middleWestPanel);
 		middlePanel.add(middleEastPanel);
 		
@@ -110,9 +169,10 @@ public class AddTourFrame extends JFrame
 		JPanel datePanel = new JPanel();
 		datePanel.add(resvStartDatePanel);
 		datePanel.add(resvEndDatePanel);
-		add(datePanel, BorderLayout.NORTH);
 		
+		add(datePanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
+		add(lowerPanel, BorderLayout.SOUTH);
 		setVisible(true);
 	}
 	private void setUpDateCBoxes()
@@ -208,7 +268,7 @@ public class AddTourFrame extends JFrame
 		public void itemStateChanged(ItemEvent e)
 		{
 			// TODO Auto-generated method stub
-			if(!yearBox.isDefaultItemSelected() && !monthBox.isDefaultItemSelected() && yearBox.isPopupVisible() ^ monthBox.isPopupVisible())
+			if(!yearBox.isDefaultItemSelected() && !monthBox.isDefaultItemSelected())
 			{
 				int year = Integer.parseInt(yearBox.getSelectedItem());
 				int daysThisMonth = (new GregorianCalendar(year, java.util.Arrays.asList(months).indexOf(monthBox.getSelectedItem()), 1)).getActualMaximum(Calendar.DAY_OF_MONTH);
