@@ -1,7 +1,4 @@
 import java.util.ArrayList;
-
-import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
-
 public class ChauffeurList
 {
    private ArrayList<Chauffeur> chauffeurs;
@@ -41,6 +38,26 @@ public class ChauffeurList
       {
          chauffeurList[i] = chauffeurs.get(i).getFirstName();
       }
+      
+      /* What value will be in chauffeurList.length when this code is run?
+       * The length of chauffeurList is set when you initialize the array in your constructor. 
+       * You set it to the length of the chauffeurs ArrayList, which you initialized on the line before, therefore they
+       * will both have the length/count of 0. So your loop will run zero times (it will be skipped) and you return an empty array. Every time.
+       */
+      
+      /*  This is probably how you should do it: (This applies to getAllLastNames and getAllChauffeurIds aswell)
+       *  Here we return a collection of strings, with the size set to the CURRENT size of our chauffeurs collection.
+      String[] firstNames = new String[chauffeurs.size()];
+      for(int i = 0; i < firstNames.length; i++)
+      {
+    	  firstNames[i] = chauffeurs.get(i).getFirstName();
+      }
+      return firstNames;
+      
+      
+      */
+      
+
       return chauffeurList;
    }
    

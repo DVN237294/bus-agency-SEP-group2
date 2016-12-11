@@ -47,9 +47,7 @@ public class BusList
       {
          if (buses.get(i).getMake().equals(make)
                || buses.get(i).getModel().equals(model)
-               || buses.get(i).getLicensePlate().equals(licensePlate)
-               || buses.get(i).getChauffeur().equals(chauffeur)
-               || buses.get(i).getDestination().equals(destination))
+               || buses.get(i).getLicensePlate().equals(licensePlate))
          {
             return buses.get(i);
          }

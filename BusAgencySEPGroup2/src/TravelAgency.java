@@ -171,17 +171,15 @@ public class TravelAgency
    }
 
    public void addBus(String make, String model, String licensePlate,
-         int maxCapacity, Chauffeur chauffeur, String destination)
+         int maxCapacity)
    {
-      busList.addBus(new Bus(make, model, licensePlate, maxCapacity, chauffeur,
-            destination));
+      busList.addBus(new Bus(make, model, licensePlate, maxCapacity));
    }
 
    public void deleteBus(String make, String model, String licensePlate,
-         int maxCapacity, Chauffeur chauffeur, String destination)
+         int maxCapacity)
    {
-      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity,
-            chauffeur, destination));
+      busList.deleteBus(new Bus(make, model, licensePlate, maxCapacity));
    }
 
    public void deleteBus(Bus bus)

@@ -286,8 +286,8 @@ public class BussesPane extends JPanel
          {
             agency.addBus(makeField.getText(), modelField.getText(),
                   licensePlateField.getText(),
-                  Integer.parseInt(maxCapacityField.getText()),
-                  chauffeurEditBox.getSelectedItem(), destiBox.getSelectedItem());
+                  Integer.parseInt(maxCapacityField.getText())
+                  );//, chauffeurEditBox.getSelectedItem(), destiBox.getSelectedItem());
             DefaultListModel<Bus> model = (DefaultListModel<Bus>) busList
                   .getModel();
             Bus temp = busList.getSelectedValue();

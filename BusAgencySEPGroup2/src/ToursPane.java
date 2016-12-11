@@ -71,8 +71,7 @@ public class ToursPane extends JPanel
 
       busBox = new JExtendedComboBox<>(agency.getAllBusses());
       busBox.setDefaultDisplayedItem(new Bus("Bus", null, null,
-            Integer.MIN_VALUE, chauffeurBox.getSelectedItem(), destinationBox
-                  .getSelectedItem()));
+            Integer.MIN_VALUE));
       toursNorthPanel.add(destinationBox);
       toursNorthPanel.add(chauffeurBox);
       toursNorthPanel.add(busBox);
