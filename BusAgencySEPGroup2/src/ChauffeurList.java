@@ -110,8 +110,8 @@ public class ChauffeurList
       for (int i = 0; i < chauffeurs.size(); i++)
       {
          if (chauffeurs.get(i).getFirstName().equals(firstName)
-               && chauffeurs.get(i).getLastName().equals(lastName)
-               && chauffeurs.get(i).getChauffeurID() == chauffeurID)
+               || chauffeurs.get(i).getLastName().equals(lastName)
+               || chauffeurs.get(i).getChauffeurID() == chauffeurID)
          {
             return chauffeurs.get(i);
          }

@@ -1,41 +1,97 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JPanel;
 
 public class ChauffeursPane extends JPanel
 {
-	private static final long serialVersionUID = 1L;
-	private TravelAgency agency;
-	private JExtendedComboBox<String> destiBox;
-	private JExtendedComboBox<String> firstNameBox;
-	private JExtendedComboBox<String> lastNameBox;
-	private JExtendedComboBox<String> chauffeurIdBox;
-	private JPanel chauffeurNorthPanel = new JPanel();
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
+   private JExtendedComboBox<String> destiBox;
+   private JExtendedComboBox<String> firstNameBox;
+   private JExtendedComboBox<String> lastNameBox;
+   private JExtendedComboBox<String> chauffeurIdBox;
+   private JList<Chauffeur> chauffeurList;
+   private JButton searchButton;
+   private JButton searchAllButton;
 
-	public ChauffeursPane(TravelAgency agency)
-	{
-		super();
-		this.agency = agency;
+   private JPanel chauffeurNorthPanel = new JPanel();
+   private JPanel chauffeurWestPanel = new JPanel();
 
-		chauffeurNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
-		chauffeurNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
-		firstNameBox = new JExtendedComboBox<String>(agency.getAllFirstNames());
-		lastNameBox = new JExtendedComboBox<String>(agency.getAllLastNames());
-		chauffeurIdBox = new JExtendedComboBox<String>(agency.getAllChauffeurIds());
+   public ChauffeursPane(TravelAgency agency)
+   {
+      super();
+      this.agency = agency;
 
-		chauffeurNorthPanel.add(destiBox);
-		chauffeurNorthPanel.add(firstNameBox);
-		chauffeurNorthPanel.add(lastNameBox);
-		chauffeurNorthPanel.add(chauffeurIdBox);
+      chauffeurNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
+      chauffeurNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      chauffeurWestPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
+      firstNameBox = new JExtendedComboBox<String>(agency.getAllFirstNames());
+      lastNameBox = new JExtendedComboBox<String>(agency.getAllLastNames());
+      chauffeurIdBox = new JExtendedComboBox<String>(
+            agency.getAllChauffeurIds());
+      chauffeurList = new JList<Chauffeur>(new DefaultListModel<Chauffeur>());
+      searchButton = new JButton("Search");
+      searchAllButton = new JButton("Search All");
+      chauffeurList.setVisible(false);
 
-		setSize(960, 540);
-		setVisible(true);
+      chauffeurNorthPanel.add(destiBox);
+      chauffeurNorthPanel.add(firstNameBox);
+      chauffeurNorthPanel.add(lastNameBox);
+      chauffeurNorthPanel.add(chauffeurIdBox);
+      chauffeurNorthPanel.add(searchButton);
+      chauffeurNorthPanel.add(searchAllButton);
+      chauffeurWestPanel.add(chauffeurList);
+      searchButton.addActionListener(new SearchAction());
+      searchAllButton.addActionListener(new SearchAllAction());
 
-		this.setLayout(new BorderLayout());
-		this.add(chauffeurNorthPanel, BorderLayout.NORTH);
-	}
+      setSize(960, 540);
+      setVisible(true);
+
+      this.setLayout(new BorderLayout());
+      this.add(chauffeurNorthPanel, BorderLayout.NORTH);
+      this.add(chauffeurWestPanel, BorderLayout.WEST);
+   }
+
+   public class SearchAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         DefaultListModel<Chauffeur> model = (DefaultListModel<Chauffeur>) chauffeurList
+               .getModel();
+         model.removeAllElements();
+         model.addElement(agency.getChauffeur(firstNameBox.getSelectedItem(),
+               lastNameBox.getSelectedItem(), Integer.parseInt(chauffeurIdBox.getSelectedItem())));
+         chauffeurList.setVisible(true);
+      }
+
+   }
+   
+   public class SearchAllAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         DefaultListModel<Chauffeur> model = (DefaultListModel<Chauffeur>) chauffeurList
+               .getModel();
+         model.removeAllElements();
+         for (Chauffeur chauffeur : agency.getAllChauffeurs())
+         {
+            model.addElement(chauffeur);
+         }
+         chauffeurList.setVisible(true);
+      }
+      
+   }
 }
