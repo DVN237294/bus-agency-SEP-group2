@@ -9,6 +9,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class ChauffeursPane extends JPanel
 {
@@ -21,6 +24,7 @@ public class ChauffeursPane extends JPanel
    private JList<Chauffeur> chauffeurList;
    private JButton searchButton;
    private JButton searchAllButton;
+   private JTextArea infoChauffeurList;
 
    private JPanel chauffeurNorthPanel = new JPanel();
    private JPanel chauffeurWestPanel = new JPanel();
@@ -41,7 +45,9 @@ public class ChauffeursPane extends JPanel
       chauffeurList = new JList<Chauffeur>(new DefaultListModel<Chauffeur>());
       searchButton = new JButton("Search");
       searchAllButton = new JButton("Search All");
+      infoChauffeurList = new JTextArea();
       chauffeurList.setVisible(false);
+      infoChauffeurList.setVisible(false);
 
       chauffeurNorthPanel.add(destiBox);
       chauffeurNorthPanel.add(firstNameBox);
@@ -50,8 +56,10 @@ public class ChauffeursPane extends JPanel
       chauffeurNorthPanel.add(searchButton);
       chauffeurNorthPanel.add(searchAllButton);
       chauffeurWestPanel.add(chauffeurList);
+      chauffeurWestPanel.add(infoChauffeurList);
       searchButton.addActionListener(new SearchAction());
       searchAllButton.addActionListener(new SearchAllAction());
+      chauffeurList.addListSelectionListener(new InformationListener());
 
       setSize(960, 540);
       setVisible(true);
@@ -91,6 +99,22 @@ public class ChauffeursPane extends JPanel
             model.addElement(chauffeur);
          }
          chauffeurList.setVisible(true);
+      }
+      
+   }
+   
+   public class InformationListener implements ListSelectionListener
+   {
+
+      @Override
+      public void valueChanged(ListSelectionEvent e)
+      {
+         if (!chauffeurList.isSelectionEmpty() && !chauffeurList.isSelectionEmpty())
+         {
+            infoChauffeurList.setText(chauffeurList.getSelectedValue().toString());
+            infoChauffeurList.setEditable(false);
+            infoChauffeurList.setVisible(true);
+         }
       }
       
    }
