@@ -2,12 +2,10 @@ import java.util.ArrayList;
 public class ChauffeurList
 {
    private ArrayList<Chauffeur> chauffeurs;
-   private String[] chauffeurList;
 
    public ChauffeurList()
    {
       chauffeurs = new ArrayList<Chauffeur>();
-      chauffeurList = new String[chauffeurs.size()];
    }
 
    public void addChauffeur(Chauffeur chauffeur)
@@ -34,9 +32,10 @@ public class ChauffeurList
    
    public String[] getAllFirstNames()
    {
-      for (int i = 0; i < chauffeurList.length; i++)
+      String[] firstNames = new String[chauffeurs.size()];
+      for (int i = 0; i < firstNames.length; i++)
       {
-         chauffeurList[i] = chauffeurs.get(i).getFirstName();
+         firstNames[i] = chauffeurs.get(i).getFirstName();
       }
       
       /* What value will be in chauffeurList.length when this code is run?
@@ -58,25 +57,27 @@ public class ChauffeurList
       */
       
 
-      return chauffeurList;
+      return firstNames;
    }
    
    public String[] getAllLastNames()
    {
-      for (int i = 0; i < chauffeurList.length; i++)
+      String[] lastNames = new String[chauffeurs.size()];
+      for (int i = 0; i < lastNames.length; i++)
       {
-         chauffeurList[i] = chauffeurs.get(i).getLastName();
+         lastNames[i] = chauffeurs.get(i).getLastName();
       }
-      return chauffeurList;
+      return lastNames;
    }
    
    public String[] getAllChauffeurIds()
    {
-      for (int i = 0; i < chauffeurList.length; i++)
+      String[] chauffeurIds = new String[chauffeurs.size()];
+      for (int i = 0; i < chauffeurIds.length; i++)
       {
-         chauffeurList[i] = Integer.toString(chauffeurs.get(i).getChauffeurID());
+         chauffeurIds[i] = Integer.toString(chauffeurs.get(i).getChauffeurID());
       }
-      return chauffeurList;
+      return chauffeurIds;
    }
    
    public String getLastName(String lastName)
