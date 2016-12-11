@@ -1,4 +1,8 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 
 public class BusList
 {
@@ -25,7 +29,7 @@ public class BusList
       ArrayList<Bus> temp = new ArrayList<>();
       for (int i = 0; i < buses.size(); i++)
       {
-         if (buses.get(i).getMaxCapacity() > minCapacity)
+         if (buses.get(i).getMaxCapacity() >= minCapacity)
          {
             temp.add(buses.get(i));
          }
@@ -53,5 +57,24 @@ public class BusList
          }
       }
       return null;
+   }
+   
+   public int[] getBusCapacities()
+   {
+	   ArrayList<Integer> temp = new ArrayList<Integer>();
+	   
+	   for(Bus bus : buses)
+	   {
+		   if(!temp.contains(bus.getMaxCapacity()))
+			   temp.add(bus.getMaxCapacity());
+	   }
+	   
+	   int[] returnArray = new int[temp.size()];
+	   for(int i = 0; i < returnArray.length; i++)
+	   {
+		   returnArray[i] = temp.get(i);
+	   }
+	   Arrays.sort(returnArray); 
+	   return returnArray;
    }
 }

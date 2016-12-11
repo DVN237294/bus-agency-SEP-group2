@@ -46,6 +46,9 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 
 	public boolean isDefaultItemSelected()
 	{
+		T item = getSelectedItem();
+		if(item == null)
+			return true;
 		return getSelectedItem().equals(getDefaultDisplayedItem());
 	}
 

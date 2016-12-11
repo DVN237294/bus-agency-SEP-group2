@@ -191,4 +191,10 @@ public class TravelAgency
    {
       return travelsList.searchTravel(destination, chauffeur, bus);
    }
+   
+   public int[] getBusCapacities()
+   {
+	   return busList.getBusCapacities();
+   }
+   
 }
