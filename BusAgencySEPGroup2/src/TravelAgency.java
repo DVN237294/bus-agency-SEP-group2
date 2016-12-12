@@ -162,6 +162,26 @@ public class TravelAgency
    {
       return busList.getBus(make, model, licensePlate, maxCapacity);
    }
+   
+   public String[] getAllBusMakes()
+   {
+      return busList.getAllMakes();
+   }
+   
+   public String[] getAllBusModels()
+   {
+      return busList.getAllModels();
+   }
+   
+   public String[] getAllBusLicensePlates()
+   {
+      return busList.getAllLicensePlates();
+   }
+   
+   public Integer[] getAllBusMaxCapacities()
+   {
+      return busList.getAllMaxCapacities();
+   }
 
    public void addChauffeur(String firstName, String lastName, int chauffeurID)
    {

@@ -4,6 +4,9 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -227,6 +230,7 @@ public class ChauffeursPane extends JPanel
       public void actionPerformed(ActionEvent e)
       {
          AddChauffeurPanel frame = new AddChauffeurPanel(agency);
+         frame.addWindowListener(new WindowStateChangedHandler());
       }
 
    }
@@ -291,5 +295,63 @@ public class ChauffeursPane extends JPanel
          infoChauffeurList.setVisible(false);
       }
       
+   }
+   
+   private class WindowStateChangedHandler implements WindowListener
+   {
+
+      @Override
+      public void windowActivated(WindowEvent e)
+      {
+
+      }
+
+      @Override
+      public void windowClosed(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("closed");
+         firstNameBox.setItems(agency.getAllFirstNames());
+         lastNameBox.setItems(agency.getAllLastNames());
+         chauffeurIdBox.setItems(agency.getAllChauffeurIds());
+      }
+
+      @Override
+      public void windowClosing(WindowEvent e)
+      {
+         AddTourFrame frame = (AddTourFrame) e.getSource();
+         System.out.println(frame.getResult());
+      }
+
+      @Override
+      public void windowDeactivated(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowDeiconified(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowIconified(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowOpened(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("opened");
+      }
+
    }
 }

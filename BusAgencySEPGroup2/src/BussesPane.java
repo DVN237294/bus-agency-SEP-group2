@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -374,6 +373,10 @@ public class BussesPane extends JPanel
          // TODO Auto-generated method stub
 
          System.out.println("closed");
+         makeBox.setItems(agency.getAllBusMakes());
+         modelBox.setItems(agency.getAllBusModels());
+         licensePlateBox.setItems(agency.getAllBusLicensePlates());
+         maxCapacityBox.setItems(agency.getAllBusMaxCapacities());
       }
 
       @Override
@@ -382,7 +385,6 @@ public class BussesPane extends JPanel
          // TODO Auto-generated method stub
 
          System.out.println("closing");
-         // ((JFrame)e.getSource()).dispose();
       }
 
       @Override

@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
 public class BusList
 {
    private ArrayList<Bus> buses;
@@ -39,6 +41,46 @@ public class BusList
    {
       Bus[] temp = new Bus[buses.size()];
       buses.toArray(temp);
+      return temp;
+   }
+   
+   public String[] getAllMakes()
+   {
+      String[] temp = new String[buses.size()];
+      for (int i = 0; i < temp.length; i++)
+      {
+            temp[i] = buses.get(i).getMake();
+      }
+      return temp;
+   }
+   
+   public String[] getAllModels()
+   {
+      String[] temp = new String[buses.size()];
+      for (int i = 0; i < temp.length; i++)
+      {
+            temp[i] = buses.get(i).getModel();
+      }
+      return temp;
+   }
+   
+   public String[] getAllLicensePlates()
+   {
+      String[] temp = new String[buses.size()];
+      for (int i = 0; i < temp.length; i++)
+      {
+            temp[i] = buses.get(i).getLicensePlate();
+      }
+      return temp;
+   }
+   
+   public Integer[] getAllMaxCapacities()
+   {
+      Integer[] temp = new Integer[buses.size()];
+      for (int i = 0; i < temp.length; i++)
+      {
+            temp[i] = buses.get(i).getMaxCapacity();
+      }
       return temp;
    }
 
