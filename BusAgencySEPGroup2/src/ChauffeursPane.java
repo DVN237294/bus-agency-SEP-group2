@@ -173,6 +173,9 @@ public class ChauffeursPane extends JPanel
          Chauffeur temp = chauffeurList.getSelectedValue();
          model.removeElement(temp);
          agency.deleteChauffeur(temp);
+         firstNameBox.removeItem(temp.getFirstName());
+         lastNameBox.removeItem(temp.getLastName());
+         chauffeurIdBox.removeItem(temp.getChauffeurID());
          infoChauffeurList.setVisible(false);
       }
 

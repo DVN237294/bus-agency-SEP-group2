@@ -197,6 +197,10 @@ public class BussesPane extends JPanel
          Bus temp = busList.getSelectedValue();
          model.removeElement(temp);
          agency.deleteBus(temp);
+         makeBox.removeItem(temp.getMake());
+         modelBox.removeItem(temp.getModel());
+         licensePlateBox.removeItem(temp.getLicensePlate());
+         maxCapacityBox.removeItem(temp.getMaxCapacity());
          busList.setVisible(true);
          deleteButton.setVisible(true);
          infoBusList.setVisible(false);
