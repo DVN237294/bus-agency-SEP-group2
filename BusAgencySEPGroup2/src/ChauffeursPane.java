@@ -81,6 +81,8 @@ public class ChauffeursPane extends JPanel
       lastNameField.setVisible(false);
       firstNameLabel.setVisible(false);
       lastNameLabel.setVisible(false);
+      deleteChauffeurButton.setVisible(false);
+      editChauffeurButton.setVisible(false);
       chauffeurIdLabel.setVisible(false);
       saveEditButton.setVisible(false);
       cancelEditButton.setVisible(false);
@@ -207,6 +209,8 @@ public class ChauffeursPane extends JPanel
             infoChauffeurList.setText(chauffeurList.getSelectedValue()
                   .toString());
             infoChauffeurList.setEditable(false);
+            editChauffeurButton.setVisible(true);
+            deleteChauffeurButton.setVisible(true);
             infoChauffeurList.setVisible(true);
          }
       }
@@ -262,6 +266,7 @@ public class ChauffeursPane extends JPanel
          chauffeurIdLabel.setVisible(false);
          saveEditButton.setVisible(false);
          cancelEditButton.setVisible(false);
+         infoChauffeurList.setVisible(false);
       }
    }
    
@@ -280,6 +285,7 @@ public class ChauffeursPane extends JPanel
          chauffeurIdLabel.setVisible(false);
          saveEditButton.setVisible(false);
          cancelEditButton.setVisible(false);
+         infoChauffeurList.setVisible(false);
       }
       
    }
