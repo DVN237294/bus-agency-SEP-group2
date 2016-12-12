@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class ChauffeursPane extends JPanel
    private JPanel chauffeurNorthPanel = new JPanel();
    private JPanel chauffeurWestPanel = new JPanel();
    private JPanel chauffeurSouthPanel = new JPanel();
+   private JPanel chauffeurEditPanel = new JPanel();
 
    public ChauffeursPane(TravelAgency agency)
    {
@@ -41,6 +43,8 @@ public class ChauffeursPane extends JPanel
       chauffeurNorthPanel.setBorder(BorderFactory.createTitledBorder("Search"));
       chauffeurNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
       chauffeurWestPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      chauffeurEditPanel.setLayout(new GridLayout(6, 2));
+      chauffeurEditPanel.setBorder(BorderFactory.createTitledBorder("Edit"));
       destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
       firstNameBox = new JExtendedComboBox<String>(agency.getAllFirstNames());
       lastNameBox = new JExtendedComboBox<String>(agency.getAllLastNames());
@@ -54,6 +58,7 @@ public class ChauffeursPane extends JPanel
       deleteChauffeurButton = new JButton("Delete Chauffeur");
       editChauffeurButton = new JButton("Edit Chauffeur");
       chauffeurList.setVisible(false);
+      chauffeurEditPanel.setVisible(false);
       infoChauffeurList.setVisible(false);
 
       chauffeurNorthPanel.add(destiBox);
@@ -127,6 +132,17 @@ public class ChauffeursPane extends JPanel
          model.removeElement(temp);
          agency.deleteChauffeur(temp);
          infoChauffeurList.setVisible(false);
+      }
+      
+   }
+   
+   public class EditAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         
       }
       
    }
