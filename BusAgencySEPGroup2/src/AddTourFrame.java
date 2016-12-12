@@ -1,30 +1,33 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.lang.reflect.Array;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javafx.util.converter.LocalDateTimeStringConverter;
-
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.CellRendererPane;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
+import javax.swing.plaf.metal.MetalComboBoxUI;
 
 public class AddTourFrame extends JFrame
 {
@@ -77,6 +80,10 @@ public class AddTourFrame extends JFrame
 	private JCheckBox enableDiscounts;
 	private JTextField basePriceField;
 
+	public String getResult()
+	{
+		return "this is it";
+	}
 	public AddTourFrame(TravelAgency agency)
 	{
 		super("Add Tour");
@@ -89,7 +96,7 @@ public class AddTourFrame extends JFrame
 		enableDiscounts = new JCheckBox("Use default discount rate");
 		int[] busCapacities = agency.getBusCapacities();
 		String[] passengerCounts = new String[busCapacities.length];
-		for(int i = 0; i < busCapacities.length; i++)
+		for (int i = 0; i < busCapacities.length; i++)
 			passengerCounts[i] = Integer.toString(busCapacities[i]);
 		maxPassengerCountCBox = new JExtendedComboBox<String>(passengerCounts);
 		maxPassengerCountCBox.setDefaultDisplayedItem("Passenger limit");
@@ -98,7 +105,7 @@ public class AddTourFrame extends JFrame
 		busChauffeurCheckBox = new JCheckBox("<html>Bus & Chauffeur<br>reservation");
 		submitFormButton = new JButton("Submit");
 		passengerLimitPanel = new JPanel();
-		//passengerLimitPanel.setBorder(BorderFactory.createTitledBorder("Passenger limit"));
+		// passengerLimitPanel.setBorder(BorderFactory.createTitledBorder("Passenger limit"));
 		passengerLimitPanel.setLayout(new GridLayout());
 		passengerLimitPanel.add(maxPassengerCountCBox);
 		middlePanel = new JPanel();
@@ -123,10 +130,17 @@ public class AddTourFrame extends JFrame
 		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE));
 		busCBox.setEnabled(false);
 
-		destinationCBox = new JExtendedComboBox<String>(new String[] { "teest", "Teest", "ll" });
+		String[] destinations = agency.getAllDestinations();
+		destinationCBox = new JExtendedComboBox<String>(destinations);
+		DestinationSearchHandler destinationBoxInputHandler = new DestinationSearchHandler(destinationCBox, destinations);
 		destinationCBox.setDefaultDisplayedItem("Destination");
 		destinationCBox.setPrototypeDisplayValue("Destination");
+		destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox.getPreferredSize().getHeight()));
 		destinationCBox.setEditable(true);
+		destinationCBox.addItemListener(destinationBoxInputHandler);
+		destinationCBox.getEditor().getEditorComponent().addKeyListener(destinationBoxInputHandler);
+		destinationCBox.getEditor().getEditorComponent().addFocusListener(destinationBoxInputHandler);
+		
 
 		JPanel middleWestPanel = new JPanel();
 		JPanel middleEastPanel = new JPanel();
@@ -153,11 +167,15 @@ public class AddTourFrame extends JFrame
 		middleEastUpperPanel.setLayout(new BorderLayout());
 		middleEastUpperCenterPanel.setLayout(new GridLayout());
 		middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		middleEastLowerSouthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		middleEastLowerSouthPanel.setLayout(new BoxLayout(middleEastLowerSouthPanel, BoxLayout.LINE_AXIS));
+		middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		JList<Customer> customerList = new JList<Customer>();
 		JButton addCustomerButton = new JButton("Add Customer");
+		JButton addPassengerButton = new JButton("Add Passenger");
 		middleEastLowerSouthPanel.add(addCustomerButton);
+		middleEastLowerSouthPanel.add(Box.createHorizontalGlue());
+		middleEastLowerSouthPanel.add(addPassengerButton);
 		// middleEastUpperPanel.setBorder(BorderFactory.createEmptyBorder(3, 0,
 		// 6, 0));
 		middleEastPanel.setLayout(new GridLayout(2, 1));
@@ -173,7 +191,8 @@ public class AddTourFrame extends JFrame
 		middleEastUpperPanel.add(middleEastUpperNorthPanel, BorderLayout.NORTH);
 		middleEastUpperPanel.add(middleEastUpperCenterPanel, BorderLayout.CENTER);
 		JButton addDstButton = new JButton("Add destination");
-		JList<String> destinationsList = new JList<String>(new String[] { "hej", "hejsa" });
+		JList<String> destinationsList = new JList<String>();
+		destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox.getPreferredSize().getHeight()));
 
 		middleEastUpperCenterPanel.add(destinationsList);
 		middleEastUpperNorthPanel.add(destinationCBox);
@@ -203,6 +222,7 @@ public class AddTourFrame extends JFrame
 		middlePanel.add(middleEastPanel);
 
 		JPanel datePanel = new JPanel();
+		datePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		datePanel.add(resvStartDatePanel);
 		datePanel.add(resvEndDatePanel);
 
@@ -391,6 +411,91 @@ public class AddTourFrame extends JFrame
 		new ReservationDateChangedHandler(resvStartDatePanel, resvEndDatePanel);
 	}
 
+	private class DestinationSearchHandler implements ItemListener, KeyListener, FocusListener
+	{
+		private JExtendedComboBox<String> cbox;
+		private String[] destinations;
+		private int indexToSelect;
+
+		public DestinationSearchHandler(JExtendedComboBox<String> cbox, String[] destinations)
+		{
+			this.cbox = cbox;
+			this.destinations = destinations;
+			this.indexToSelect = -1;
+		}
+
+		@Override
+		public void itemStateChanged(ItemEvent e)
+		{
+			System.out.println("yeeaap");
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e)
+		{
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e)
+		{
+
+			// useful
+			// filter out the list based on keyinput..
+			String typedString = (cbox.getEditor().getItem() == null ? "" : cbox.getEditor().getItem().toString().toLowerCase())
+					+ (e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() >= KeyEvent.VK_Z ? Character.toString(e.getKeyChar()).toLowerCase() : "");
+			
+			System.out.println("code: " + e.getKeyCode());
+			String itemToSelect = null;
+			System.out.println("Typed: " + typedString);
+			for (int i = cbox.getItemCount() - 1; i >= 0; i--)
+			{
+				if (!cbox.getItemAt(i).toLowerCase().startsWith(typedString))
+				{
+					cbox.removeItemAt(i);
+				} else
+				{
+					itemToSelect = cbox.getItemAt(i);
+				}
+
+			}
+			System.out.println(itemToSelect);
+			indexToSelect = Arrays.asList(destinations).indexOf(itemToSelect);
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e)
+		{
+
+		}
+
+		@Override
+		public void focusGained(FocusEvent e)
+		{
+			// TODO Auto-generated method stub
+			System.out.println("focus");
+			if(cbox.isEmpty())
+				cbox.setItems(destinations);
+				
+			cbox.setPopupVisible(true);
+			cbox.getEditor().setItem("");
+
+		}
+
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+			// TODO Auto-generated method stub
+			// cbox.setPopupVisible(false);
+			System.out.println("To select: " + indexToSelect);
+			if (indexToSelect > 0)
+			{
+				cbox.setItems(destinations);
+				cbox.setSelectedIndex(indexToSelect);
+			}
+		}
+
+	}
+
 	private class ReservationDateChangedHandler implements ItemListener
 	{
 		private JPanel reservationStartDatePanel;
@@ -451,27 +556,28 @@ public class AddTourFrame extends JFrame
 					int endDay = Integer.parseInt(resvEndDayCBox.getSelectedItem());
 					int endHour = Integer.parseInt(resvEndHourCBox.getSelectedItem());
 					int endMinute = Integer.parseInt(resvEndMinCBox.getSelectedItem());
-					LocalDateTime startDate =  LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
+					LocalDateTime startDate = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
 					LocalDateTime endDate = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
-					
-					if(startDate.isBefore(endDate))
+
+					if (startDate.isBefore(endDate))
 					{
-						//update bus and chauffeur boxes with entities available within this time interval
+						// update bus and chauffeur boxes with entities
+						// available within this time interval
 						busCBox.removeAllItems();
 						chauffeurCBox.removeAllItems();
-						
-						for(Bus bus : agency.listAvailableBusses(startDate, endDate, Integer.parseInt(maxPassengerCountCBox.getSelectedItem())))
+
+						for (Bus bus : agency.listAvailableBusses(startDate, endDate, Integer.parseInt(maxPassengerCountCBox.getSelectedItem())))
 							busCBox.addItem(bus);
-						
-						for(Chauffeur chauffeur : agency.listAvailableChauffeurs(startDate, endDate))
+
+						for (Chauffeur chauffeur : agency.listAvailableChauffeurs(startDate, endDate))
 							chauffeurCBox.addItem(chauffeur);
-						
+
 						busCBox.setEnabled(true);
 						chauffeurCBox.setEnabled(true);
 					}
 				}
-			}
-			else {
+			} else
+			{
 
 				busCBox.removeAllItems();
 				chauffeurCBox.removeAllItems();

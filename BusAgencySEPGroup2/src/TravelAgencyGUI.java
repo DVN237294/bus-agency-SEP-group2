@@ -22,6 +22,8 @@ public class TravelAgencyGUI extends JFrame
       // Dummy data, to test layout:
       agency.addDestination("xyz");
       agency.addDestination("abcd");
+      agency.addDestination("xyzghdf");
+      agency.addDestination("abcdefgh");
       agency.addChauffeur("Hans", "Hansen", 666);
       agency.addChauffeur("Afonso", "Taborda", 999);
       agency.addBus("Volkswagen", "jdsskdj", "12323AB", 50);
