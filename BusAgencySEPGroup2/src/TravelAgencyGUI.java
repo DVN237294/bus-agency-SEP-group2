@@ -47,6 +47,10 @@ public class TravelAgencyGUI extends JFrame
       tabPanels[0] = new ToursPane(agency);
       tabbedPane.setComponentAt(0, tabPanels[0]);
 
+      //BusAndChauffeur pane
+      tabPanels[1] = new ToursPane(agency);
+      tabbedPane.setComponentAt(1, tabPanels[1]);
+      
       // Busses pane
       tabPanels[2] = new BussesPane(agency);
       tabbedPane.setComponentAt(2, tabPanels[2]);
