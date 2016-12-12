@@ -4,6 +4,9 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -177,7 +180,7 @@ public class BussesPane extends JPanel
          model.removeAllElements();
          model.addElement(agency.getBus(makeBox.getSelectedItem(),
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem(),
-               chauffeurBox.getSelectedItem(), destiBox.getSelectedItem()));
+               maxCapacityBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
          editBusFrameButton.setVisible(true);
@@ -262,6 +265,7 @@ public class BussesPane extends JPanel
       public void actionPerformed(ActionEvent e)
       {
          AddBusFrame frame = new AddBusFrame(agency);
+         frame.addWindowListener(new WindowListenerChangeHandler());
       }
 
    }
@@ -349,5 +353,66 @@ public class BussesPane extends JPanel
          destiEditBox.setVisible(false);
          cancelEditBus.setVisible(false);
       }
+   }
+   
+   private class WindowListenerChangeHandler implements WindowListener
+   {
+
+      @Override
+      public void windowActivated(WindowEvent e)
+      {
+         if (e.getID() == WindowEvent.WINDOW_CLOSED)
+         {
+            System.out.println("you closed the window");
+         }
+         System.out.println("something");
+      }
+
+      @Override
+      public void windowClosed(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("closed");
+      }
+
+      @Override
+      public void windowClosing(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("closing");
+         // ((JFrame)e.getSource()).dispose();
+      }
+
+      @Override
+      public void windowDeactivated(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowDeiconified(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowIconified(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowOpened(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("opened");
+      }
+      
    }
 }

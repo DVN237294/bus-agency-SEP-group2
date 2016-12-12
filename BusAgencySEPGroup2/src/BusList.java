@@ -1,8 +1,5 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 
 public class BusList
 {
@@ -45,13 +42,14 @@ public class BusList
       return temp;
    }
 
-   public Bus getBus(String make, String model, String licensePlate, Chauffeur chauffeur, String destination)
+   public Bus getBus(String make, String model, String licensePlate, int maxCapacity)
    {
       for (int i = 0; i < buses.size(); i++)
       {
          if (buses.get(i).getMake().equals(make)
                || buses.get(i).getModel().equals(model)
-               || buses.get(i).getLicensePlate().equals(licensePlate))
+               || buses.get(i).getLicensePlate().equals(licensePlate)
+               || buses.get(i).getMaxCapacity() == maxCapacity)
          {
             return buses.get(i);
          }

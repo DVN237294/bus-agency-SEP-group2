@@ -158,10 +158,9 @@ public class TravelAgency
       return busList.getAllBusses();
    }
 
-   public Bus getBus(String make, String model, String licensePlate,
-         Chauffeur chauffeur, String destination)
+   public Bus getBus(String make, String model, String licensePlate, int maxCapacity)
    {
-      return busList.getBus(make, model, licensePlate, chauffeur, destination);
+      return busList.getBus(make, model, licensePlate, maxCapacity);
    }
 
    public void addChauffeur(String firstName, String lastName, int chauffeurID)
