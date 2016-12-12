@@ -71,6 +71,7 @@ public class ChauffeursPane extends JPanel
       searchAllButton.addActionListener(new SearchAllAction());
       chauffeurList.addListSelectionListener(new InformationListener());
       addChauffeurButton.addActionListener(new AddChauffeurAction());
+      deleteChauffeurButton.addActionListener(new DeleteAction());
 
       setSize(960, 540);
       setVisible(true);
@@ -111,6 +112,21 @@ public class ChauffeursPane extends JPanel
             model.addElement(chauffeur);
          }
          chauffeurList.setVisible(true);
+      }
+      
+   }
+   
+   public class DeleteAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         DefaultListModel<Chauffeur> model = (DefaultListModel<Chauffeur>) chauffeurList.getModel();
+         Chauffeur temp = chauffeurList.getSelectedValue();
+         model.removeElement(temp);
+         agency.deleteChauffeur(temp);
+         infoChauffeurList.setVisible(false);
       }
       
    }

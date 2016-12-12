@@ -169,6 +169,16 @@ public class TravelAgency
       chauffeurList
             .addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
    }
+   
+   public void deleteChauffeur(String firstName, String lastName, int chauffeurID)
+   {
+      chauffeurList.deleteChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
+   }
+   
+   public void deleteChauffeur(Chauffeur chauffeur)
+   {
+      chauffeurList.deleteChauffeur(chauffeur);
+   }
 
    public void addBus(String make, String model, String licensePlate,
          int maxCapacity)
