@@ -4,6 +4,9 @@ import java.awt.GridLayout;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -34,6 +37,7 @@ public class BussesPane extends JPanel
    private JButton addBusFrameButton;
    private JButton editBusFrameButton;
    private JButton saveEditBus;
+   private JButton cancelEditBus;
    private TextField makeField;
    private TextField modelField;
    private TextField licensePlateField;
@@ -109,6 +113,8 @@ public class BussesPane extends JPanel
       licensePlateLabel = new JLabel("License Plate");
       maxCapacityLabel = new JLabel("Max Capacity");
       saveEditBus = new JButton("Save");
+      cancelEditBus = new JButton("Cancel");
+      cancelEditBus.setVisible(false);
       saveEditBus.setVisible(false);
       infoBusList.setVisible(false);
       busList.setVisible(false);
@@ -147,6 +153,7 @@ public class BussesPane extends JPanel
       bussesEditBusPanel.add(maxCapacityLabel);
       bussesEditBusPanel.add(maxCapacityField);
       bussesEditBusPanel.add(saveEditBus);
+      bussesEditBusPanel.add(cancelEditBus);
       searchButton.addActionListener(new SearchListener());
       busList.addListSelectionListener(new InformationListener());
       showAllBussesButton.addActionListener(new SearchAllListener());
@@ -154,6 +161,7 @@ public class BussesPane extends JPanel
       addBusFrameButton.addActionListener(new AddBusFrameAction());
       editBusFrameButton.addActionListener(new EditBusAction());
       saveEditBus.addActionListener(new SaveEditAction());
+      cancelEditBus.addActionListener(new CancelEditAction());
       this.setLayout(new BorderLayout());
       this.add(bussesNorthPanel, BorderLayout.NORTH);
       this.add(bussesWestPanel, BorderLayout.WEST);
@@ -172,7 +180,7 @@ public class BussesPane extends JPanel
          model.removeAllElements();
          model.addElement(agency.getBus(makeBox.getSelectedItem(),
                modelBox.getSelectedItem(), licensePlateBox.getSelectedItem(),
-               chauffeurBox.getSelectedItem(), destiBox.getSelectedItem()));
+               maxCapacityBox.getSelectedItem()));
          busList.setVisible(true);
          deleteButton.setVisible(true);
          editBusFrameButton.setVisible(true);
@@ -192,6 +200,10 @@ public class BussesPane extends JPanel
          Bus temp = busList.getSelectedValue();
          model.removeElement(temp);
          agency.deleteBus(temp);
+         makeBox.removeItem(temp.getMake());
+         modelBox.removeItem(temp.getModel());
+         licensePlateBox.removeItem(temp.getLicensePlate());
+         maxCapacityBox.removeItem(temp.getMaxCapacity());
          busList.setVisible(true);
          deleteButton.setVisible(true);
          infoBusList.setVisible(false);
@@ -253,6 +265,7 @@ public class BussesPane extends JPanel
       public void actionPerformed(ActionEvent e)
       {
          AddBusFrame frame = new AddBusFrame(agency);
+         frame.addWindowListener(new WindowListenerChangeHandler());
       }
 
    }
@@ -268,12 +281,32 @@ public class BussesPane extends JPanel
          saveEditBus.setVisible(true);
          destiEditBox.setVisible(true);
          modelLabel.setVisible(true);
+         cancelEditBus.setVisible(true);
          licensePlateLabel.setVisible(true);
          maxCapacityLabel.setVisible(true);
          bussesEditBusPanel.setVisible(true);
          chauffeurEditBox.setVisible(true);
       }
 
+   }
+   
+   private class CancelEditAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         editBusFrameButton.setVisible(false);
+         makeLabel.setVisible(false);
+         saveEditBus.setVisible(false);
+         modelLabel.setVisible(false);
+         licensePlateLabel.setVisible(false);
+         maxCapacityLabel.setVisible(false);
+         bussesEditBusPanel.setVisible(false);
+         chauffeurEditBox.setVisible(false);
+         destiEditBox.setVisible(false);
+      }
+      
    }
 
    private class SaveEditAction implements ActionListener
@@ -305,6 +338,7 @@ public class BussesPane extends JPanel
             bussesEditBusPanel.setVisible(false);
             chauffeurEditBox.setVisible(false);
             destiEditBox.setVisible(false);
+            cancelEditBus.setVisible(false);
             System.out.println(a.getMessage()
                   + "Please fill up all the empty fields");
          }
@@ -317,6 +351,68 @@ public class BussesPane extends JPanel
          bussesEditBusPanel.setVisible(false);
          chauffeurEditBox.setVisible(false);
          destiEditBox.setVisible(false);
+         cancelEditBus.setVisible(false);
       }
+   }
+   
+   private class WindowListenerChangeHandler implements WindowListener
+   {
+
+      @Override
+      public void windowActivated(WindowEvent e)
+      {
+         if (e.getID() == WindowEvent.WINDOW_CLOSED)
+         {
+            System.out.println("you closed the window");
+         }
+         System.out.println("something");
+      }
+
+      @Override
+      public void windowClosed(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("closed");
+      }
+
+      @Override
+      public void windowClosing(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("closing");
+         // ((JFrame)e.getSource()).dispose();
+      }
+
+      @Override
+      public void windowDeactivated(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowDeiconified(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowIconified(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void windowOpened(WindowEvent e)
+      {
+         // TODO Auto-generated method stub
+
+         System.out.println("opened");
+      }
+      
    }
 }
