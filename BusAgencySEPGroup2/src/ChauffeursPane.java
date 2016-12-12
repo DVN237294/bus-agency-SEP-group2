@@ -25,9 +25,13 @@ public class ChauffeursPane extends JPanel
    private JButton searchButton;
    private JButton searchAllButton;
    private JTextArea infoChauffeurList;
+   private JButton addChauffeurButton;
+   private JButton deleteChauffeurButton;
+   private JButton editChauffeurButton;
 
    private JPanel chauffeurNorthPanel = new JPanel();
    private JPanel chauffeurWestPanel = new JPanel();
+   private JPanel chauffeurSouthPanel = new JPanel();
 
    public ChauffeursPane(TravelAgency agency)
    {
@@ -46,6 +50,9 @@ public class ChauffeursPane extends JPanel
       searchButton = new JButton("Search");
       searchAllButton = new JButton("Search All");
       infoChauffeurList = new JTextArea();
+      addChauffeurButton = new JButton("Add Chauffeur");
+      deleteChauffeurButton = new JButton("Delete Chauffeur");
+      editChauffeurButton = new JButton("Edit Chauffeur");
       chauffeurList.setVisible(false);
       infoChauffeurList.setVisible(false);
 
@@ -57,9 +64,13 @@ public class ChauffeursPane extends JPanel
       chauffeurNorthPanel.add(searchAllButton);
       chauffeurWestPanel.add(chauffeurList);
       chauffeurWestPanel.add(infoChauffeurList);
+      chauffeurSouthPanel.add(addChauffeurButton);
+      chauffeurSouthPanel.add(deleteChauffeurButton);
+      chauffeurSouthPanel.add(editChauffeurButton);
       searchButton.addActionListener(new SearchAction());
       searchAllButton.addActionListener(new SearchAllAction());
       chauffeurList.addListSelectionListener(new InformationListener());
+      addChauffeurButton.addActionListener(new AddChauffeurAction());
 
       setSize(960, 540);
       setVisible(true);
@@ -67,6 +78,7 @@ public class ChauffeursPane extends JPanel
       this.setLayout(new BorderLayout());
       this.add(chauffeurNorthPanel, BorderLayout.NORTH);
       this.add(chauffeurWestPanel, BorderLayout.WEST);
+      this.add(chauffeurSouthPanel, BorderLayout.SOUTH);
    }
 
    public class SearchAction implements ActionListener
@@ -115,6 +127,17 @@ public class ChauffeursPane extends JPanel
             infoChauffeurList.setEditable(false);
             infoChauffeurList.setVisible(true);
          }
+      }
+      
+   }
+   
+   public class AddChauffeurAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         AddChauffeurPanel frame = new AddChauffeurPanel(agency);
       }
       
    }
