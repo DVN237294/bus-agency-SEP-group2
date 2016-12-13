@@ -279,6 +279,9 @@ public class ChauffeursPane extends JPanel
             chauffeurIdLabel.setVisible(false);
             saveEditButton.setVisible(false);
             cancelEditButton.setVisible(false);
+            firstNameBox.setItems(agency.getAllFirstNames());
+            lastNameBox.setItems(agency.getAllLastNames());
+            chauffeurIdBox.setItems(agency.getAllChauffeurIds());
          }
          chauffeurEditPanel.setVisible(false);
          firstNameField.setVisible(false);
@@ -290,6 +293,9 @@ public class ChauffeursPane extends JPanel
          saveEditButton.setVisible(false);
          cancelEditButton.setVisible(false);
          infoChauffeurList.setVisible(false);
+         firstNameBox.setItems(agency.getAllFirstNames());
+         lastNameBox.setItems(agency.getAllLastNames());
+         chauffeurIdBox.setItems(agency.getAllChauffeurIds());
       }
    }
 

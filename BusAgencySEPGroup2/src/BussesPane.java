@@ -340,6 +340,10 @@ public class BussesPane extends JPanel
             cancelEditBus.setVisible(false);
             System.out.println(a.getMessage()
                   + "Please fill up all the empty fields");
+            makeBox.setItems(agency.getAllBusMakes());
+            modelBox.setItems(agency.getAllBusModels());
+            licensePlateBox.setItems(agency.getAllBusLicensePlates());
+            maxCapacityBox.setItems(agency.getAllBusMaxCapacities());
          }
          editBusFrameButton.setVisible(false);
          makeLabel.setVisible(false);
@@ -351,6 +355,10 @@ public class BussesPane extends JPanel
          chauffeurEditBox.setVisible(false);
          destiEditBox.setVisible(false);
          cancelEditBus.setVisible(false);
+         makeBox.setItems(agency.getAllBusMakes());
+         modelBox.setItems(agency.getAllBusModels());
+         licensePlateBox.setItems(agency.getAllBusLicensePlates());
+         maxCapacityBox.setItems(agency.getAllBusMaxCapacities());
       }
    }
    
