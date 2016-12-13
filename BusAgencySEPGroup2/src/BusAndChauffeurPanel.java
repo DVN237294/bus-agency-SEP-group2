@@ -56,13 +56,13 @@ public class BusAndChauffeurPanel extends JPanel
       maxCapacityBox = new JExtendedComboBox<Integer>(maxCapacityArray);
       
       
-      busAndChauffeurNorthPanel.add(firstNameBox); //already have it.
-      busAndChauffeurNorthPanel.add(lastNameBox); // already have it.
-      busAndChauffeurNorthPanel.add(chauffeurIdBox); // already have it.
+      busAndChauffeurNorthPanel.add(firstNameBox); 
+      busAndChauffeurNorthPanel.add(lastNameBox); 
+      busAndChauffeurNorthPanel.add(chauffeurIdBox); 
       busAndChauffeurWestPanel.add(makeBox);
       busAndChauffeurWestPanel.add(modelBox);
       busAndChauffeurWestPanel.add(licensePlateBox);
-      busAndChauffeurWestPanel.add(maxCapacityBox); // already have it.
+      busAndChauffeurWestPanel.add(maxCapacityBox);
       
       
       setSize(960, 540);
