@@ -34,661 +34,743 @@ import javax.swing.plaf.metal.MetalComboBoxUI;
 
 public class AddTourFrame extends JFrame
 {
-	private static final long serialVersionUID = 1L;
-	private TravelAgency agency;
-	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-			"December" };
-
-	private JPanel resvStartDatePanel;
-	private JPanel resvEndDatePanel;
-	private JPanel departureDatePanel;
-	private JPanel arrivalDatePanel;
-	private JPanel returnDatePanel;
-	private JPanel middlePanel;
-	private JPanel lowerPanel;
-	private JPanel middleDestinationPanel;
-	private JPanel passengerLimitPanel;
-	private JExtendedComboBox<String> resvStartYearCBox;
-	private JExtendedComboBox<String> resvStartMonthCBox;
-	private JExtendedComboBox<String> resvStartDayCBox;
-	private JExtendedComboBox<String> resvStartHourCBox;
-	private JExtendedComboBox<String> resvStartMinCBox;
-	private JExtendedComboBox<String> resvEndYearCBox;
-	private JExtendedComboBox<String> resvEndMonthCBox;
-	private JExtendedComboBox<String> resvEndDayCBox;
-	private JExtendedComboBox<String> resvEndHourCBox;
-	private JExtendedComboBox<String> resvEndMinCBox;
-	private JExtendedComboBox<String> departureYearCBox;
-	private JExtendedComboBox<String> departureMonthCBox;
-	private JExtendedComboBox<String> departureDayCBox;
-	private JExtendedComboBox<String> departureHourCBox;
-	private JExtendedComboBox<String> departureMinCBox;
-	private JExtendedComboBox<String> arrivalYearCBox;
-	private JExtendedComboBox<String> arrivalMonthCBox;
-	private JExtendedComboBox<String> arrivalDayCBox;
-	private JExtendedComboBox<String> arrivalHourCBox;
-	private JExtendedComboBox<String> arrivalMinCBox;
-	private JExtendedComboBox<String> returnYearCBox;
-	private JExtendedComboBox<String> returnMonthCBox;
-	private JExtendedComboBox<String> returnDayCBox;
-	private JExtendedComboBox<String> returnHourCBox;
-	private JExtendedComboBox<String> returnMinCBox;
-	private JExtendedComboBox<String> maxPassengerCountCBox;
-
-	private JExtendedComboBox<Chauffeur> chauffeurCBox;
-	private JExtendedComboBox<Bus> busCBox;
-	private JExtendedComboBox<String> destinationCBox;
-	private JButton submitFormButton;
-	private JCheckBox busChauffeurCheckBox;
-	private JCheckBox enableDiscounts;
-	private JTextField basePriceField;
-
-	public String getResult()
-	{
-		return "this is it";
-	}
-
-	public AddTourFrame(TravelAgency agency)
-	{
-		super("Add Tour");
-		this.agency = agency;
-		setSize(735, 540);
-		setResizable(false);
-		BorderLayout mainLayout = new BorderLayout();
-		setLayout(mainLayout);
-
-		enableDiscounts = new JCheckBox("Use default discount rate", true);
-		
-		int[] busCapacities = agency.getBusCapacities();
-		String[] passengerCounts = new String[busCapacities.length];
-		for (int i = 0; i < busCapacities.length; i++)
-			passengerCounts[i] = Integer.toString(busCapacities[i]);
-		maxPassengerCountCBox = new JExtendedComboBox<String>(passengerCounts);
-		maxPassengerCountCBox.setDefaultDisplayedItem("Passenger limit");
-		
-		String basePriceDefaultText = "Price per seat";
-		basePriceField = new JTextField(basePriceDefaultText);
-		basePriceField.setFont(new Font(basePriceField.getFont().getName(), Font.ITALIC, basePriceField.getFont().getSize()));
-		TextFieldFocusHandler basePriceHandler = new TextFieldFocusHandler(basePriceDefaultText);
-		basePriceField.addFocusListener(basePriceHandler);
-		
-		busChauffeurCheckBox = new JCheckBox("<html>Bus & Chauffeur<br>reservation");
-		submitFormButton = new JButton("Submit");
-		passengerLimitPanel = new JPanel();
-		// passengerLimitPanel.setBorder(BorderFactory.createTitledBorder("Passenger limit"));
-		passengerLimitPanel.setLayout(new GridLayout());
-		passengerLimitPanel.add(maxPassengerCountCBox);
-		middlePanel = new JPanel();
-		lowerPanel = new JPanel();
-		lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		lowerPanel.add(submitFormButton);
-		middlePanel.setLayout(new GridLayout(1, 2));
-		// middleDestinationPanel = new JPanel();
-		// middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
-		// middlePanel.setBorder(BorderFactory.createTitledBorder("Bus & Chauffeur"));
-
-		setupDateCBoxes();
-
-		// middle panel
-		chauffeurCBox = new JExtendedComboBox<Chauffeur>();
-		chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
-		chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
-		chauffeurCBox.setEnabled(false);
-
-		busCBox = new JExtendedComboBox<Bus>();
-		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE));
-		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE));
-		busCBox.setEnabled(false);
-
-		String[] destinations = agency.getAllDestinations();
-		destinationCBox = new JExtendedComboBox<String>(destinations);
-		DestinationSearchHandler destinationBoxInputHandler = new DestinationSearchHandler(destinationCBox, destinations);
-		destinationCBox.setDefaultDisplayedItem("Destination");
-		destinationCBox.setPrototypeDisplayValue("Destination");
-		destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox.getPreferredSize().getHeight()));
-		destinationCBox.setEditable(true);
-		destinationCBox.getEditor().getEditorComponent().addKeyListener(destinationBoxInputHandler);
-		destinationCBox.getEditor().getEditorComponent().addFocusListener(destinationBoxInputHandler);
-
-		JPanel middleWestPanel = new JPanel();
-		JPanel middleEastPanel = new JPanel();
-		middleWestPanel.setLayout(new GridLayout(2, 1));
-		middleWestPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-		JPanel middleWestUpperPanel = new JPanel();
-		JPanel middleWestLowerPanel = new JPanel();
-		middleWestPanel.add(middleWestUpperPanel);
-		middleWestPanel.add(middleWestLowerPanel);
-
-		middleWestUpperPanel.setLayout(new GridLayout(5, 1, 0, 10));
-
-		JPanel middleWestFirstPanel = new JPanel();
-		JPanel middleWestSecondPanel = new JPanel();
-		JPanel middleWestThirdPanel = new JPanel();
-		JPanel middleWestFourthPanel = new JPanel();
-
-		JPanel middleEastUpperPanel = new JPanel();
-		JPanel middleEastLowerPanel = new JPanel();
-		JPanel middleEastUpperNorthPanel = new JPanel();
-		JPanel middleEastUpperCenterPanel = new JPanel();
-		JPanel middleEastLowerCenterPanel = new JPanel();
-		JPanel middleEastLowerSouthPanel = new JPanel();
-		middleEastLowerCenterPanel.setLayout(new GridLayout());
-		middleEastUpperPanel.setLayout(new BorderLayout());
-		middleEastUpperCenterPanel.setLayout(new GridLayout());
-		middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		middleEastLowerSouthPanel.setLayout(new BoxLayout(middleEastLowerSouthPanel, BoxLayout.LINE_AXIS));
-		middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		JList<Customer> customerList = new JList<Customer>();
-		JButton addCustomerButton = new JButton("Add Customer");
-		JButton addPassengerButton = new JButton("Add Passenger");
-		middleEastLowerSouthPanel.add(addCustomerButton);
-		middleEastLowerSouthPanel.add(Box.createHorizontalGlue());
-		middleEastLowerSouthPanel.add(addPassengerButton);
-		// middleEastUpperPanel.setBorder(BorderFactory.createEmptyBorder(3, 0,
-		// 6, 0));
-		middleEastPanel.setLayout(new GridLayout(2, 1));
-		middleEastPanel.add(middleEastUpperPanel);
-		middleEastPanel.add(middleEastLowerPanel);
-		middleEastUpperPanel.setBorder(BorderFactory.createTitledBorder("Destinations"));
-		middleEastLowerPanel.setLayout(new BorderLayout());
-		middleEastLowerCenterPanel.add(customerList);
-		middleEastLowerPanel.add(middleEastLowerCenterPanel, BorderLayout.CENTER);
-		middleEastLowerPanel.add(middleEastLowerSouthPanel, BorderLayout.SOUTH);
-
-		middleEastLowerPanel.setBorder(BorderFactory.createTitledBorder("Customers"));
-		middleEastUpperPanel.add(middleEastUpperNorthPanel, BorderLayout.NORTH);
-		middleEastUpperPanel.add(middleEastUpperCenterPanel, BorderLayout.CENTER);
-		JButton addDstButton = new JButton("Add destination");
-		JList<String> destinationsList = new JList<String>();
-		destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox.getPreferredSize().getHeight()));
-
-		middleEastUpperCenterPanel.add(destinationsList);
-		middleEastUpperNorthPanel.add(destinationCBox);
-		middleEastUpperNorthPanel.add(addDstButton);
-
-		middleWestFirstPanel.setLayout(new GridLayout());
-		middleWestSecondPanel.setLayout(new GridLayout());
-		middleWestThirdPanel.setLayout(new GridLayout());
-		middleWestFourthPanel.setLayout(new GridLayout());
-
-		//middleWestFirstPanel.add(busChauffeurCheckBox);
-		middleWestFirstPanel.add(passengerLimitPanel);
-		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
-		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
-		
-		//middleWestSecondPanel.add(chauffeurCBox);
-		middleWestSecondPanel.add(busCBox);
-
-		//middleWestThirdPanel.add(basePriceField);
-		//middleWestThirdPanel.add(enableDiscounts);
-		
-		middleWestThirdPanel.add(chauffeurCBox);
-		
-		middleWestFourthPanel.add(basePriceField);
-		middleWestFourthPanel.add(enableDiscounts);
-
-		middleWestUpperPanel.add(middleWestFirstPanel);
-		middleWestUpperPanel.add(middleWestSecondPanel);
-		middleWestUpperPanel.add(middleWestThirdPanel);
-		middleWestUpperPanel.add(middleWestFourthPanel);
-		
-		middleWestLowerPanel.add(departureDatePanel);
-		middleWestLowerPanel.add(arrivalDatePanel);
-		middleWestLowerPanel.add(returnDatePanel);
-
-		middlePanel.add(middleWestPanel);
-		middlePanel.add(middleEastPanel);
-
-		JPanel datePanel = new JPanel();
-		datePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		datePanel.add(resvStartDatePanel);
-		datePanel.add(resvEndDatePanel);
-
-		add(datePanel, BorderLayout.NORTH);
-		add(middlePanel, BorderLayout.CENTER);
-		add(lowerPanel, BorderLayout.SOUTH);
-		setVisible(true);
-	}
-
-	private void setupDateCBoxes()
-	{
-		resvStartDatePanel = new JPanel();
-		resvEndDatePanel = new JPanel();
-		departureDatePanel = new JPanel();
-		arrivalDatePanel = new JPanel();
-		returnDatePanel = new JPanel();
-
-		resvStartDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation start date"));
-		resvEndDatePanel.setBorder(BorderFactory.createTitledBorder("Reservation end date"));
-		departureDatePanel.setBorder(BorderFactory.createTitledBorder("Departure date"));
-		arrivalDatePanel.setBorder(BorderFactory.createTitledBorder("Arrival date"));
-		returnDatePanel.setBorder(BorderFactory.createTitledBorder("Returning Date"));
-
-		resvStartDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		resvEndDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		departureDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		arrivalDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		returnDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		resvStartYearCBox = new JExtendedComboBox<String>();
-		resvEndYearCBox = new JExtendedComboBox<String>();
-		departureYearCBox = new JExtendedComboBox<String>();
-		arrivalYearCBox = new JExtendedComboBox<String>();
-		returnYearCBox = new JExtendedComboBox<String>();
-		for (int i = 0, year = LocalDateTime.now().getYear(); i < 10; i++, year++)
-		{
-			resvStartYearCBox.addItem(Integer.toString(year));
-			resvEndYearCBox.addItem(Integer.toString(year));
-			departureYearCBox.addItem(Integer.toString(year));
-			arrivalYearCBox.addItem(Integer.toString(year));
-			returnYearCBox.addItem(Integer.toString(year));
-		}
-		resvStartYearCBox.setDefaultDisplayedItem("Year");
-		resvEndYearCBox.setDefaultDisplayedItem("Year");
-		departureYearCBox.setDefaultDisplayedItem("Year");
-		arrivalYearCBox.setDefaultDisplayedItem("Year");
-		returnYearCBox.setDefaultDisplayedItem("Year");
-		resvStartYearCBox.setPrototypeDisplayValue("0000");
-		resvEndYearCBox.setPrototypeDisplayValue("0000");
-		departureYearCBox.setPrototypeDisplayValue("0000");
-		arrivalYearCBox.setPrototypeDisplayValue("0000");
-		returnYearCBox.setPrototypeDisplayValue("0000");
-
-		resvStartMonthCBox = new JExtendedComboBox<String>(months);
-		resvEndMonthCBox = new JExtendedComboBox<String>(months);
-		departureMonthCBox = new JExtendedComboBox<String>(months);
-		arrivalMonthCBox = new JExtendedComboBox<String>(months);
-		returnMonthCBox = new JExtendedComboBox<String>(months);
-		resvStartMonthCBox.setDefaultDisplayedItem("Month");
-		resvEndMonthCBox.setDefaultDisplayedItem("Month");
-		departureMonthCBox.setDefaultDisplayedItem("Month");
-		arrivalMonthCBox.setDefaultDisplayedItem("Month");
-		returnMonthCBox.setDefaultDisplayedItem("Month");
-		resvStartMonthCBox.setPrototypeDisplayValue(months[8]);
-		resvEndMonthCBox.setPrototypeDisplayValue(months[8]);
-		departureMonthCBox.setPrototypeDisplayValue(months[8]);
-		arrivalMonthCBox.setPrototypeDisplayValue(months[8]);
-		returnMonthCBox.setPrototypeDisplayValue(months[8]);
-
-		resvStartDayCBox = new JExtendedComboBox<String>();
-		resvEndDayCBox = new JExtendedComboBox<String>();
-		departureDayCBox = new JExtendedComboBox<String>();
-		arrivalDayCBox = new JExtendedComboBox<String>();
-		returnDayCBox = new JExtendedComboBox<String>();
-		resvStartDayCBox.setDefaultDisplayedItem("Day");
-		resvEndDayCBox.setDefaultDisplayedItem("Day");
-		departureDayCBox.setDefaultDisplayedItem("Day");
-		arrivalDayCBox.setDefaultDisplayedItem("Day");
-		returnDayCBox.setDefaultDisplayedItem("Day");
-		resvStartDayCBox.setPrototypeDisplayValue("Day");
-		resvEndDayCBox.setPrototypeDisplayValue("Day");
-		departureDayCBox.setPrototypeDisplayValue("Day");
-		arrivalDayCBox.setPrototypeDisplayValue("Day");
-		returnDayCBox.setPrototypeDisplayValue("Day");
-		resvStartDayCBox.setEnabled(false);
-		resvEndDayCBox.setEnabled(false);
-		departureDayCBox.setEnabled(false);
-		arrivalDayCBox.setEnabled(false);
-		returnDayCBox.setEnabled(false);
-
-		YearMonthSelectionChangedHandler resvStartDateHandler = new YearMonthSelectionChangedHandler(resvStartYearCBox, resvStartMonthCBox, resvStartDayCBox);
-		YearMonthSelectionChangedHandler resvEndDateHandler = new YearMonthSelectionChangedHandler(resvEndYearCBox, resvEndMonthCBox, resvEndDayCBox);
-		YearMonthSelectionChangedHandler departureDateHandler = new YearMonthSelectionChangedHandler(departureYearCBox, departureMonthCBox, departureDayCBox);
-		YearMonthSelectionChangedHandler arrivalDateHandler = new YearMonthSelectionChangedHandler(arrivalYearCBox, arrivalMonthCBox, arrivalDayCBox);
-		YearMonthSelectionChangedHandler returnDateHandler = new YearMonthSelectionChangedHandler(returnYearCBox, returnMonthCBox, returnDayCBox);
-
-		resvStartYearCBox.addItemListener(resvStartDateHandler);
-		resvStartMonthCBox.addItemListener(resvStartDateHandler);
-		resvEndYearCBox.addItemListener(resvEndDateHandler);
-		resvEndMonthCBox.addItemListener(resvEndDateHandler);
-		departureYearCBox.addItemListener(departureDateHandler);
-		departureMonthCBox.addItemListener(departureDateHandler);
-		arrivalYearCBox.addItemListener(arrivalDateHandler);
-		arrivalMonthCBox.addItemListener(arrivalDateHandler);
-		returnYearCBox.addItemListener(returnDateHandler);
-		returnMonthCBox.addItemListener(returnDateHandler);
-
-		resvStartHourCBox = new JExtendedComboBox<String>();
-		resvEndHourCBox = new JExtendedComboBox<String>();
-		departureHourCBox = new JExtendedComboBox<String>();
-		arrivalHourCBox = new JExtendedComboBox<String>();
-		returnHourCBox = new JExtendedComboBox<String>();
-		for (int i = 0; i < 24; i++)
-		{
-			resvStartHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			resvEndHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			departureHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			arrivalHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			returnHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-		}
-		resvStartHourCBox.setDefaultDisplayedItem("Hour");
-		resvEndHourCBox.setDefaultDisplayedItem("Hour");
-		departureHourCBox.setDefaultDisplayedItem("Hour");
-		arrivalHourCBox.setDefaultDisplayedItem("Hour");
-		returnHourCBox.setDefaultDisplayedItem("Hour");
-		resvStartHourCBox.setPrototypeDisplayValue("Hour");
-		resvEndHourCBox.setPrototypeDisplayValue("Hour");
-		departureHourCBox.setPrototypeDisplayValue("Hour");
-		arrivalHourCBox.setPrototypeDisplayValue("Hour");
-		returnHourCBox.setPrototypeDisplayValue("Hour");
-
-		resvStartMinCBox = new JExtendedComboBox<String>();
-		resvEndMinCBox = new JExtendedComboBox<String>();
-		departureMinCBox = new JExtendedComboBox<String>();
-		arrivalMinCBox = new JExtendedComboBox<String>();
-		returnMinCBox = new JExtendedComboBox<String>();
-		for (int i = 0; i < 60; i++)
-		{
-			resvStartMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			resvEndMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			departureMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			arrivalMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-			returnMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer.toString(i));
-		}
-		resvStartMinCBox.setDefaultDisplayedItem("Minute");
-		resvEndMinCBox.setDefaultDisplayedItem("Minute");
-		departureMinCBox.setDefaultDisplayedItem("Minute");
-		arrivalMinCBox.setDefaultDisplayedItem("Minute");
-		returnMinCBox.setDefaultDisplayedItem("Minute");
-		resvStartMinCBox.setPrototypeDisplayValue("Minute");
-		resvEndMinCBox.setPrototypeDisplayValue("Minute");
-		departureMinCBox.setPrototypeDisplayValue("Minute");
-		arrivalMinCBox.setPrototypeDisplayValue("Minute");
-		returnMinCBox.setPrototypeDisplayValue("Minute");
-
-		resvStartDatePanel.add(resvStartYearCBox);
-		resvStartDatePanel.add(resvStartMonthCBox);
-		resvStartDatePanel.add(resvStartDayCBox);
-		resvStartDatePanel.add(resvStartHourCBox);
-		resvStartDatePanel.add(resvStartMinCBox);
-
-		resvEndDatePanel.add(resvEndYearCBox);
-		resvEndDatePanel.add(resvEndMonthCBox);
-		resvEndDatePanel.add(resvEndDayCBox);
-		resvEndDatePanel.add(resvEndHourCBox);
-		resvEndDatePanel.add(resvEndMinCBox);
-
-		departureDatePanel.add(departureYearCBox);
-		departureDatePanel.add(departureMonthCBox);
-		departureDatePanel.add(departureDayCBox);
-		departureDatePanel.add(departureHourCBox);
-		departureDatePanel.add(departureMinCBox);
-
-		arrivalDatePanel.add(arrivalYearCBox);
-		arrivalDatePanel.add(arrivalMonthCBox);
-		arrivalDatePanel.add(arrivalDayCBox);
-		arrivalDatePanel.add(arrivalHourCBox);
-		arrivalDatePanel.add(arrivalMinCBox);
-
-		returnDatePanel.add(returnYearCBox);
-		returnDatePanel.add(returnMonthCBox);
-		returnDatePanel.add(returnDayCBox);
-		returnDatePanel.add(returnHourCBox);
-		returnDatePanel.add(returnMinCBox);
-
-		new ReservationDateChangedHandler(resvStartDatePanel, resvEndDatePanel);
-	}
-
-	private class DestinationSearchHandler implements KeyListener, FocusListener
-	{
-		private JExtendedComboBox<String> cbox;
-		private String[] destinations;
-		private ListDataListener autoSelectingListener;
-		private String previousSearchString;
-
-		public DestinationSearchHandler(JExtendedComboBox<String> cbox, String[] destinations)
-		{
-			this.cbox = cbox;
-			this.destinations = destinations;
-			this.previousSearchString = null;
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e)
-		{
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e)
-		{
-			String searchString = (cbox.getEditor().getItem() == null ? "" : cbox.getEditor().getItem().toString().toLowerCase());
-			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && previousSearchString != null)
-			{
-				for (int i = 0; i < destinations.length; i++)
-				{
-					String destination = destinations[i].toLowerCase();
-					if (destination.startsWith(searchString) && !destination.startsWith(previousSearchString))
-					{
-						cbox.addItem(destinations[i]);
-					}
-				}
-			} else
-			{
-				// filter out the list based on keyinput..
-				for (int i = cbox.getItemCount() - 1; i >= 0; i--)
-				{
-					if (!cbox.getItemAt(i).toLowerCase().startsWith(searchString))
-					{
-						cbox.removeItemAt(i);
-					}
-				}
-			}
-			previousSearchString = searchString;
-		}
-
-		@Override
-		public void keyTyped(KeyEvent e)
-		{
-
-		}
-
-		@Override
-		public void focusGained(FocusEvent e)
-		{
-			for (ListDataListener listener : ((DefaultComboBoxModel<String>) cbox.getModel()).getListDataListeners())
-			{
-				if (listener.getClass().getEnclosingClass() != null && listener.getClass().getEnclosingClass().equals(BasicComboBoxUI.class))
-				{
-					/*
-					 * this listener sets the selected item of the combobox when
-					 * the underlying model is changed which is behavious we
-					 * don't want right here.
-					 */
-					autoSelectingListener = listener;
-					cbox.getModel().removeListDataListener(listener);
-				}
-			}
-			cbox.setItems(destinations);
-			cbox.setPopupVisible(true);
-			cbox.getEditor().setItem("");
-		}
-
-		@Override
-		public void focusLost(FocusEvent e)
-		{
-			cbox.getModel().addListDataListener(autoSelectingListener);
-		}
-
-	}
-
-	private class TextFieldFocusHandler implements FocusListener
-	{
-		private String defaultText;
-
-		public TextFieldFocusHandler(String defaultText)
-		{
-			this.defaultText = defaultText;
-		}
-
-		@Override
-		public void focusGained(FocusEvent e)
-		{
-			if (e.getSource() instanceof JTextField)
-			{
-				JTextField field = (JTextField) e.getSource();
-				if (field.getText().equals(defaultText))
-					field.setText("");
-			}
-		}
-
-		@Override
-		public void focusLost(FocusEvent e)
-		{
-			if (e.getSource() instanceof JTextField)
-			{
-				JTextField field = (JTextField) e.getSource();
-				String currentText = field.getText().trim();
-				if (currentText.equals(""))
-					field.setText(defaultText);
-				
-				StringBuilder sb = new StringBuilder();
-				boolean decimalpointSeen = false;
-				for(int i = 0; i < currentText.length(); i++)
-				{
-					char theChar = currentText.charAt(i);
-					if((!decimalpointSeen && (theChar == '.' || theChar == ',')) || (theChar >= '0' && theChar <= '9'))
-					{
-						if(theChar == '.' || theChar == ',')
-							decimalpointSeen = true;
-						
-						sb.append(theChar);
-					}
-				}
-				
-				field.setText(sb.toString());
-				currentText = field.getText().trim();
-				if (currentText.equals(""))
-					field.setText(defaultText);
-			}
-		}
-	}
-
-	private class ReservationDateChangedHandler implements ItemListener
-	{
-		private JPanel reservationStartDatePanel;
-		private JPanel reservationEndDatePanel;
-
-		public ReservationDateChangedHandler(JPanel reservationStartDatePanel, JPanel reservationEndDatePanel)
-		{
-			this.reservationStartDatePanel = reservationStartDatePanel;
-			this.reservationEndDatePanel = reservationEndDatePanel;
-
-			for (int i = 0; i < 2; i++)
-			{
-				JPanel thisPanel = i == 0 ? reservationStartDatePanel : reservationEndDatePanel;
-				for (Component comp : thisPanel.getComponents())
-				{
-					if (comp instanceof JExtendedComboBox)
-					{
-						JExtendedComboBox<String> box = (JExtendedComboBox<String>) comp;
-						box.addItemListener(this);
-					}
-				}
-			}
-			maxPassengerCountCBox.addItemListener(this);
-		}
-
-		@Override
-		public void itemStateChanged(ItemEvent e)
-		{
-			boolean datesSelected = true;
-			if (e.getStateChange() == ItemEvent.SELECTED && !maxPassengerCountCBox.isDefaultItemSelected())
-			{
-				for (int i = 0; i < 2; i++)
-				{
-					JPanel thisPanel = i == 0 ? reservationStartDatePanel : reservationEndDatePanel;
-					if (datesSelected)
-						for (Component comp : thisPanel.getComponents())
-						{
-							if (comp instanceof JExtendedComboBox)
-							{
-								JExtendedComboBox<String> box = (JExtendedComboBox<String>) comp;
-								if (box.isDefaultItemSelected())
-								{
-									datesSelected = false;
-									break;
-								}
-							}
-						}
-				}
-				if (datesSelected)
-				{
-					int startYear = Integer.parseInt(resvStartYearCBox.getSelectedItem());
-					int startMonth = resvStartMonthCBox.getSelectedIndex() + 1;
-					int startDay = Integer.parseInt(resvStartDayCBox.getSelectedItem());
-					int startHour = Integer.parseInt(resvStartHourCBox.getSelectedItem());
-					int startMinute = Integer.parseInt(resvStartMinCBox.getSelectedItem());
-					int endYear = Integer.parseInt(resvEndYearCBox.getSelectedItem());
-					int endMonth = resvEndMonthCBox.getSelectedIndex() + 1;
-					int endDay = Integer.parseInt(resvEndDayCBox.getSelectedItem());
-					int endHour = Integer.parseInt(resvEndHourCBox.getSelectedItem());
-					int endMinute = Integer.parseInt(resvEndMinCBox.getSelectedItem());
-					LocalDateTime startDate = LocalDateTime.of(startYear, startMonth, startDay, startHour, startMinute);
-					LocalDateTime endDate = LocalDateTime.of(endYear, endMonth, endDay, endHour, endMinute);
-
-					if (startDate.isBefore(endDate))
-					{
-						// update bus and chauffeur boxes with entities
-						// available within this time interval
-						busCBox.removeAllItems();
-						chauffeurCBox.removeAllItems();
-
-						for (Bus bus : agency.listAvailableBusses(startDate, endDate, Integer.parseInt(maxPassengerCountCBox.getSelectedItem())))
-							busCBox.addItem(bus);
-
-						for (Chauffeur chauffeur : agency.listAvailableChauffeurs(startDate, endDate))
-							chauffeurCBox.addItem(chauffeur);
-
-						busCBox.setEnabled(true);
-						chauffeurCBox.setEnabled(true);
-					}
-				}
-			} else
-			{
-
-				busCBox.removeAllItems();
-				chauffeurCBox.removeAllItems();
-				busCBox.reset();
-				chauffeurCBox.reset();
-				busCBox.setEnabled(false);
-				chauffeurCBox.setEnabled(false);
-			}
-		}
-	}
-
-	private class YearMonthSelectionChangedHandler implements ItemListener
-	{
-		private JExtendedComboBox<String> yearBox;
-		private JExtendedComboBox<String> monthBox;
-		private JExtendedComboBox<String> dayBox;
-
-		public YearMonthSelectionChangedHandler(JExtendedComboBox<String> yearBox, JExtendedComboBox<String> monthBox, JExtendedComboBox<String> dayBox)
-		{
-			this.yearBox = yearBox;
-			this.monthBox = monthBox;
-			this.dayBox = dayBox;
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		public void itemStateChanged(ItemEvent e)
-		{
-			// TODO Auto-generated method stub
-			if (!yearBox.isDefaultItemSelected() && !monthBox.isDefaultItemSelected())
-			{
-				int year = Integer.parseInt(yearBox.getSelectedItem());
-				int daysThisMonth = (new GregorianCalendar(year, java.util.Arrays.asList(months).indexOf(monthBox.getSelectedItem()), 1))
-						.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-				dayBox.removeAllItems();
-				for (int i = 1; i <= daysThisMonth; i++)
-					dayBox.addItem(Integer.toString(i));
-
-				dayBox.setEnabled(true);
-			}
-			if (yearBox.isDefaultItemSelected() || monthBox.isDefaultItemSelected())
-				dayBox.setEnabled(false);
-		}
-	}
+   private static final long serialVersionUID = 1L;
+   private TravelAgency agency;
+   private String[] months = new String[] { "January", "February", "March",
+         "April", "May", "June", "July", "August", "September", "October",
+         "November", "December" };
+
+   private JPanel resvStartDatePanel;
+   private JPanel resvEndDatePanel;
+   private JPanel departureDatePanel;
+   private JPanel arrivalDatePanel;
+   private JPanel returnDatePanel;
+   private JPanel middlePanel;
+   private JPanel lowerPanel;
+   private JPanel middleDestinationPanel;
+   private JPanel passengerLimitPanel;
+   private JExtendedComboBox<String> resvStartYearCBox;
+   private JExtendedComboBox<String> resvStartMonthCBox;
+   private JExtendedComboBox<String> resvStartDayCBox;
+   private JExtendedComboBox<String> resvStartHourCBox;
+   private JExtendedComboBox<String> resvStartMinCBox;
+   private JExtendedComboBox<String> resvEndYearCBox;
+   private JExtendedComboBox<String> resvEndMonthCBox;
+   private JExtendedComboBox<String> resvEndDayCBox;
+   private JExtendedComboBox<String> resvEndHourCBox;
+   private JExtendedComboBox<String> resvEndMinCBox;
+   private JExtendedComboBox<String> departureYearCBox;
+   private JExtendedComboBox<String> departureMonthCBox;
+   private JExtendedComboBox<String> departureDayCBox;
+   private JExtendedComboBox<String> departureHourCBox;
+   private JExtendedComboBox<String> departureMinCBox;
+   private JExtendedComboBox<String> arrivalYearCBox;
+   private JExtendedComboBox<String> arrivalMonthCBox;
+   private JExtendedComboBox<String> arrivalDayCBox;
+   private JExtendedComboBox<String> arrivalHourCBox;
+   private JExtendedComboBox<String> arrivalMinCBox;
+   private JExtendedComboBox<String> returnYearCBox;
+   private JExtendedComboBox<String> returnMonthCBox;
+   private JExtendedComboBox<String> returnDayCBox;
+   private JExtendedComboBox<String> returnHourCBox;
+   private JExtendedComboBox<String> returnMinCBox;
+   private JExtendedComboBox<String> maxPassengerCountCBox;
+
+   private JExtendedComboBox<Chauffeur> chauffeurCBox;
+   private JExtendedComboBox<Bus> busCBox;
+   private JExtendedComboBox<String> destinationCBox;
+   private JButton submitFormButton;
+   private JCheckBox busChauffeurCheckBox;
+   private JCheckBox enableDiscounts;
+   private JTextField basePriceField;
+
+   public String getResult()
+   {
+      return "this is it";
+   }
+
+   public AddTourFrame(TravelAgency agency)
+   {
+      super("Add Tour");
+      this.agency = agency;
+      setSize(735, 540);
+      setResizable(false);
+      BorderLayout mainLayout = new BorderLayout();
+      setLayout(mainLayout);
+
+      enableDiscounts = new JCheckBox("Use default discount rate", true);
+
+      int[] busCapacities = agency.getBusCapacities();
+      String[] passengerCounts = new String[busCapacities.length];
+      for (int i = 0; i < busCapacities.length; i++)
+         passengerCounts[i] = Integer.toString(busCapacities[i]);
+      maxPassengerCountCBox = new JExtendedComboBox<String>(passengerCounts);
+      maxPassengerCountCBox.setDefaultDisplayedItem("Passenger limit");
+
+      String basePriceDefaultText = "Price per seat";
+      basePriceField = new JTextField(basePriceDefaultText);
+      basePriceField.setFont(new Font(basePriceField.getFont().getName(),
+            Font.ITALIC, basePriceField.getFont().getSize()));
+      TextFieldFocusHandler basePriceHandler = new TextFieldFocusHandler(
+            basePriceDefaultText);
+      basePriceField.addFocusListener(basePriceHandler);
+
+      busChauffeurCheckBox = new JCheckBox(
+            "<html>Bus & Chauffeur<br>reservation");
+      submitFormButton = new JButton("Submit");
+      passengerLimitPanel = new JPanel();
+      // passengerLimitPanel.setBorder(BorderFactory.createTitledBorder("Passenger limit"));
+      passengerLimitPanel.setLayout(new GridLayout());
+      passengerLimitPanel.add(maxPassengerCountCBox);
+      middlePanel = new JPanel();
+      lowerPanel = new JPanel();
+      lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+      lowerPanel.add(submitFormButton);
+      middlePanel.setLayout(new GridLayout(1, 2));
+      // middleDestinationPanel = new JPanel();
+      // middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
+      // middlePanel.setBorder(BorderFactory.createTitledBorder("Bus & Chauffeur"));
+
+      setupDateCBoxes();
+
+      // middle panel
+      chauffeurCBox = new JExtendedComboBox<Chauffeur>();
+      chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null,
+            Integer.MIN_VALUE));
+      chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null,
+            Integer.MIN_VALUE));
+      chauffeurCBox.setEnabled(false);
+
+      busCBox = new JExtendedComboBox<Bus>();
+      busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null,
+            Integer.MIN_VALUE));
+      busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null,
+            Integer.MIN_VALUE));
+      busCBox.setEnabled(false);
+
+      String[] destinations = agency.getAllDestinations();
+      destinationCBox = new JExtendedComboBox<String>(destinations);
+      DestinationSearchHandler destinationBoxInputHandler = new DestinationSearchHandler(
+            destinationCBox, destinations);
+      destinationCBox.setDefaultDisplayedItem("Destination");
+      destinationCBox.setPrototypeDisplayValue("Destination");
+      destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox
+            .getPreferredSize().getHeight()));
+      destinationCBox.setEditable(true);
+      destinationCBox.getEditor().getEditorComponent()
+            .addKeyListener(destinationBoxInputHandler);
+      destinationCBox.getEditor().getEditorComponent()
+            .addFocusListener(destinationBoxInputHandler);
+
+      JPanel middleWestPanel = new JPanel();
+      JPanel middleEastPanel = new JPanel();
+      middleWestPanel.setLayout(new GridLayout(2, 1));
+      middleWestPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+      JPanel middleWestUpperPanel = new JPanel();
+      JPanel middleWestLowerPanel = new JPanel();
+      middleWestPanel.add(middleWestUpperPanel);
+      middleWestPanel.add(middleWestLowerPanel);
+
+      middleWestUpperPanel.setLayout(new GridLayout(5, 1, 0, 10));
+
+      JPanel middleWestFirstPanel = new JPanel();
+      JPanel middleWestSecondPanel = new JPanel();
+      JPanel middleWestThirdPanel = new JPanel();
+      JPanel middleWestFourthPanel = new JPanel();
+
+      JPanel middleEastUpperPanel = new JPanel();
+      JPanel middleEastLowerPanel = new JPanel();
+      JPanel middleEastUpperNorthPanel = new JPanel();
+      JPanel middleEastUpperCenterPanel = new JPanel();
+      JPanel middleEastLowerCenterPanel = new JPanel();
+      JPanel middleEastLowerSouthPanel = new JPanel();
+      middleEastLowerCenterPanel.setLayout(new GridLayout());
+      middleEastUpperPanel.setLayout(new BorderLayout());
+      middleEastUpperCenterPanel.setLayout(new GridLayout());
+      middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      middleEastLowerSouthPanel.setLayout(new BoxLayout(
+            middleEastLowerSouthPanel, BoxLayout.LINE_AXIS));
+      middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5,
+            5, 5));
+
+      JList<Customer> customerList = new JList<Customer>();
+      JButton addCustomerButton = new JButton("Add Customer");
+      JButton addPassengerButton = new JButton("Add Passenger");
+      middleEastLowerSouthPanel.add(addCustomerButton);
+      middleEastLowerSouthPanel.add(Box.createHorizontalGlue());
+      middleEastLowerSouthPanel.add(addPassengerButton);
+      // middleEastUpperPanel.setBorder(BorderFactory.createEmptyBorder(3, 0,
+      // 6, 0));
+      middleEastPanel.setLayout(new GridLayout(2, 1));
+      middleEastPanel.add(middleEastUpperPanel);
+      middleEastPanel.add(middleEastLowerPanel);
+      middleEastUpperPanel.setBorder(BorderFactory
+            .createTitledBorder("Destinations"));
+      middleEastLowerPanel.setLayout(new BorderLayout());
+      middleEastLowerCenterPanel.add(customerList);
+      middleEastLowerPanel.add(middleEastLowerCenterPanel, BorderLayout.CENTER);
+      middleEastLowerPanel.add(middleEastLowerSouthPanel, BorderLayout.SOUTH);
+
+      middleEastLowerPanel.setBorder(BorderFactory
+            .createTitledBorder("Customers"));
+      middleEastUpperPanel.add(middleEastUpperNorthPanel, BorderLayout.NORTH);
+      middleEastUpperPanel.add(middleEastUpperCenterPanel, BorderLayout.CENTER);
+      JButton addDstButton = new JButton("Add destination");
+      JList<String> destinationsList = new JList<String>();
+      destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox
+            .getPreferredSize().getHeight()));
+
+      middleEastUpperCenterPanel.add(destinationsList);
+      middleEastUpperNorthPanel.add(destinationCBox);
+      middleEastUpperNorthPanel.add(addDstButton);
+
+      middleWestFirstPanel.setLayout(new GridLayout());
+      middleWestSecondPanel.setLayout(new GridLayout());
+      middleWestThirdPanel.setLayout(new GridLayout());
+      middleWestFourthPanel.setLayout(new GridLayout());
+
+      // middleWestFirstPanel.add(busChauffeurCheckBox);
+      middleWestFirstPanel.add(passengerLimitPanel);
+      middleWestFirstPanel.add(Box.createHorizontalStrut(1));
+      middleWestFirstPanel.add(Box.createHorizontalStrut(1));
+
+      // middleWestSecondPanel.add(chauffeurCBox);
+      middleWestSecondPanel.add(busCBox);
+
+      // middleWestThirdPanel.add(basePriceField);
+      // middleWestThirdPanel.add(enableDiscounts);
+
+      middleWestThirdPanel.add(chauffeurCBox);
+
+      middleWestFourthPanel.add(basePriceField);
+      middleWestFourthPanel.add(enableDiscounts);
+
+      middleWestUpperPanel.add(middleWestFirstPanel);
+      middleWestUpperPanel.add(middleWestSecondPanel);
+      middleWestUpperPanel.add(middleWestThirdPanel);
+      middleWestUpperPanel.add(middleWestFourthPanel);
+
+      middleWestLowerPanel.add(departureDatePanel);
+      middleWestLowerPanel.add(arrivalDatePanel);
+      middleWestLowerPanel.add(returnDatePanel);
+
+      middlePanel.add(middleWestPanel);
+      middlePanel.add(middleEastPanel);
+
+      JPanel datePanel = new JPanel();
+      datePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      datePanel.add(resvStartDatePanel);
+      datePanel.add(resvEndDatePanel);
+
+      add(datePanel, BorderLayout.NORTH);
+      add(middlePanel, BorderLayout.CENTER);
+      add(lowerPanel, BorderLayout.SOUTH);
+      setVisible(true);
+   }
+
+   private void setupDateCBoxes()
+   {
+      resvStartDatePanel = new JPanel();
+      resvEndDatePanel = new JPanel();
+      departureDatePanel = new JPanel();
+      arrivalDatePanel = new JPanel();
+      returnDatePanel = new JPanel();
+
+      resvStartDatePanel.setBorder(BorderFactory
+            .createTitledBorder("Reservation start date"));
+      resvEndDatePanel.setBorder(BorderFactory
+            .createTitledBorder("Reservation end date"));
+      departureDatePanel.setBorder(BorderFactory
+            .createTitledBorder("Departure date"));
+      arrivalDatePanel.setBorder(BorderFactory
+            .createTitledBorder("Arrival date"));
+      returnDatePanel.setBorder(BorderFactory
+            .createTitledBorder("Returning Date"));
+
+      resvStartDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      resvEndDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      departureDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      arrivalDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      returnDatePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+      resvStartYearCBox = new JExtendedComboBox<String>();
+      resvEndYearCBox = new JExtendedComboBox<String>();
+      departureYearCBox = new JExtendedComboBox<String>();
+      arrivalYearCBox = new JExtendedComboBox<String>();
+      returnYearCBox = new JExtendedComboBox<String>();
+      for (int i = 0, year = LocalDateTime.now().getYear(); i < 10; i++, year++)
+      {
+         resvStartYearCBox.addItem(Integer.toString(year));
+         resvEndYearCBox.addItem(Integer.toString(year));
+         departureYearCBox.addItem(Integer.toString(year));
+         arrivalYearCBox.addItem(Integer.toString(year));
+         returnYearCBox.addItem(Integer.toString(year));
+      }
+      resvStartYearCBox.setDefaultDisplayedItem("Year");
+      resvEndYearCBox.setDefaultDisplayedItem("Year");
+      departureYearCBox.setDefaultDisplayedItem("Year");
+      arrivalYearCBox.setDefaultDisplayedItem("Year");
+      returnYearCBox.setDefaultDisplayedItem("Year");
+      resvStartYearCBox.setPrototypeDisplayValue("0000");
+      resvEndYearCBox.setPrototypeDisplayValue("0000");
+      departureYearCBox.setPrototypeDisplayValue("0000");
+      arrivalYearCBox.setPrototypeDisplayValue("0000");
+      returnYearCBox.setPrototypeDisplayValue("0000");
+
+      resvStartMonthCBox = new JExtendedComboBox<String>(months);
+      resvEndMonthCBox = new JExtendedComboBox<String>(months);
+      departureMonthCBox = new JExtendedComboBox<String>(months);
+      arrivalMonthCBox = new JExtendedComboBox<String>(months);
+      returnMonthCBox = new JExtendedComboBox<String>(months);
+      resvStartMonthCBox.setDefaultDisplayedItem("Month");
+      resvEndMonthCBox.setDefaultDisplayedItem("Month");
+      departureMonthCBox.setDefaultDisplayedItem("Month");
+      arrivalMonthCBox.setDefaultDisplayedItem("Month");
+      returnMonthCBox.setDefaultDisplayedItem("Month");
+      resvStartMonthCBox.setPrototypeDisplayValue(months[8]);
+      resvEndMonthCBox.setPrototypeDisplayValue(months[8]);
+      departureMonthCBox.setPrototypeDisplayValue(months[8]);
+      arrivalMonthCBox.setPrototypeDisplayValue(months[8]);
+      returnMonthCBox.setPrototypeDisplayValue(months[8]);
+
+      resvStartDayCBox = new JExtendedComboBox<String>();
+      resvEndDayCBox = new JExtendedComboBox<String>();
+      departureDayCBox = new JExtendedComboBox<String>();
+      arrivalDayCBox = new JExtendedComboBox<String>();
+      returnDayCBox = new JExtendedComboBox<String>();
+      resvStartDayCBox.setDefaultDisplayedItem("Day");
+      resvEndDayCBox.setDefaultDisplayedItem("Day");
+      departureDayCBox.setDefaultDisplayedItem("Day");
+      arrivalDayCBox.setDefaultDisplayedItem("Day");
+      returnDayCBox.setDefaultDisplayedItem("Day");
+      resvStartDayCBox.setPrototypeDisplayValue("Day");
+      resvEndDayCBox.setPrototypeDisplayValue("Day");
+      departureDayCBox.setPrototypeDisplayValue("Day");
+      arrivalDayCBox.setPrototypeDisplayValue("Day");
+      returnDayCBox.setPrototypeDisplayValue("Day");
+      resvStartDayCBox.setEnabled(false);
+      resvEndDayCBox.setEnabled(false);
+      departureDayCBox.setEnabled(false);
+      arrivalDayCBox.setEnabled(false);
+      returnDayCBox.setEnabled(false);
+
+      YearMonthSelectionChangedHandler resvStartDateHandler = new YearMonthSelectionChangedHandler(
+            resvStartYearCBox, resvStartMonthCBox, resvStartDayCBox);
+      YearMonthSelectionChangedHandler resvEndDateHandler = new YearMonthSelectionChangedHandler(
+            resvEndYearCBox, resvEndMonthCBox, resvEndDayCBox);
+      YearMonthSelectionChangedHandler departureDateHandler = new YearMonthSelectionChangedHandler(
+            departureYearCBox, departureMonthCBox, departureDayCBox);
+      YearMonthSelectionChangedHandler arrivalDateHandler = new YearMonthSelectionChangedHandler(
+            arrivalYearCBox, arrivalMonthCBox, arrivalDayCBox);
+      YearMonthSelectionChangedHandler returnDateHandler = new YearMonthSelectionChangedHandler(
+            returnYearCBox, returnMonthCBox, returnDayCBox);
+
+      resvStartYearCBox.addItemListener(resvStartDateHandler);
+      resvStartMonthCBox.addItemListener(resvStartDateHandler);
+      resvEndYearCBox.addItemListener(resvEndDateHandler);
+      resvEndMonthCBox.addItemListener(resvEndDateHandler);
+      departureYearCBox.addItemListener(departureDateHandler);
+      departureMonthCBox.addItemListener(departureDateHandler);
+      arrivalYearCBox.addItemListener(arrivalDateHandler);
+      arrivalMonthCBox.addItemListener(arrivalDateHandler);
+      returnYearCBox.addItemListener(returnDateHandler);
+      returnMonthCBox.addItemListener(returnDateHandler);
+
+      resvStartHourCBox = new JExtendedComboBox<String>();
+      resvEndHourCBox = new JExtendedComboBox<String>();
+      departureHourCBox = new JExtendedComboBox<String>();
+      arrivalHourCBox = new JExtendedComboBox<String>();
+      returnHourCBox = new JExtendedComboBox<String>();
+      for (int i = 0; i < 24; i++)
+      {
+         resvStartHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         resvEndHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         departureHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         arrivalHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         returnHourCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+      }
+      resvStartHourCBox.setDefaultDisplayedItem("Hour");
+      resvEndHourCBox.setDefaultDisplayedItem("Hour");
+      departureHourCBox.setDefaultDisplayedItem("Hour");
+      arrivalHourCBox.setDefaultDisplayedItem("Hour");
+      returnHourCBox.setDefaultDisplayedItem("Hour");
+      resvStartHourCBox.setPrototypeDisplayValue("Hour");
+      resvEndHourCBox.setPrototypeDisplayValue("Hour");
+      departureHourCBox.setPrototypeDisplayValue("Hour");
+      arrivalHourCBox.setPrototypeDisplayValue("Hour");
+      returnHourCBox.setPrototypeDisplayValue("Hour");
+
+      resvStartMinCBox = new JExtendedComboBox<String>();
+      resvEndMinCBox = new JExtendedComboBox<String>();
+      departureMinCBox = new JExtendedComboBox<String>();
+      arrivalMinCBox = new JExtendedComboBox<String>();
+      returnMinCBox = new JExtendedComboBox<String>();
+      for (int i = 0; i < 60; i++)
+      {
+         resvStartMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         resvEndMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         departureMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         arrivalMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+         returnMinCBox.addItem(i < 10 ? "0" + Integer.toString(i) : Integer
+               .toString(i));
+      }
+      resvStartMinCBox.setDefaultDisplayedItem("Minute");
+      resvEndMinCBox.setDefaultDisplayedItem("Minute");
+      departureMinCBox.setDefaultDisplayedItem("Minute");
+      arrivalMinCBox.setDefaultDisplayedItem("Minute");
+      returnMinCBox.setDefaultDisplayedItem("Minute");
+      resvStartMinCBox.setPrototypeDisplayValue("Minute");
+      resvEndMinCBox.setPrototypeDisplayValue("Minute");
+      departureMinCBox.setPrototypeDisplayValue("Minute");
+      arrivalMinCBox.setPrototypeDisplayValue("Minute");
+      returnMinCBox.setPrototypeDisplayValue("Minute");
+
+      resvStartDatePanel.add(resvStartYearCBox);
+      resvStartDatePanel.add(resvStartMonthCBox);
+      resvStartDatePanel.add(resvStartDayCBox);
+      resvStartDatePanel.add(resvStartHourCBox);
+      resvStartDatePanel.add(resvStartMinCBox);
+
+      resvEndDatePanel.add(resvEndYearCBox);
+      resvEndDatePanel.add(resvEndMonthCBox);
+      resvEndDatePanel.add(resvEndDayCBox);
+      resvEndDatePanel.add(resvEndHourCBox);
+      resvEndDatePanel.add(resvEndMinCBox);
+
+      departureDatePanel.add(departureYearCBox);
+      departureDatePanel.add(departureMonthCBox);
+      departureDatePanel.add(departureDayCBox);
+      departureDatePanel.add(departureHourCBox);
+      departureDatePanel.add(departureMinCBox);
+
+      arrivalDatePanel.add(arrivalYearCBox);
+      arrivalDatePanel.add(arrivalMonthCBox);
+      arrivalDatePanel.add(arrivalDayCBox);
+      arrivalDatePanel.add(arrivalHourCBox);
+      arrivalDatePanel.add(arrivalMinCBox);
+
+      returnDatePanel.add(returnYearCBox);
+      returnDatePanel.add(returnMonthCBox);
+      returnDatePanel.add(returnDayCBox);
+      returnDatePanel.add(returnHourCBox);
+      returnDatePanel.add(returnMinCBox);
+
+      new ReservationDateChangedHandler(resvStartDatePanel, resvEndDatePanel);
+   }
+
+   private class DestinationSearchHandler implements KeyListener, FocusListener
+   {
+      private JExtendedComboBox<String> cbox;
+      private String[] destinations;
+      private ListDataListener autoSelectingListener;
+      private String previousSearchString;
+
+      public DestinationSearchHandler(JExtendedComboBox<String> cbox,
+            String[] destinations)
+      {
+         this.cbox = cbox;
+         this.destinations = destinations;
+         this.previousSearchString = null;
+      }
+
+      @Override
+      public void keyPressed(KeyEvent e)
+      {
+      }
+
+      @Override
+      public void keyReleased(KeyEvent e)
+      {
+         String searchString = (cbox.getEditor().getItem() == null ? "" : cbox
+               .getEditor().getItem().toString().toLowerCase());
+         if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE
+               && previousSearchString != null)
+         {
+            for (int i = 0; i < destinations.length; i++)
+            {
+               String destination = destinations[i].toLowerCase();
+               if (destination.startsWith(searchString)
+                     && !destination.startsWith(previousSearchString))
+               {
+                  cbox.addItem(destinations[i]);
+               }
+            }
+         }
+         else
+         {
+            // filter out the list based on keyinput..
+            for (int i = cbox.getItemCount() - 1; i >= 0; i--)
+            {
+               if (!cbox.getItemAt(i).toLowerCase().startsWith(searchString))
+               {
+                  cbox.removeItemAt(i);
+               }
+            }
+         }
+         previousSearchString = searchString;
+      }
+
+      @Override
+      public void keyTyped(KeyEvent e)
+      {
+
+      }
+
+      @Override
+      public void focusGained(FocusEvent e)
+      {
+         for (ListDataListener listener : ((DefaultComboBoxModel<String>) cbox
+               .getModel()).getListDataListeners())
+         {
+            if (listener.getClass().getEnclosingClass() != null
+                  && listener.getClass().getEnclosingClass()
+                        .equals(BasicComboBoxUI.class))
+            {
+               /*
+                * this listener sets the selected item of the combobox when the
+                * underlying model is changed which is behavious we don't want
+                * right here.
+                */
+               autoSelectingListener = listener;
+               cbox.getModel().removeListDataListener(listener);
+            }
+         }
+         cbox.setItems(destinations);
+         cbox.setPopupVisible(true);
+         cbox.getEditor().setItem("");
+      }
+
+      @Override
+      public void focusLost(FocusEvent e)
+      {
+         cbox.getModel().addListDataListener(autoSelectingListener);
+      }
+
+   }
+
+   private class TextFieldFocusHandler implements FocusListener
+   {
+      private String defaultText;
+
+      public TextFieldFocusHandler(String defaultText)
+      {
+         this.defaultText = defaultText;
+      }
+
+      @Override
+      public void focusGained(FocusEvent e)
+      {
+         if (e.getSource() instanceof JTextField)
+         {
+            JTextField field = (JTextField) e.getSource();
+            if (field.getText().equals(defaultText))
+               field.setText("");
+         }
+      }
+
+      @Override
+      public void focusLost(FocusEvent e)
+      {
+         if (e.getSource() instanceof JTextField)
+         {
+            JTextField field = (JTextField) e.getSource();
+            String currentText = field.getText().trim();
+            if (currentText.equals(""))
+               field.setText(defaultText);
+
+            StringBuilder sb = new StringBuilder();
+            boolean decimalpointSeen = false;
+            for (int i = 0; i < currentText.length(); i++)
+            {
+               char theChar = currentText.charAt(i);
+               if ((!decimalpointSeen && (theChar == '.' || theChar == ','))
+                     || (theChar >= '0' && theChar <= '9'))
+               {
+                  if (theChar == '.' || theChar == ',')
+                     decimalpointSeen = true;
+
+                  sb.append(theChar);
+               }
+            }
+
+            field.setText(sb.toString());
+            currentText = field.getText().trim();
+            if (currentText.equals(""))
+               field.setText(defaultText);
+         }
+      }
+   }
+
+   private class ReservationDateChangedHandler implements ItemListener
+   {
+      private JPanel reservationStartDatePanel;
+      private JPanel reservationEndDatePanel;
+
+      public ReservationDateChangedHandler(JPanel reservationStartDatePanel,
+            JPanel reservationEndDatePanel)
+      {
+         this.reservationStartDatePanel = reservationStartDatePanel;
+         this.reservationEndDatePanel = reservationEndDatePanel;
+
+         for (int i = 0; i < 2; i++)
+         {
+            JPanel thisPanel = i == 0 ? reservationStartDatePanel
+                  : reservationEndDatePanel;
+            for (Component comp : thisPanel.getComponents())
+            {
+               if (comp instanceof JExtendedComboBox)
+               {
+                  JExtendedComboBox<String> box = (JExtendedComboBox<String>) comp;
+                  box.addItemListener(this);
+               }
+            }
+         }
+         maxPassengerCountCBox.addItemListener(this);
+      }
+
+      @Override
+      public void itemStateChanged(ItemEvent e)
+      {
+         boolean datesSelected = true;
+         if (e.getStateChange() == ItemEvent.SELECTED
+               && !maxPassengerCountCBox.isDefaultItemSelected())
+         {
+            for (int i = 0; i < 2; i++)
+            {
+               JPanel thisPanel = i == 0 ? reservationStartDatePanel
+                     : reservationEndDatePanel;
+               if (datesSelected)
+                  for (Component comp : thisPanel.getComponents())
+                  {
+                     if (comp instanceof JExtendedComboBox)
+                     {
+                        JExtendedComboBox<String> box = (JExtendedComboBox<String>) comp;
+                        if (box.isDefaultItemSelected())
+                        {
+                           datesSelected = false;
+                           break;
+                        }
+                     }
+                  }
+            }
+            if (datesSelected)
+            {
+               int startYear = Integer.parseInt(resvStartYearCBox
+                     .getSelectedItem());
+               int startMonth = resvStartMonthCBox.getSelectedIndex() + 1;
+               int startDay = Integer.parseInt(resvStartDayCBox
+                     .getSelectedItem());
+               int startHour = Integer.parseInt(resvStartHourCBox
+                     .getSelectedItem());
+               int startMinute = Integer.parseInt(resvStartMinCBox
+                     .getSelectedItem());
+               int endYear = Integer
+                     .parseInt(resvEndYearCBox.getSelectedItem());
+               int endMonth = resvEndMonthCBox.getSelectedIndex() + 1;
+               int endDay = Integer.parseInt(resvEndDayCBox.getSelectedItem());
+               int endHour = Integer
+                     .parseInt(resvEndHourCBox.getSelectedItem());
+               int endMinute = Integer.parseInt(resvEndMinCBox
+                     .getSelectedItem());
+               LocalDateTime startDate = LocalDateTime.of(startYear,
+                     startMonth, startDay, startHour, startMinute);
+               LocalDateTime endDate = LocalDateTime.of(endYear, endMonth,
+                     endDay, endHour, endMinute);
+
+               if (startDate.isBefore(endDate))
+               {
+                  // update bus and chauffeur boxes with entities
+                  // available within this time interval
+                  busCBox.removeAllItems();
+                  chauffeurCBox.removeAllItems();
+
+                  for (Bus bus : agency.listAvailableBusses(startDate, endDate,
+                        Integer.parseInt(maxPassengerCountCBox
+                              .getSelectedItem())))
+                     busCBox.addItem(bus);
+
+                  for (Chauffeur chauffeur : agency.listAvailableChauffeurs(
+                        startDate, endDate))
+                     chauffeurCBox.addItem(chauffeur);
+
+                  busCBox.setEnabled(true);
+                  chauffeurCBox.setEnabled(true);
+               }
+            }
+         }
+         else
+         {
+
+            busCBox.removeAllItems();
+            chauffeurCBox.removeAllItems();
+            busCBox.reset();
+            chauffeurCBox.reset();
+            busCBox.setEnabled(false);
+            chauffeurCBox.setEnabled(false);
+         }
+      }
+   }
+
+   private class YearMonthSelectionChangedHandler implements ItemListener
+   {
+      private JExtendedComboBox<String> yearBox;
+      private JExtendedComboBox<String> monthBox;
+      private JExtendedComboBox<String> dayBox;
+
+      public YearMonthSelectionChangedHandler(
+            JExtendedComboBox<String> yearBox,
+            JExtendedComboBox<String> monthBox, JExtendedComboBox<String> dayBox)
+      {
+         this.yearBox = yearBox;
+         this.monthBox = monthBox;
+         this.dayBox = dayBox;
+         // TODO Auto-generated constructor stub
+      }
+
+      @Override
+      public void itemStateChanged(ItemEvent e)
+      {
+         // TODO Auto-generated method stub
+         if (!yearBox.isDefaultItemSelected()
+               && !monthBox.isDefaultItemSelected())
+         {
+            int year = Integer.parseInt(yearBox.getSelectedItem());
+            int daysThisMonth = (new GregorianCalendar(year, java.util.Arrays
+                  .asList(months).indexOf(monthBox.getSelectedItem()), 1))
+                  .getActualMaximum(Calendar.DAY_OF_MONTH);
+
+            dayBox.removeAllItems();
+            for (int i = 1; i <= daysThisMonth; i++)
+               dayBox.addItem(Integer.toString(i));
+
+            dayBox.setEnabled(true);
+         }
+         if (yearBox.isDefaultItemSelected()
+               || monthBox.isDefaultItemSelected())
+            dayBox.setEnabled(false);
+      }
+   }
+
+   public String getReservationStartDate()
+   {
+      return "Day:" + resvStartDayCBox.getSelectedItem() + "Month:" + resvStartMonthCBox.getSelectedItem() + "Year:"
+            + resvStartYearCBox.getSelectedItem() + "Hour:" + resvStartHourCBox.getSelectedItem()
+            + "Minute:" + resvStartMinCBox.getSelectedItem();
+   }
+   
+   public String getReservationEndDate()
+   {
+      return "Day:" + resvEndDayCBox.getSelectedItem() + "Month:" + resvEndMonthCBox.getSelectedItem() + "Year:"
+            + resvEndYearCBox.getSelectedItem() + "Hour:" + resvEndHourCBox.getSelectedItem()
+            + "Minute:" + resvEndMinCBox.getSelectedItem();
+   }
 }

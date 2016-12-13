@@ -9,6 +9,7 @@ public class TravelAgency
    private CustomerList customerList;
    private TravelsList travelsList;
    private DestinationsList destinationsList;
+   private AddTourFrame addTourFrame;
 
    public TravelAgency()
    {
@@ -226,4 +227,13 @@ public class TravelAgency
 	   return busList.getBusCapacities();
    }
    
+   public String getReservationStartDate()
+   {
+      return addTourFrame.getReservationStartDate();
+   }
+   
+   public String getReservationEndDate()
+   {
+      return addTourFrame.getReservationEndDate();
+   }
 }

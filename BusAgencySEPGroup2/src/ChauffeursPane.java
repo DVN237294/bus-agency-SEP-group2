@@ -40,10 +40,13 @@ public class ChauffeursPane extends JPanel
    private JLabel chauffeurIdLabel;
    private JButton saveEditButton;
    private JButton cancelEditButton;
+   private JButton checkScheduleButton;
+   private JTextArea scheduleArea;
 
    private JPanel chauffeurNorthPanel = new JPanel();
    private JPanel chauffeurWestPanel = new JPanel();
    private JPanel chauffeurSouthPanel = new JPanel();
+   private JPanel chauffeurAvailabilityJPanel = new JPanel();
    private JPanel chauffeurEditPanel = new JPanel();
 
    public ChauffeursPane(TravelAgency agency)
@@ -56,6 +59,9 @@ public class ChauffeursPane extends JPanel
       chauffeurWestPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
       chauffeurEditPanel.setLayout(new GridLayout(6, 2));
       chauffeurEditPanel.setBorder(BorderFactory.createTitledBorder("Edit"));
+      chauffeurAvailabilityJPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+      chauffeurAvailabilityJPanel.setBorder(BorderFactory
+            .createTitledBorder("Check Availability"));
       destiBox = new JExtendedComboBox<String>(agency.getAllDestinations());
       firstNameBox = new JExtendedComboBox<String>(agency.getAllFirstNames());
       lastNameBox = new JExtendedComboBox<String>(agency.getAllLastNames());
@@ -76,8 +82,14 @@ public class ChauffeursPane extends JPanel
       chauffeurIdLabel = new JLabel("Chauffeur ID");
       saveEditButton = new JButton("Save");
       cancelEditButton = new JButton("Cancel");
+      checkScheduleButton = new JButton("Check Availability");
+//      scheduleArea = new JTextArea("From:" + agency.getReservationStartDate()
+//            + "\n" + "Until:" + agency.getReservationEndDate());
+//      scheduleArea.setVisible(false);
+      checkScheduleButton.setVisible(false);
       chauffeurList.setVisible(false);
       chauffeurEditPanel.setVisible(false);
+      chauffeurAvailabilityJPanel.setVisible(false);
       infoChauffeurList.setVisible(false);
       chauffeurIdField.setVisible(false);
       firstNameField.setVisible(false);
@@ -100,6 +112,7 @@ public class ChauffeursPane extends JPanel
       chauffeurWestPanel.add(infoChauffeurList);
       chauffeurSouthPanel.add(addChauffeurButton);
       chauffeurSouthPanel.add(deleteChauffeurButton);
+      chauffeurSouthPanel.add(checkScheduleButton);
       chauffeurSouthPanel.add(editChauffeurButton);
       chauffeurEditPanel.add(firstNameLabel);
       chauffeurEditPanel.add(firstNameField);
@@ -109,6 +122,7 @@ public class ChauffeursPane extends JPanel
       chauffeurEditPanel.add(chauffeurIdField);
       chauffeurEditPanel.add(saveEditButton);
       chauffeurEditPanel.add(cancelEditButton);
+//      chauffeurAvailabilityJPanel.add(scheduleArea);
       searchButton.addActionListener(new SearchAction());
       searchAllButton.addActionListener(new SearchAllAction());
       chauffeurList.addListSelectionListener(new InformationListener());
@@ -126,6 +140,7 @@ public class ChauffeursPane extends JPanel
       this.add(chauffeurWestPanel, BorderLayout.WEST);
       this.add(chauffeurSouthPanel, BorderLayout.SOUTH);
       this.add(chauffeurEditPanel, BorderLayout.CENTER);
+      this.add(chauffeurAvailabilityJPanel, BorderLayout.CENTER);
    }
 
    public class SearchAction implements ActionListener
@@ -217,6 +232,7 @@ public class ChauffeursPane extends JPanel
             infoChauffeurList.setEditable(false);
             editChauffeurButton.setVisible(true);
             deleteChauffeurButton.setVisible(true);
+            checkScheduleButton.setVisible(true);
             infoChauffeurList.setVisible(true);
          }
       }
@@ -276,7 +292,7 @@ public class ChauffeursPane extends JPanel
          infoChauffeurList.setVisible(false);
       }
    }
-   
+
    public class CancelAction implements ActionListener
    {
 
@@ -294,9 +310,21 @@ public class ChauffeursPane extends JPanel
          cancelEditButton.setVisible(false);
          infoChauffeurList.setVisible(false);
       }
-      
+
    }
-   
+
+   public class AvailabilityAction implements ActionListener
+   {
+
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+         chauffeurAvailabilityJPanel.setVisible(true);
+         scheduleArea.setVisible(true);
+      }
+
+   }
+
    private class WindowStateChangedHandler implements WindowListener
    {
 
