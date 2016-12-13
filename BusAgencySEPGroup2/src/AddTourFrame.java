@@ -21,12 +21,15 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.CellRendererPane;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ListDataListener;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.metal.MetalComboBoxUI;
 
 public class AddTourFrame extends JFrame
@@ -84,6 +87,7 @@ public class AddTourFrame extends JFrame
 	{
 		return "this is it";
 	}
+
 	public AddTourFrame(TravelAgency agency)
 	{
 		super("Add Tour");
@@ -93,15 +97,21 @@ public class AddTourFrame extends JFrame
 		BorderLayout mainLayout = new BorderLayout();
 		setLayout(mainLayout);
 
-		enableDiscounts = new JCheckBox("Use default discount rate");
+		enableDiscounts = new JCheckBox("Use default discount rate", true);
+		
 		int[] busCapacities = agency.getBusCapacities();
 		String[] passengerCounts = new String[busCapacities.length];
 		for (int i = 0; i < busCapacities.length; i++)
 			passengerCounts[i] = Integer.toString(busCapacities[i]);
 		maxPassengerCountCBox = new JExtendedComboBox<String>(passengerCounts);
 		maxPassengerCountCBox.setDefaultDisplayedItem("Passenger limit");
-		basePriceField = new JTextField("Price per seat");
+		
+		String basePriceDefaultText = "Price per seat";
+		basePriceField = new JTextField(basePriceDefaultText);
 		basePriceField.setFont(new Font(basePriceField.getFont().getName(), Font.ITALIC, basePriceField.getFont().getSize()));
+		TextFieldFocusHandler basePriceHandler = new TextFieldFocusHandler(basePriceDefaultText);
+		basePriceField.addFocusListener(basePriceHandler);
+		
 		busChauffeurCheckBox = new JCheckBox("<html>Bus & Chauffeur<br>reservation");
 		submitFormButton = new JButton("Submit");
 		passengerLimitPanel = new JPanel();
@@ -137,10 +147,8 @@ public class AddTourFrame extends JFrame
 		destinationCBox.setPrototypeDisplayValue("Destination");
 		destinationCBox.setPreferredSize(new Dimension(217, (int) destinationCBox.getPreferredSize().getHeight()));
 		destinationCBox.setEditable(true);
-		destinationCBox.addItemListener(destinationBoxInputHandler);
 		destinationCBox.getEditor().getEditorComponent().addKeyListener(destinationBoxInputHandler);
 		destinationCBox.getEditor().getEditorComponent().addFocusListener(destinationBoxInputHandler);
-		
 
 		JPanel middleWestPanel = new JPanel();
 		JPanel middleEastPanel = new JPanel();
@@ -156,6 +164,7 @@ public class AddTourFrame extends JFrame
 		JPanel middleWestFirstPanel = new JPanel();
 		JPanel middleWestSecondPanel = new JPanel();
 		JPanel middleWestThirdPanel = new JPanel();
+		JPanel middleWestFourthPanel = new JPanel();
 
 		JPanel middleEastUpperPanel = new JPanel();
 		JPanel middleEastLowerPanel = new JPanel();
@@ -201,19 +210,29 @@ public class AddTourFrame extends JFrame
 		middleWestFirstPanel.setLayout(new GridLayout());
 		middleWestSecondPanel.setLayout(new GridLayout());
 		middleWestThirdPanel.setLayout(new GridLayout());
+		middleWestFourthPanel.setLayout(new GridLayout());
 
-		middleWestFirstPanel.add(busChauffeurCheckBox);
+		//middleWestFirstPanel.add(busChauffeurCheckBox);
 		middleWestFirstPanel.add(passengerLimitPanel);
-
-		middleWestSecondPanel.add(chauffeurCBox);
+		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
+		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
+		
+		//middleWestSecondPanel.add(chauffeurCBox);
 		middleWestSecondPanel.add(busCBox);
 
-		middleWestThirdPanel.add(basePriceField);
-		middleWestThirdPanel.add(enableDiscounts);
+		//middleWestThirdPanel.add(basePriceField);
+		//middleWestThirdPanel.add(enableDiscounts);
+		
+		middleWestThirdPanel.add(chauffeurCBox);
+		
+		middleWestFourthPanel.add(basePriceField);
+		middleWestFourthPanel.add(enableDiscounts);
 
 		middleWestUpperPanel.add(middleWestFirstPanel);
 		middleWestUpperPanel.add(middleWestSecondPanel);
 		middleWestUpperPanel.add(middleWestThirdPanel);
+		middleWestUpperPanel.add(middleWestFourthPanel);
+		
 		middleWestLowerPanel.add(departureDatePanel);
 		middleWestLowerPanel.add(arrivalDatePanel);
 		middleWestLowerPanel.add(returnDatePanel);
@@ -411,23 +430,18 @@ public class AddTourFrame extends JFrame
 		new ReservationDateChangedHandler(resvStartDatePanel, resvEndDatePanel);
 	}
 
-	private class DestinationSearchHandler implements ItemListener, KeyListener, FocusListener
+	private class DestinationSearchHandler implements KeyListener, FocusListener
 	{
 		private JExtendedComboBox<String> cbox;
 		private String[] destinations;
-		private int indexToSelect;
+		private ListDataListener autoSelectingListener;
+		private String previousSearchString;
 
 		public DestinationSearchHandler(JExtendedComboBox<String> cbox, String[] destinations)
 		{
 			this.cbox = cbox;
 			this.destinations = destinations;
-			this.indexToSelect = -1;
-		}
-
-		@Override
-		public void itemStateChanged(ItemEvent e)
-		{
-			System.out.println("yeeaap");
+			this.previousSearchString = null;
 		}
 
 		@Override
@@ -438,28 +452,29 @@ public class AddTourFrame extends JFrame
 		@Override
 		public void keyReleased(KeyEvent e)
 		{
-
-			// useful
-			// filter out the list based on keyinput..
-			String typedString = (cbox.getEditor().getItem() == null ? "" : cbox.getEditor().getItem().toString().toLowerCase())
-					+ (e.getKeyCode() >= KeyEvent.VK_A && e.getKeyCode() >= KeyEvent.VK_Z ? Character.toString(e.getKeyChar()).toLowerCase() : "");
-			
-			System.out.println("code: " + e.getKeyCode());
-			String itemToSelect = null;
-			System.out.println("Typed: " + typedString);
-			for (int i = cbox.getItemCount() - 1; i >= 0; i--)
+			String searchString = (cbox.getEditor().getItem() == null ? "" : cbox.getEditor().getItem().toString().toLowerCase());
+			if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE && previousSearchString != null)
 			{
-				if (!cbox.getItemAt(i).toLowerCase().startsWith(typedString))
+				for (int i = 0; i < destinations.length; i++)
 				{
-					cbox.removeItemAt(i);
-				} else
-				{
-					itemToSelect = cbox.getItemAt(i);
+					String destination = destinations[i].toLowerCase();
+					if (destination.startsWith(searchString) && !destination.startsWith(previousSearchString))
+					{
+						cbox.addItem(destinations[i]);
+					}
 				}
-
+			} else
+			{
+				// filter out the list based on keyinput..
+				for (int i = cbox.getItemCount() - 1; i >= 0; i--)
+				{
+					if (!cbox.getItemAt(i).toLowerCase().startsWith(searchString))
+					{
+						cbox.removeItemAt(i);
+					}
+				}
 			}
-			System.out.println(itemToSelect);
-			indexToSelect = Arrays.asList(destinations).indexOf(itemToSelect);
+			previousSearchString = searchString;
 		}
 
 		@Override
@@ -471,29 +486,82 @@ public class AddTourFrame extends JFrame
 		@Override
 		public void focusGained(FocusEvent e)
 		{
-			// TODO Auto-generated method stub
-			System.out.println("focus");
-			if(cbox.isEmpty())
-				cbox.setItems(destinations);
-				
+			for (ListDataListener listener : ((DefaultComboBoxModel<String>) cbox.getModel()).getListDataListeners())
+			{
+				if (listener.getClass().getEnclosingClass() != null && listener.getClass().getEnclosingClass().equals(BasicComboBoxUI.class))
+				{
+					/*
+					 * this listener sets the selected item of the combobox when
+					 * the underlying model is changed which is behavious we
+					 * don't want right here.
+					 */
+					autoSelectingListener = listener;
+					cbox.getModel().removeListDataListener(listener);
+				}
+			}
+			cbox.setItems(destinations);
 			cbox.setPopupVisible(true);
 			cbox.getEditor().setItem("");
-
 		}
 
 		@Override
 		public void focusLost(FocusEvent e)
 		{
-			// TODO Auto-generated method stub
-			// cbox.setPopupVisible(false);
-			System.out.println("To select: " + indexToSelect);
-			if (indexToSelect > 0)
+			cbox.getModel().addListDataListener(autoSelectingListener);
+		}
+
+	}
+
+	private class TextFieldFocusHandler implements FocusListener
+	{
+		private String defaultText;
+
+		public TextFieldFocusHandler(String defaultText)
+		{
+			this.defaultText = defaultText;
+		}
+
+		@Override
+		public void focusGained(FocusEvent e)
+		{
+			if (e.getSource() instanceof JTextField)
 			{
-				cbox.setItems(destinations);
-				cbox.setSelectedIndex(indexToSelect);
+				JTextField field = (JTextField) e.getSource();
+				if (field.getText().equals(defaultText))
+					field.setText("");
 			}
 		}
 
+		@Override
+		public void focusLost(FocusEvent e)
+		{
+			if (e.getSource() instanceof JTextField)
+			{
+				JTextField field = (JTextField) e.getSource();
+				String currentText = field.getText().trim();
+				if (currentText.equals(""))
+					field.setText(defaultText);
+				
+				StringBuilder sb = new StringBuilder();
+				boolean decimalpointSeen = false;
+				for(int i = 0; i < currentText.length(); i++)
+				{
+					char theChar = currentText.charAt(i);
+					if((!decimalpointSeen && (theChar == '.' || theChar == ',')) || (theChar >= '0' && theChar <= '9'))
+					{
+						if(theChar == '.' || theChar == ',')
+							decimalpointSeen = true;
+						
+						sb.append(theChar);
+					}
+				}
+				
+				field.setText(sb.toString());
+				currentText = field.getText().trim();
+				if (currentText.equals(""))
+					field.setText(defaultText);
+			}
+		}
 	}
 
 	private class ReservationDateChangedHandler implements ItemListener
@@ -547,12 +615,12 @@ public class AddTourFrame extends JFrame
 				if (datesSelected)
 				{
 					int startYear = Integer.parseInt(resvStartYearCBox.getSelectedItem());
-					int startMonth = resvStartMonthCBox.getSelectedIndex();
+					int startMonth = resvStartMonthCBox.getSelectedIndex() + 1;
 					int startDay = Integer.parseInt(resvStartDayCBox.getSelectedItem());
 					int startHour = Integer.parseInt(resvStartHourCBox.getSelectedItem());
 					int startMinute = Integer.parseInt(resvStartMinCBox.getSelectedItem());
 					int endYear = Integer.parseInt(resvEndYearCBox.getSelectedItem());
-					int endMonth = resvEndMonthCBox.getSelectedIndex();
+					int endMonth = resvEndMonthCBox.getSelectedIndex() + 1;
 					int endDay = Integer.parseInt(resvEndDayCBox.getSelectedItem());
 					int endHour = Integer.parseInt(resvEndHourCBox.getSelectedItem());
 					int endMinute = Integer.parseInt(resvEndMinCBox.getSelectedItem());

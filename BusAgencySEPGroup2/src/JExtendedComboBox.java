@@ -1,12 +1,15 @@
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 
 import java.awt.event.*;
+import java.util.Vector;
 
 public class JExtendedComboBox<T> extends JComboBox<T>
 {
 	private static final long serialVersionUID = 1L;
 	private T defaultDisplayedItem = null;
-
 	public JExtendedComboBox(T[] arg0)
 	{
 		super(arg0);
@@ -47,7 +50,7 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 	public boolean isDefaultItemSelected()
 	{
 		T item = getSelectedItem();
-		if(item == null)
+		if (item == null)
 			return true;
 		return getSelectedItem().equals(getDefaultDisplayedItem());
 	}
@@ -62,25 +65,27 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 			getModel().setSelectedItem(defaultDisplayedItem);
 		}
 	}
+
 	public void setItems(T[] items)
 	{
 		removeAllItems();
-		for(T item : items)
+		for (T item : items)
 			addItem(item);
 	}
+
 	public boolean isEmpty()
 	{
 		return this.getItemCount() <= 0;
 	}
-	
+
 	@Override
 	public void setPopupVisible(boolean input)
 	{
-		if(input)
+		if (input)
 			removeDefaultFromList();
 		super.setPopupVisible(input);
 	}
-	
+
 	private void removeDefaultFromList()
 	{
 		if (getItemAt(0) != null && getItemAt(0).equals(defaultDisplayedItem))
@@ -92,21 +97,24 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 			setSelectedIndex(0);
 		}
 	}
+
 	private class MouseScroll implements MouseWheelListener
 	{
 
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
-			if(isDefaultItemSelected())
+			if (isDefaultItemSelected())
 				removeDefaultFromList();
-			else if((JExtendedComboBox.this.getSelectedIndex() > 0 && e.getPreciseWheelRotation() < 0) || (JExtendedComboBox.this.getSelectedIndex() < JExtendedComboBox.this.getItemCount() - 1 && e.getPreciseWheelRotation() > 0))
-				JExtendedComboBox.this.setSelectedIndex(JExtendedComboBox.this.getSelectedIndex() + (int)e.getPreciseWheelRotation());
-		}	
+			else if ((JExtendedComboBox.this.getSelectedIndex() > 0 && e.getPreciseWheelRotation() < 0)
+					|| (JExtendedComboBox.this.getSelectedIndex() < JExtendedComboBox.this.getItemCount() - 1 && e.getPreciseWheelRotation() > 0))
+				JExtendedComboBox.this.setSelectedIndex(JExtendedComboBox.this.getSelectedIndex() + (int) e.getPreciseWheelRotation());
+		}
 	}
+
 	private class MouseClickAction implements MouseListener
 	{
-		
+
 		@Override
 		public void mouseClicked(MouseEvent e)
 		{
@@ -114,24 +122,31 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 			{
 				JExtendedComboBox.this.reset();
 			}
+			if (e.getButton() == MouseEvent.BUTTON1 && JExtendedComboBox.this.hasFocus() && defaultDisplayedItem != null)
+				removeDefaultFromList();
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e)
-		{}
+		{
+		}
 
 		@Override
 		public void mouseExited(MouseEvent e)
-		{}
+		{
+		}
 
 		@Override
 		public void mousePressed(MouseEvent e)
-		{}
+		{
+		}
 
 		@Override
 		public void mouseReleased(MouseEvent e)
-		{}
+		{
+		}
 	}
+
 	private class FocusListen implements FocusListener
 	{
 		@Override
