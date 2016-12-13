@@ -44,6 +44,11 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 	@Override
 	public T getSelectedItem()
 	{
+		if(this.isEditable && super.getSelectedIndex() == -1)
+		{
+			//get the selected item from the editor.
+			return (T)this.editor.getItem();
+		}
 		return super.getItemAt(super.getSelectedIndex());
 	}
 
@@ -100,7 +105,6 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 
 	private class MouseScroll implements MouseWheelListener
 	{
-
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{

@@ -25,6 +25,20 @@ public class PassengerList
 
 		return 0;
 	}
+	
+	public int getSize()
+	{
+		return passengers.size();
+	}
+	
+	public double getPassengerTicketPriceSum()
+	{
+		double acc = 0;
+		for (Ticket collectionTicket : tickets)
+			acc += collectionTicket.getPrice();
+		
+		return acc;
+	}
 
 	public void deletePassenger(Passenger passenger)
 	{
