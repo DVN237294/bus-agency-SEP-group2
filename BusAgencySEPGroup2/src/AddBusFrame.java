@@ -83,11 +83,4 @@ public class AddBusFrame extends JFrame
          AddBusFrame.this.dispose();
       }
    }
-
-   public Bus getResult()
-   {
-      return agency.getBus(makeArea.getText(), modelArea.getText(),
-            licensePlateArea.getText(),
-            Integer.parseInt(maxCapacityArea.getText()));
-   }
 }
