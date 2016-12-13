@@ -140,7 +140,7 @@ public class ChauffeursPane extends JPanel
       this.add(chauffeurWestPanel, BorderLayout.WEST);
       this.add(chauffeurSouthPanel, BorderLayout.SOUTH);
       this.add(chauffeurEditPanel, BorderLayout.CENTER);
-      this.add(chauffeurAvailabilityJPanel, BorderLayout.CENTER);
+      this.add(chauffeurAvailabilityJPanel, BorderLayout.EAST);
    }
 
    public class SearchAction implements ActionListener
