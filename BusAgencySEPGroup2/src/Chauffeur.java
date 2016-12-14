@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Chauffeur
+
+public class Chauffeur implements Serializable
 {
 	private String firstName;
 	private String lastName;

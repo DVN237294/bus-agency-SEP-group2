@@ -1,4 +1,6 @@
-public class Bus
+import java.io.Serializable;
+
+public class Bus implements Serializable
 {
    private String make;
    private String model;

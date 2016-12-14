@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PassengerList
+public class PassengerList implements Serializable
 {
 	private ArrayList<Passenger> passengers;
 	private ArrayList<Ticket> tickets;

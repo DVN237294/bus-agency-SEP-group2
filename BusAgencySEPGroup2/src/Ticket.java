@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Ticket
+
+public class Ticket implements Serializable
 {
 	private double price;
 	private Passenger owner;

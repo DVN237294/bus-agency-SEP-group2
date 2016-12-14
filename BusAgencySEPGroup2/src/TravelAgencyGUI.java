@@ -19,16 +19,6 @@ public class TravelAgencyGUI extends JFrame
       super("VIA Bus");
       agency = new TravelAgency();
 
-      // Dummy data, to test layout:
-      agency.addDestination("xyz");
-      agency.addDestination("abcd");
-      agency.addDestination("xyzghdf");
-      agency.addDestination("abcdefgh");
-      agency.addChauffeur("Hans", "Hansen", 666);
-      agency.addChauffeur("Afonso", "Taborda", 999);
-      agency.addBus("Volkswagen", "jdsskdj", "12323AB", 50);
-      agency.addBus("Volvo", "jdj", "1234", 20);
-
       // Menu bar
       menuBar = new JMenuBar();
       fileMenu = new JMenu("File");

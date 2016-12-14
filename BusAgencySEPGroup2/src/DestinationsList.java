@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DestinationsList
+public class DestinationsList implements Serializable
 {
    private ArrayList<String> destinations;
 

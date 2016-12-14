@@ -1,9 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
-public class BusList
+public class BusList implements Serializable
 {
    private ArrayList<Bus> buses;
 

@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Passenger
+public class Passenger implements Serializable
 {
 	private Address address;
 	private String name;

@@ -298,6 +298,9 @@ public class AddTourFrame extends JFrame
 					destinations[i] = destinationsModel.get(i);
 
 				newTour.setDestinations(destinations);
+				
+				//keep these destinations for future tours:
+				agency.addDestinations(destinations);
 			}
 
 			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();

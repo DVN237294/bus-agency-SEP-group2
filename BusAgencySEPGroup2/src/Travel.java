@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public abstract class Travel
+public abstract class Travel implements Serializable
 {
 	private Bus bus;
 	private Chauffeur chauffeur;
@@ -18,7 +19,7 @@ public abstract class Travel
 		this.reservationEndDate = reservationEndDate;
 
 		this.basePrice = 0;
-		this.destinations = null;
+		this.destinations = new String[0];
 	}
 	
 	public abstract int getCustomerFrequency(Customer customer);

@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class TravelsList
+public class TravelsList implements Serializable
 {
 	private ArrayList<Travel> travels;
 	
