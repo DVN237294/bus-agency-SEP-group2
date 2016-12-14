@@ -34,7 +34,7 @@ public class AddCustomerFrame extends JFrame
 	private MinimumInputHandler minimumInputHandler;
 	private DateJPanel birthdayPanel;
 
-	public AddCustomerFrame(TravelAgency agency, double tourPrice)
+	public AddCustomerFrame(TravelAgency agency, double tourPrice, boolean canAddPassenger)
 	{
 		super("Add Customer");
 		this.agency = agency;
@@ -53,6 +53,7 @@ public class AddCustomerFrame extends JFrame
 		submitFormButton = new JButton("Submit");
 		minimumInputHandler = new MinimumInputHandler(nameField, phoneNumberField);
 		customerIsPassengerBox = new JCheckBox("<html>Customer is a<br>passenger", false);
+		customerIsPassengerBox.setEnabled(canAddPassenger);
 		
 		birthdayPanel.setBorder(BorderFactory.createTitledBorder("Birthday"));
 		nameField.setBorder(BorderFactory.createTitledBorder("Name"));

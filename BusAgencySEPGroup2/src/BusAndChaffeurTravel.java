@@ -10,16 +10,12 @@ public class BusAndChaffeurTravel extends Travel
 	{
 		super(bus, chauffeur, reservationStartDate, reservationEndDate);
 		this.personCount = personCount;
+		this.customer = customer;
 	}
 
 	public int getPersonCount()
 	{
 		return personCount;
-	}
-
-	public void setCustomer(Customer customer)
-	{
-		this.customer = customer;
 	}
 
 	public Customer getCustomer()
@@ -30,7 +26,7 @@ public class BusAndChaffeurTravel extends Travel
 	@Override
 	public String toString()
 	{
-		return "Bus & Chauffeur: " + super.toString();
+		return "Bus & Chauffeur: " + super.toString() + " - Customer: " + customer.getName();
 	}
 
 	@Override
@@ -40,5 +36,11 @@ public class BusAndChaffeurTravel extends Travel
 			return 1;
 
 		return 0;
+	}
+
+	@Override
+	protected String getReservationType()
+	{
+		return "Bus and Chauffeur Reservation";
 	}
 }

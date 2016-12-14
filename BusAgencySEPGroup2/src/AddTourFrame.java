@@ -1,7 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.FocusTraversalPolicy;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,15 +35,19 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.metal.MetalComboBoxUI;
 
+import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultText;
+
 public class AddTourFrame extends JFrame
 {
-	private Tour resultTour;
+	private Travel resultTravel;
 	private static final long serialVersionUID = 1L;
 	private TravelAgency agency;
 	private DateJPanel resvStartDatePanel;
@@ -60,16 +66,48 @@ public class AddTourFrame extends JFrame
 	private JButton submitFormButton;
 	private JCheckBox enableDiscounts;
 	private JTextField basePriceField;
+	private JCheckBox busAndChauffeurReservationBox;
 
 	private JButton addCustomerButton;
 	private JButton addRemoveDstButton;
 	private JButton addPassengerButton;
 	private DestinationAddButtonHandler addDestinationHandler;
 	private JList<String> destinationsList;
+	private int customerLimit = Integer.MAX_VALUE;
+	private String tourPriceString = "Price per seat";;
+	private String bAndCPriceString = "Reservation price";
 
 	public AddTourFrame(TravelAgency agency)
 	{
 		super("Add Tour");
+		//We don't want the default focus policy to mess with our focus events on components..
+		this.setFocusTraversalPolicy(new FocusTraversalPolicy() {
+				@Override
+				public Component getLastComponent(Container aContainer)
+				{
+					return null;
+				}
+				@Override
+				public Component getFirstComponent(Container aContainer)
+				{
+					return null;
+				}
+				@Override
+				public Component getDefaultComponent(Container aContainer)
+				{
+					return null;
+				}
+				@Override
+				public Component getComponentBefore(Container aContainer, Component aComponent)
+				{
+					return null;
+				}
+				@Override
+				public Component getComponentAfter(Container aContainer, Component aComponent)
+				{
+					return null;
+				}
+			});
 		this.agency = agency;
 		setSize(735, 540);
 		setResizable(false);
@@ -101,11 +139,12 @@ public class AddTourFrame extends JFrame
 		new ReservationDateChangedHandler(resvStartDatePanel, resvEndDatePanel);
 
 		enableDiscounts = new JCheckBox("Use default discount rate", true);
+		busAndChauffeurReservationBox = new JCheckBox("<html>Bus & Chauffeur<br><center>Reservation</center>", false);
+		busAndChauffeurReservationBox.addItemListener(new BusAndChauffeurReservationCheckedHandler());
 
-		String basePriceDefaultText = "Price per seat";
-		basePriceField = new JTextField(basePriceDefaultText);
+		basePriceField = new JTextField(tourPriceString);
 		basePriceField.setFont(new Font(basePriceField.getFont().getName(), Font.ITALIC, basePriceField.getFont().getSize()));
-		TextFieldFocusHandler basePriceHandler = new TextFieldFocusHandler(basePriceDefaultText);
+		TextFieldFocusHandler basePriceHandler = new TextFieldFocusHandler();
 		basePriceField.addFocusListener(basePriceHandler);
 
 		submitFormButton = new JButton("Submit");
@@ -218,7 +257,7 @@ public class AddTourFrame extends JFrame
 
 		middleWestFirstPanel.add(passengerLimitPanel);
 		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
-		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
+		middleWestFirstPanel.add(busAndChauffeurReservationBox);
 
 		middleWestSecondPanel.add(busCBox);
 
@@ -250,9 +289,65 @@ public class AddTourFrame extends JFrame
 		setVisible(true);
 	}
 
-	public Tour getResultTour()
+	public Travel getResultTravel()
 	{
-		return resultTour;
+		return resultTravel;
+	}
+
+	private void checkSubmitButton()
+	{
+		boolean enable = true;
+		if(busAndChauffeurReservationBox.isSelected())
+		{
+			//Bus and chauffeur reservation, we need to have one customer:
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
+			enable = customers.size() >= customerLimit;
+		}
+		submitFormButton.setEnabled(enable && !busCBox.isDefaultItemSelected() && !chauffeurCBox.isDefaultItemSelected());
+	}
+	
+	private int getMaxPassengerCount()
+	{
+		if (busAndChauffeurReservationBox.isSelected())
+			return 0;
+		else if (maxPassengerCountCBox.getSelectedIndex() != -1)
+		{
+			return Integer.parseInt(maxPassengerCountCBox.getSelectedItem());
+		}
+
+		return 0;
+	}
+
+	private class BusAndChauffeurReservationCheckedHandler implements ItemListener
+	{
+
+		@Override
+		public void itemStateChanged(ItemEvent e)
+		{
+			// swap the base price fields text
+			if (busAndChauffeurReservationBox.isSelected())
+			{
+				if (basePriceField.getText().equals(tourPriceString))
+					basePriceField.setText(bAndCPriceString);
+
+				// a B&C reservation can only have one customer 
+				customerLimit = 1;
+			} else
+			{
+				customerLimit = Integer.MAX_VALUE;
+
+				if (basePriceField.getText().equals(bAndCPriceString))
+					basePriceField.setText(tourPriceString);
+			}
+			checkSubmitButton();
+			// departure, arrival and return dates are not applicable to a B&C
+			// reservation
+			departureDatePanel.setEnabled(!busAndChauffeurReservationBox.isSelected());
+			arrivalDatePanel.setEnabled(!busAndChauffeurReservationBox.isSelected());
+			returnDatePanel.setEnabled(!busAndChauffeurReservationBox.isSelected());
+
+		}
+
 	}
 
 	private class BusAndChauffeurSelectedHandler implements ItemListener
@@ -260,7 +355,7 @@ public class AddTourFrame extends JFrame
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
-			submitFormButton.setEnabled(!busCBox.isDefaultItemSelected() && !chauffeurCBox.isDefaultItemSelected());
+			checkSubmitButton();
 		}
 	}
 
@@ -269,28 +364,40 @@ public class AddTourFrame extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
+			boolean isTour = !busAndChauffeurReservationBox.isSelected();
 			// collect all of the information into a tour object
-
-			Tour newTour = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+			
+			Travel newTravel;
+				if(isTour)
+					newTravel = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+				else 
+				{
+					DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
+					int personCount = Integer.parseInt(maxPassengerCountCBox.getSelectedItem());
+					newTravel = new BusAndChaffeurTravel(customers.get(0), busCBox.getSelectedItem(),
+							chauffeurCBox.getSelectedItem(), personCount, resvStartDatePanel.getDate(),
+							resvEndDatePanel.getDate());
+				}
+				
 
 			try
 			{
 				double price = Double.parseDouble(basePriceField.getText().replace(',', '.'));
-				newTour.setBasePrice(price);
+				newTravel.setBasePrice(price);
 			} catch (NumberFormatException e2)
 			{
 				// user didn't input a tour price. sooo 0?
-				newTour.setBasePrice(0);
+				newTravel.setBasePrice(0);
 			}
 
-			if (departureDatePanel.hasDateSelected())
-				newTour.setDepartureDate(departureDatePanel.getDate());
+			if (departureDatePanel.hasDateSelected() && isTour)
+				((Tour)newTravel).setDepartureDate(departureDatePanel.getDate());
 
-			if (arrivalDatePanel.hasDateSelected())
-				newTour.setArrivalDate(arrivalDatePanel.getDate());
+			if (arrivalDatePanel.hasDateSelected() && isTour)
+				((Tour)newTravel).setArrivalDate(arrivalDatePanel.getDate());
 
-			if (returnDatePanel.hasDateSelected())
-				newTour.setReturnDate(returnDatePanel.getDate());
+			if (returnDatePanel.hasDateSelected() && isTour)
+				((Tour)newTravel).setReturnDate(returnDatePanel.getDate());
 
 			DefaultListModel<String> destinationsModel = (DefaultListModel<String>) destinationsList.getModel();
 
@@ -300,17 +407,19 @@ public class AddTourFrame extends JFrame
 				for (int i = 0; i < destinations.length; i++)
 					destinations[i] = destinationsModel.get(i);
 
-				newTour.setDestinations(destinations);
+				newTravel.setDestinations(destinations);
 
 				// keep these destinations for future tours:
 				agency.addDestinations(destinations);
 			}
 
+			if(isTour)
+			{
 			DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
 			for (int i = 0; i < customers.getSize(); i++)
-				newTour.addCustomer(customers.get(i));
-
-			resultTour = newTour;
+				((Tour)newTravel).addCustomer(customers.get(i));
+			}
+			resultTravel = newTravel;
 
 			// signal parent frame to get the result
 			AddTourFrame.this.dispatchEvent(new java.awt.event.WindowEvent(AddTourFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
@@ -322,7 +431,11 @@ public class AddTourFrame extends JFrame
 		@Override
 		public void valueChanged(ListSelectionEvent e)
 		{
-			addPassengerButton.setEnabled(customerList.hasFocus());
+			int currentPassengerCount = 0;
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
+			for(int i = 0; i < customers.getSize(); i++)
+				currentPassengerCount += customers.get(i).getPassengerCount();
+			addPassengerButton.setEnabled(customerList.hasFocus() && currentPassengerCount < getMaxPassengerCount());
 		}
 	}
 
@@ -381,12 +494,11 @@ public class AddTourFrame extends JFrame
 
 	private class AddCustomerHandler implements ActionListener
 	{
-
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
 			double price = Double.parseDouble(basePriceField.getText().replace(',', '.'));
-			AddCustomerFrame frame = new AddCustomerFrame(agency, price);
+			AddCustomerFrame frame = new AddCustomerFrame(agency, price, !busAndChauffeurReservationBox.isSelected());
 			frame.addWindowListener(new AddCustomerFrameClosedHandler());
 		}
 	}
@@ -450,7 +562,10 @@ public class AddTourFrame extends JFrame
 			if (e.getSource() instanceof AddCustomerFrame)
 			{
 				AddCustomerFrame source = (AddCustomerFrame) e.getSource();
-				((DefaultListModel<Customer>) customerList.getModel()).addElement(source.getCustomerResult());
+				DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+				customers.addElement(source.getCustomerResult());
+				addCustomerButton.setEnabled(customers.size() < customerLimit);
+				checkSubmitButton();
 			}
 		}
 
@@ -559,11 +674,12 @@ public class AddTourFrame extends JFrame
 
 	private class TextFieldFocusHandler implements FocusListener
 	{
-		private String defaultText;
-
-		public TextFieldFocusHandler(String defaultText)
+		private String defaultText()
 		{
-			this.defaultText = defaultText;
+			if (busAndChauffeurReservationBox.isSelected())
+				return bAndCPriceString;
+			else
+				return tourPriceString;
 		}
 
 		@Override
@@ -572,7 +688,7 @@ public class AddTourFrame extends JFrame
 			if (e.getSource() instanceof JTextField)
 			{
 				JTextField field = (JTextField) e.getSource();
-				if (field.getText().equals(defaultText))
+				if (field.getText().equals(defaultText()))
 					field.setText("");
 			}
 		}
@@ -585,7 +701,7 @@ public class AddTourFrame extends JFrame
 				JTextField field = (JTextField) e.getSource();
 				String currentText = field.getText().trim();
 				if (currentText.equals(""))
-					field.setText(defaultText);
+					field.setText(defaultText());
 
 				StringBuilder sb = new StringBuilder();
 				boolean decimalpointSeen = false;
@@ -605,12 +721,13 @@ public class AddTourFrame extends JFrame
 				currentText = field.getText().trim();
 				if (currentText.equals(""))
 				{
-					field.setText(defaultText);
+					field.setText(defaultText());
 					addCustomerButton.setEnabled(false);
 				} else
 				{
+					DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
 					// valid price
-					addCustomerButton.setEnabled(true);
+					addCustomerButton.setEnabled(customers.getSize() < customerLimit);
 				}
 			}
 		}

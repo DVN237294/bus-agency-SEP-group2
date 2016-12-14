@@ -76,14 +76,14 @@ public abstract class Travel implements Serializable
 
 	public boolean reservationOverlaps(LocalDateTime startDate, LocalDateTime endDate)
 	{
-		return ((TimeStamp.unixTime(startDate) < TimeStamp.unixTime(reservationEndDate) && TimeStamp.unixTime(startDate) > TimeStamp
-				.unixTime(reservationStartDate)) || (TimeStamp.unixTime(endDate) > TimeStamp.unixTime(reservationStartDate) && TimeStamp.unixTime(endDate) < TimeStamp
+		return ((Time.unixTime(startDate) < Time.unixTime(reservationEndDate) && Time.unixTime(startDate) > Time
+				.unixTime(reservationStartDate)) || (Time.unixTime(endDate) > Time.unixTime(reservationStartDate) && Time.unixTime(endDate) < Time
 				.unixTime(reservationEndDate)))
 				||
 				// or the other way around:
-				((TimeStamp.unixTime(reservationStartDate) < TimeStamp.unixTime(endDate) && TimeStamp.unixTime(reservationStartDate) > TimeStamp
-						.unixTime(startDate)) || (TimeStamp.unixTime(reservationEndDate) > TimeStamp.unixTime(startDate) && TimeStamp
-						.unixTime(reservationEndDate) < TimeStamp.unixTime(endDate)));
+				((Time.unixTime(reservationStartDate) < Time.unixTime(endDate) && Time.unixTime(reservationStartDate) > Time
+						.unixTime(startDate)) || (Time.unixTime(reservationEndDate) > Time.unixTime(startDate) && Time
+						.unixTime(reservationEndDate) < Time.unixTime(endDate)));
 	}
 
 	public boolean reservationOverlaps(Travel other)
@@ -91,13 +91,44 @@ public abstract class Travel implements Serializable
 		return reservationOverlaps(other.getReservationStartDate(), other.getReservationEndDate());
 	}
 
+	protected abstract String getReservationType();
+	
+	public String getText()
+	{
+		String text = getReservationType() + "\n";
+		text += "Reservation from:\t" + Time.readableDate(reservationStartDate);
+		text += "\nReservation to:\t\t" + Time.readableDate(reservationEndDate);
+		text += "\n\nChauffeur: " + chauffeur.getFirstName() + " " + chauffeur.getLastName() + " (" + chauffeur.getChauffeurID() + ")\n";
+		text += "\tContact:\n";
+		if(chauffeur.getEmail() != null && !chauffeur.getEmail().equals(""))
+		text += "\tMail: " + chauffeur.getEmail() + "\n";
+		if(chauffeur.getPhoneNumber() != null && !chauffeur.getPhoneNumber().equals(""))
+		text += "\tPhone: " + chauffeur.getPhoneNumber();
+		text += "\n\nBus: " + bus.getMake() + ", " + bus.getModel() + " - " + bus.getMaxCapacity() + " seater." + " Licenseplate: " + bus.getLicensePlate(); 
+		text += "\n";
+		if(this instanceof Tour)
+			text += "Price: " + basePrice + " Per seat";
+		else if(this instanceof BusAndChaffeurTravel)
+			text += "Reservation price: " + basePrice;
+		
+		text += "\n\nDestinations:\n";
+		for(int i = 0; i < destinations.length; i++)
+		{
+			text += "\t" + destinations[i] + "\n";
+		}
+		return text;
+	}
+	
 	@Override
 	public String toString()
 	{
+		String toReturn = "";
 		if (destinations != null && destinations.length > 0)
-			return destinations[0];
+			toReturn += destinations[0] + " - ";
 
-		return "";
+		toReturn += "Chauffeur:" + chauffeur.getFirstName(); 
+		
+		return toReturn;
 	}
 
 }

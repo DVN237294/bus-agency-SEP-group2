@@ -1,10 +1,6 @@
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 
 import java.awt.event.*;
-import java.util.Vector;
 
 public class JExtendedComboBox<T> extends JComboBox<T>
 {

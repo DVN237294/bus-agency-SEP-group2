@@ -61,7 +61,7 @@ public class Tour extends Travel
 	@Override
 	public String toString()
 	{
-		return "Tour: " + super.toString() + " " + customers.getTotalNumberOfCustomers() + " Customers & " + customers.getPassengerCount() + " Passengers";
+		return "\t\tTour: " + super.toString() + " - " + "Customers: " + customers.getTotalNumberOfCustomers() + ", Passengers: " + customers.getPassengerCount();
 	}
 
 	@Override
@@ -69,5 +69,11 @@ public class Tour extends Travel
 	{
 		return customers.getCustomerFrequency(customer);
 
+	}
+
+	@Override
+	protected String getReservationType()
+	{
+		return "Tour Reservation";
 	}
 }

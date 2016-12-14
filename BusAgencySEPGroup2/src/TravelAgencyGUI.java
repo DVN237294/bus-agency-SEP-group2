@@ -11,7 +11,7 @@ public class TravelAgencyGUI extends JFrame
    private JMenuItem exitItem;
    private JTabbedPane tabbedPane = new JTabbedPane();
    private JPanel[] tabPanels;
-   private String[] tabNames = new String[] { "Tours", "Bus & Chauffeur",
+   private String[] tabNames = new String[] { "Reservations", 
          "Busses", "Chauffeurs" };
 
    public TravelAgencyGUI()
@@ -36,19 +36,19 @@ public class TravelAgencyGUI extends JFrame
       }
 
       // Tour pane
-      tabPanels[0] = new ToursPane(agency);
+      tabPanels[0] = new ReservationsPane(agency);
       tabbedPane.setComponentAt(0, tabPanels[0]);
 
       //BusAndChauffeur pane
-      tabPanels[1] = new BusAndChauffeurPanel(agency);
-      tabbedPane.setComponentAt(1, tabPanels[1]);
+      /*tabPanels[1] = new BusAndChauffeurPanel(agency);
+      tabbedPane.setComponentAt(1, tabPanels[1]);*/
       
       // Busses pane
-      tabPanels[2] = new BussesPane(agency);
-      tabbedPane.setComponentAt(2, tabPanels[2]);
+      tabPanels[1] = new BussesPane(agency);
+      tabbedPane.setComponentAt(1, tabPanels[1]);
       
-      tabPanels[3] = new ChauffeursPane(agency);
-      tabbedPane.setComponentAt(3, tabPanels[3]);
+      tabPanels[2] = new ChauffeursPane(agency);
+      tabbedPane.setComponentAt(2, tabPanels[2]);
 
       setDefaultCloseOperation(EXIT_ON_CLOSE);
       setSize(960, 540);

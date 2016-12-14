@@ -69,6 +69,16 @@ public class DateJPanel extends JPanel
 		add(minComboBox);
 	}
 	
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		super.setEnabled(enabled);
+		yearComboBox.setEnabled(enabled);
+		monthComboBox.setEnabled(enabled);
+		dayComboBox.setEnabled(enabled);
+		hourComboBox.setEnabled(enabled);
+		minComboBox.setEnabled(enabled);
+	}
 	public boolean hasDateSelected()
 	{
 		return !yearComboBox.isDefaultItemSelected() && 
