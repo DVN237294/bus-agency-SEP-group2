@@ -87,6 +87,11 @@ public class Customer implements Serializable
 	   return associatedPassengers.hasPassenger(passenger);
    }
    
+   public double getTicketTotalAmount()
+   {
+	   return associatedPassengers.getPassengerTicketPriceSum();
+   }
+   
    public double getPassengerTicketPrice(Passenger passenger)
    {
 	   return associatedPassengers.getPassengerTicketPrice(passenger);

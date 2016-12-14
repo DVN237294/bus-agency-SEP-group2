@@ -80,34 +80,7 @@ public class AddTourFrame extends JFrame
 	public AddTourFrame(TravelAgency agency)
 	{
 		super("Add Tour");
-		//We don't want the default focus policy to mess with our focus events on components..
-		this.setFocusTraversalPolicy(new FocusTraversalPolicy() {
-				@Override
-				public Component getLastComponent(Container aContainer)
-				{
-					return null;
-				}
-				@Override
-				public Component getFirstComponent(Container aContainer)
-				{
-					return null;
-				}
-				@Override
-				public Component getDefaultComponent(Container aContainer)
-				{
-					return null;
-				}
-				@Override
-				public Component getComponentBefore(Container aContainer, Component aComponent)
-				{
-					return null;
-				}
-				@Override
-				public Component getComponentAfter(Container aContainer, Component aComponent)
-				{
-					return null;
-				}
-			});
+
 		this.agency = agency;
 		setSize(735, 540);
 		setResizable(false);
@@ -286,6 +259,41 @@ public class AddTourFrame extends JFrame
 		add(datePanel, BorderLayout.NORTH);
 		add(middlePanel, BorderLayout.CENTER);
 		add(lowerPanel, BorderLayout.SOUTH);
+
+		// We don't want the default focus policy to mess with our focus events
+		// on components..
+		this.setFocusTraversalPolicy(new FocusTraversalPolicy() {
+			@Override
+			public Component getLastComponent(Container aContainer)
+			{
+				return null;
+			}
+
+			@Override
+			public Component getFirstComponent(Container aContainer)
+			{
+				return null;
+			}
+
+			@Override
+			public Component getDefaultComponent(Container aContainer)
+			{
+				return null;
+			}
+
+			@Override
+			public Component getComponentBefore(Container aContainer, Component aComponent)
+			{
+				return null;
+			}
+
+			@Override
+			public Component getComponentAfter(Container aContainer, Component aComponent)
+			{
+				return null;
+			}
+		});
+
 		setVisible(true);
 	}
 
@@ -297,15 +305,15 @@ public class AddTourFrame extends JFrame
 	private void checkSubmitButton()
 	{
 		boolean enable = true;
-		if(busAndChauffeurReservationBox.isSelected())
+		if (busAndChauffeurReservationBox.isSelected())
 		{
-			//Bus and chauffeur reservation, we need to have one customer:
-			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
+			// Bus and chauffeur reservation, we need to have one customer:
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
 			enable = customers.size() >= customerLimit;
 		}
 		submitFormButton.setEnabled(enable && !busCBox.isDefaultItemSelected() && !chauffeurCBox.isDefaultItemSelected());
 	}
-	
+
 	private int getMaxPassengerCount()
 	{
 		if (busAndChauffeurReservationBox.isSelected())
@@ -330,7 +338,7 @@ public class AddTourFrame extends JFrame
 				if (basePriceField.getText().equals(tourPriceString))
 					basePriceField.setText(bAndCPriceString);
 
-				// a B&C reservation can only have one customer 
+				// a B&C reservation can only have one customer
 				customerLimit = 1;
 			} else
 			{
@@ -366,19 +374,17 @@ public class AddTourFrame extends JFrame
 		{
 			boolean isTour = !busAndChauffeurReservationBox.isSelected();
 			// collect all of the information into a tour object
-			
+
 			Travel newTravel;
-				if(isTour)
-					newTravel = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
-				else 
-				{
-					DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
-					int personCount = Integer.parseInt(maxPassengerCountCBox.getSelectedItem());
-					newTravel = new BusAndChaffeurTravel(customers.get(0), busCBox.getSelectedItem(),
-							chauffeurCBox.getSelectedItem(), personCount, resvStartDatePanel.getDate(),
-							resvEndDatePanel.getDate());
-				}
-				
+			if (isTour)
+				newTravel = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+			else
+			{
+				DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+				int personCount = Integer.parseInt(maxPassengerCountCBox.getSelectedItem());
+				newTravel = new BusAndChaffeurTravel(customers.get(0), busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), personCount,
+						resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+			}
 
 			try
 			{
@@ -391,13 +397,13 @@ public class AddTourFrame extends JFrame
 			}
 
 			if (departureDatePanel.hasDateSelected() && isTour)
-				((Tour)newTravel).setDepartureDate(departureDatePanel.getDate());
+				((Tour) newTravel).setDepartureDate(departureDatePanel.getDate());
 
 			if (arrivalDatePanel.hasDateSelected() && isTour)
-				((Tour)newTravel).setArrivalDate(arrivalDatePanel.getDate());
+				((Tour) newTravel).setArrivalDate(arrivalDatePanel.getDate());
 
 			if (returnDatePanel.hasDateSelected() && isTour)
-				((Tour)newTravel).setReturnDate(returnDatePanel.getDate());
+				((Tour) newTravel).setReturnDate(returnDatePanel.getDate());
 
 			DefaultListModel<String> destinationsModel = (DefaultListModel<String>) destinationsList.getModel();
 
@@ -413,11 +419,11 @@ public class AddTourFrame extends JFrame
 				agency.addDestinations(destinations);
 			}
 
-			if(isTour)
+			if (isTour)
 			{
-			DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
-			for (int i = 0; i < customers.getSize(); i++)
-				((Tour)newTravel).addCustomer(customers.get(i));
+				DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+				for (int i = 0; i < customers.getSize(); i++)
+					((Tour) newTravel).addCustomer(customers.get(i));
 			}
 			resultTravel = newTravel;
 
@@ -432,8 +438,8 @@ public class AddTourFrame extends JFrame
 		public void valueChanged(ListSelectionEvent e)
 		{
 			int currentPassengerCount = 0;
-			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
-			for(int i = 0; i < customers.getSize(); i++)
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+			for (int i = 0; i < customers.getSize(); i++)
 				currentPassengerCount += customers.get(i).getPassengerCount();
 			addPassengerButton.setEnabled(customerList.hasFocus() && currentPassengerCount < getMaxPassengerCount());
 		}
@@ -725,7 +731,7 @@ public class AddTourFrame extends JFrame
 					addCustomerButton.setEnabled(false);
 				} else
 				{
-					DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
+					DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
 					// valid price
 					addCustomerButton.setEnabled(customers.getSize() < customerLimit);
 				}

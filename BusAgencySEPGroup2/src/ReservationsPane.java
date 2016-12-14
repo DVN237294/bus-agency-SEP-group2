@@ -1,6 +1,9 @@
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -113,6 +116,11 @@ public class ReservationsPane extends JPanel
 		this.add(toursNorthPanel, BorderLayout.NORTH);
 		this.add(toursCenterPanel, BorderLayout.CENTER);
 		this.add(toursSouthPanel, BorderLayout.SOUTH);
+		
+		
+		// We don't want the default focus policy to mess with our focus events
+		// on components..
+		
 	}
 
 	private void performSearch()

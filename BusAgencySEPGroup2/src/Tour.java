@@ -1,14 +1,13 @@
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-
 public class Tour extends Travel
 {
 	private LocalDateTime departureDate;
 	private LocalDateTime arrivalDate;
 	private LocalDateTime returnDate;
 	private CustomerList customers;
-	
+
 	public Tour(Bus bus, Chauffeur chauffeur, LocalDateTime reservationStartDate, LocalDateTime reservationEndDate)
 	{
 		super(bus, chauffeur, reservationStartDate, reservationEndDate);
@@ -17,12 +16,12 @@ public class Tour extends Travel
 		returnDate = null;
 		customers = new CustomerList();
 	}
-	
+
 	public void addCustomer(Customer customer)
 	{
-	   customers.addCustomer(customer);
+		customers.addCustomer(customer);
 	}
-	
+
 	public LocalDateTime getDepartureDate()
 	{
 		return departureDate;
@@ -52,16 +51,36 @@ public class Tour extends Travel
 	{
 		this.returnDate = returnDate;
 	}
-	
+
 	public boolean hasCustomer(Customer customer)
 	{
 		return customers.getCustomer(customer) != null;
 	}
-	
+
+	@Override
+	public String getText()
+	{
+		String text = "";
+		text += "Customers:\n";
+		for (Customer customer : customers.getAllCustomers())
+		{
+			text += "\t" + customer.getName() + " Phone: " + customer.getPhoneNumber() + " Passengers: " + customer.getPassengerCount() + " Total amount: "
+					+ customer.getTicketTotalAmount() + "\n";
+			for (Passenger passenger : customer.getAllPassengers())
+			{
+				text += "\t\t" + passenger.getName() + " - Phone: " + passenger.getPhoneNumber() + " - Email: " + passenger.getEmail() + "\n"; 
+			}
+			text += "\n\n";
+		}
+
+		return super.getText() + text;
+	}
+
 	@Override
 	public String toString()
 	{
-		return "\t\tTour: " + super.toString() + " - " + "Customers: " + customers.getTotalNumberOfCustomers() + ", Passengers: " + customers.getPassengerCount();
+		return "\t\tTour: " + super.toString() + " - " + "Customers: " + customers.getTotalNumberOfCustomers() + ", Passengers: "
+				+ customers.getPassengerCount();
 	}
 
 	@Override
