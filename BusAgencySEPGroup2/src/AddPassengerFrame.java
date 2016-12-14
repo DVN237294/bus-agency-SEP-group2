@@ -69,10 +69,10 @@ public class AddPassengerFrame extends JFrame
 
 		submitFormButton.setEnabled(false);
 		submitFormButton.addActionListener(new SubmitFormHandler());
-		
-		JPanel addressPanel = new JPanel(new GridBagLayout());
 		JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		submitPanel.add(submitFormButton);
+		
+		JPanel addressPanel = new JPanel(new GridBagLayout());
 		addressPanel.setBorder(BorderFactory.createTitledBorder("Address"));
 
 		GridBagConstraints streetNameBagConstraints = new GridBagConstraints();

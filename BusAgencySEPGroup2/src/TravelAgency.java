@@ -6,27 +6,34 @@ public class TravelAgency
 	private double defaultDiscountRate;
 	private BusList busList;
 	private ChauffeurList chauffeurList;
-	private CustomerList customerList;
+	//private CustomerList customerList;
 	private TravelsList travelsList;
 	private DestinationsList destinationsList;
+	private int frequentCustomerThreshHold;
 
 	public TravelAgency()
 	{
 		this.busList = new BusList();
 		this.chauffeurList = new ChauffeurList();
-		this.customerList = new CustomerList();
+		//this.customerList = new CustomerList();
 		this.travelsList = new TravelsList();
 		this.destinationsList = new DestinationsList();
+		this.frequentCustomerThreshHold = Integer.MAX_VALUE;
 	}
-
+/*
 	public TravelAgency(BusList busList, ChauffeurList chauffeurList, CustomerList customerList, TravelsList travelsList)
 	{
 		this.busList = busList;
 		this.chauffeurList = chauffeurList;
 		this.customerList = customerList;
 		this.travelsList = travelsList;
-	}
+	}*/
 
+	public void setFrequentCustomerThreshhold(int reservationCount)
+	{
+		frequentCustomerThreshHold = reservationCount;
+	}
+	
 	public Bus[] listAvailableBusses(LocalDateTime startDate, LocalDateTime endDate, int minCapacity)
 	{
 		ArrayList<Bus> temp = new ArrayList<Bus>();
@@ -66,12 +73,15 @@ public class TravelAgency
 		if (!payingCustomer.hasAssociatedPassenger(passenger))
 			payingCustomer.addPassenger(passenger, price);
 	}
-
+	public boolean isFrequentCustomer(Customer customer)
+	{
+		return travelsList.getCustomerFrequency(customer) >= frequentCustomerThreshHold;
+	}
 	public void addTourPassenger(Tour tour, Customer payingCustomer, Passenger passenger)
 	{
 		// this one uses the base price of the tour + default discount rate
 		double price = tour.getBasePrice();
-		if (customerList.isFrequentCustomer(payingCustomer))
+		if (isFrequentCustomer(payingCustomer))
 		{
 			// apply discount
 			price *= defaultDiscountRate;
@@ -81,7 +91,7 @@ public class TravelAgency
 
 	public double getCustomerSuggestedPrice(double basePrice, Customer payingCustomer)
 	{
-		if (customerList.isFrequentCustomer(payingCustomer))
+		if (isFrequentCustomer(payingCustomer))
 		{
 			// apply discount
 			basePrice *= defaultDiscountRate;
@@ -93,7 +103,7 @@ public class TravelAgency
 	{
 		double price = travel.getBasePrice();
 
-		if (customerList.isFrequentCustomer(payingCustomer))
+		if (isFrequentCustomer(payingCustomer))
 		{
 			// apply discount
 			price *= defaultDiscountRate;
@@ -186,6 +196,11 @@ public class TravelAgency
 		return busList.getAllMaxCapacities();
 	}
 
+	public void addChauffeur(Chauffeur chauffeur)
+	{
+		chauffeurList.addChauffeur(chauffeur);
+	}
+	
 	public void addChauffeur(String firstName, String lastName, int chauffeurID)
 	{
 		chauffeurList.addChauffeur(new Chauffeur(firstName, lastName, chauffeurID));
@@ -218,7 +233,7 @@ public class TravelAgency
 
 	public Travel[] searchTravel(String destination, Chauffeur chauffeur, Bus bus)
 	{
-		return travelsList.searchTravel(destination, chauffeur, bus);
+		return travelsList.searchTravel(destination, chauffeur, bus, false);
 	}
 
 	public int[] getBusCapacities()
@@ -229,6 +244,11 @@ public class TravelAgency
 	public void addTravel(Travel travel)
 	{
 		travelsList.addTravel(travel);
+	}
+	
+	public void removeTravel(Travel travel)
+	{
+		travelsList.deleteTravel(travel);
 	}
 
 	/*

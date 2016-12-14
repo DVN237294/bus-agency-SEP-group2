@@ -24,6 +24,11 @@ public class Customer
 	   this.birthday = birthday;
    }
    
+   public int getPassengerCount()
+   {
+	   return associatedPassengers.getSize();
+   }
+   
    public LocalDateTime getBirthday()
    {
 	   return this.birthday;

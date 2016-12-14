@@ -5,10 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
@@ -47,6 +49,7 @@ public class ToursPane extends JPanel
 		addTourButton = new JButton("Add Tour");
 		editTourButton = new JButton("Edit Tour");
 		deleteTourButton = new JButton("Delete Tour");
+		deleteTourButton.addActionListener(new DeleteButtonAction());
 		centerWestList = new JList<Tour>(new DefaultListModel<Tour>());
 		centerWestList.setVisible(false);
 		centerEastJTextArea = new JTextArea();
@@ -106,6 +109,24 @@ public class ToursPane extends JPanel
 
 		}
 	}
+	
+	private class DeleteButtonAction implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(centerWestList.getSelectedIndex() != -1)
+			{
+				int result = JOptionPane.showConfirmDialog(ToursPane.this, "Are you sure you wish to delete this Tour?");
+				if(result == JOptionPane.YES_OPTION)
+				{
+					agency.removeTravel(centerWestList.getSelectedValue());
+				}
+			}
+		}
+		
+	}
 
 	private class SearchAction implements ActionListener
 	{
@@ -114,7 +135,10 @@ public class ToursPane extends JPanel
 		public void actionPerformed(ActionEvent e)
 		{
 			centerWestList.setVisible(true);
-			Travel[] searchResult = agency.searchTravel(destinationBox.getSelectedItem(), chauffeurBox.getSelectedItem(), busBox.getSelectedItem());
+			String destinationString = destinationBox.isDefaultItemSelected() ? null : destinationBox.getSelectedItem();
+			Chauffeur chauffeur = chauffeurBox.isDefaultItemSelected() ? null : chauffeurBox.getSelectedItem();
+			Bus bus = busBox.isDefaultItemSelected() ? null : busBox.getSelectedItem();
+			Travel[] searchResult = agency.searchTravel(destinationString, chauffeur, bus);
 			DefaultListModel<Tour> listModel = (DefaultListModel<Tour>) centerWestList.getModel();
 			listModel.clear();
 			for (Travel travel : searchResult)
@@ -154,7 +178,8 @@ public class ToursPane extends JPanel
 		public void windowClosing(WindowEvent e)
 		{
 			AddTourFrame frame = (AddTourFrame) e.getSource();
-			agency.addTravel(frame.getResultTour());
+			Travel result = frame.getResultTour();
+			agency.addTravel(result);
 		}
 
 		@Override

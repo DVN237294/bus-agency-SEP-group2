@@ -8,6 +8,7 @@ public class Chauffeur
 	private String email;
 	private String[] destinationPreferences;
 	private Bus[] busPreferences;
+	private Address address;
 	
 	public Chauffeur(String firstName, String lastName, int chauffeurID)
 	{
@@ -20,7 +21,14 @@ public class Chauffeur
 		this.destinationPreferences = null;
 		this.busPreferences = null;
 	}
-
+	public Address getAddress()
+	{
+		return this.address;
+	}
+	public void setAddress(Address address)
+	{
+		this.address = address;
+	}
 	public String getPhoneNumber()
 	{
 		return phoneNumber;

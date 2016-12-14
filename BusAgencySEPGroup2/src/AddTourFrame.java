@@ -300,6 +300,10 @@ public class AddTourFrame extends JFrame
 				newTour.setDestinations(destinations);
 			}
 
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
+			for(int i = 0; i < customers.getSize(); i++)
+				newTour.addCustomer(customers.get(i));
+			
 			resultTour = newTour;
 			
 			//signal parent frame to get the result

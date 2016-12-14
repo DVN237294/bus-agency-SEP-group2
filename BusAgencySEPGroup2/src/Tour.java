@@ -7,7 +7,7 @@ public class Tour extends Travel
 	private LocalDateTime departureDate;
 	private LocalDateTime arrivalDate;
 	private LocalDateTime returnDate;
-	private ArrayList<Customer> customers;
+	private CustomerList customers;
 	
 	public Tour(Bus bus, Chauffeur chauffeur, LocalDateTime reservationStartDate, LocalDateTime reservationEndDate)
 	{
@@ -15,19 +15,14 @@ public class Tour extends Travel
 		departureDate = null;
 		arrivalDate = null;
 		returnDate = null;
-		customers = new ArrayList<Customer>();
+		customers = new CustomerList();
 	}
 	
 	public void addCustomer(Customer customer)
 	{
-	   customers.add(customer);
+	   customers.addCustomer(customer);
 	}
 	
-	public void deleteCustomer(Customer customer)
-	{
-	   customers.remove(customer);
-	}
-
 	public LocalDateTime getDepartureDate()
 	{
 		return departureDate;
@@ -60,16 +55,19 @@ public class Tour extends Travel
 	
 	public boolean hasCustomer(Customer customer)
 	{
-		for(Customer collectionCustomer: customers)
-			if(customer.equals(collectionCustomer))
-				return true;
-		
-		return false;
+		return customers.getCustomer(customer) != null;
 	}
 	
-	public ArrayList<Customer> getAllCustomers()
+	@Override
+	public String toString()
 	{
-	   return customers;
+		return "Tour: " + super.toString() + " " + customers.getTotalNumberOfCustomers() + " Customers & " + customers.getPassengerCount() + " Passengers";
 	}
-	
+
+	@Override
+	public int getCustomerFrequency(Customer customer)
+	{
+		return customers.getCustomerFrequency(customer);
+
+	}
 }

@@ -2,88 +2,95 @@ import java.util.ArrayList;
 
 public class CustomerList
 {
-   private ArrayList<Customer> customers;
-   private int frequentCustomerThreshHold;
+	private ArrayList<Customer> customers;
 
-   public CustomerList()
-   {
-      this.customers = new ArrayList<Customer>();
-      frequentCustomerThreshHold = Integer.MAX_VALUE;
-   }
+	public CustomerList()
+	{
+		this.customers = new ArrayList<Customer>();
+	}
 
-   public Customer addCustomer(String name, int phoneNumber)
-   {
-      Customer temp = new Customer(name, phoneNumber);
-      addCustomer(temp);
-      return temp;
-   }
+	public Customer addCustomer(String name, int phoneNumber)
+	{
+		Customer temp = new Customer(name, phoneNumber);
+		addCustomer(temp);
+		return temp;
+	}
 
-   public void addCustomer(Customer customer)
-   {
-      customers.add(customer);
-   }
+	public int getCustomerFrequency(Customer customer)
+	{
+		int sum = 0;
+		for (Customer listCustomer : customers)
+			if (listCustomer.equals(customer))
+				sum++;
 
-   public Customer findCustomer(String name, int phoneNumber)
-   {
-      for (Customer collectionCustomer : customers)
-         if (collectionCustomer.getName().equals(name)
-               && phoneNumber == collectionCustomer.getPhoneNumber())
-            return collectionCustomer;
+		return sum;
+	}
 
-      return null;
-   }
+	public int getPassengerCount()
+	{
+		int sum = 0;
+		for (Customer customer : customers)
+			sum += customer.getPassengerCount();
 
-   public void deleteCustomer(String name, int phoneNumber)
-   {
-      deleteCustomer(findCustomer(name, phoneNumber));
-   }
+		return sum;
+	}
 
-   public void deleteCustomer(Customer customer)
-   {
-      customers.remove(customer);
-   }
+	public void addCustomer(Customer customer)
+	{
+		customers.add(customer);
+	}
 
-   public boolean isFrequentCustomer(Customer customer)
-   {
-      return customer.getReservationCount() >= frequentCustomerThreshHold;
-   }
+	public Customer findCustomer(String name, int phoneNumber)
+	{
+		for (Customer collectionCustomer : customers)
+			if (collectionCustomer.getName().equals(name) && phoneNumber == collectionCustomer.getPhoneNumber())
+				return collectionCustomer;
 
-   public void setFrequentCustomerThreshhold(int reservationCount)
-   {
-      frequentCustomerThreshHold = reservationCount;
-   }
+		return null;
+	}
 
-   public int getTotalNumberOfCustomers()
-   {
-      return customers.size();
-   }
+	public void deleteCustomer(String name, int phoneNumber)
+	{
+		deleteCustomer(findCustomer(name, phoneNumber));
+	}
 
-   public Customer getCustomer(Customer customer)
-   {
-      for (int i = 0; i < customers.size(); i++)
-      {
-         if (customers.get(i).equals(customer))
-         {
-            return customers.get(i);
-         }
-      }
-      return null;
-   }
+	public void deleteCustomer(Customer customer)
+	{
+		customers.remove(customer);
+	}
 
-   public Customer getCustomerByName(String name)
-   {
-      for (int i = 0; i < customers.size(); i++)
-      {
-         if (customers.get(i).getName().equals(name))
-         {
-            return customers.get(i);
-         }
-      }
-      return null;
-   }
 
-   public ArrayList<Customer> getAllCustomers()
-   {
-      return customers;
-   }
+	public int getTotalNumberOfCustomers()
+	{
+		return customers.size();
+	}
+
+	public Customer getCustomer(Customer customer)
+	{
+		for (int i = 0; i < customers.size(); i++)
+		{
+			if (customers.get(i).equals(customer))
+			{
+				return customers.get(i);
+			}
+		}
+		return null;
+	}
+
+	public Customer getCustomerByName(String name)
+	{
+		for (int i = 0; i < customers.size(); i++)
+		{
+			if (customers.get(i).getName().equals(name))
+			{
+				return customers.get(i);
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<Customer> getAllCustomers()
+	{
+		return customers;
+	}
 }
