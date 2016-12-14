@@ -64,6 +64,7 @@ public class ReservationsPane extends JPanel
 		travelsList.setPreferredSize(new Dimension(200, 200));
 		travelsList.setBorder(BorderFactory.createTitledBorder("Search results"));
 		centerEastJTextArea = new JTextArea();
+		centerEastJTextArea.setTabSize(4);
 		centerEastJTextArea.setPreferredSize(new Dimension(200, 200));
 		centerEastJTextArea.setBorder(BorderFactory.createTitledBorder("Reservation details"));
 		toursCenterPanel.setLayout(new GridBagLayout());
@@ -173,11 +174,12 @@ public class ReservationsPane extends JPanel
 		{
 			if (travelsList.getSelectedIndex() != -1)
 			{
-				int result = JOptionPane.showConfirmDialog(ReservationsPane.this, "Are you sure you wish to delete this Tour?");
+				int result = JOptionPane.showConfirmDialog(ReservationsPane.this, "Are you sure you wish to delete this reservation?");
 				if (result == JOptionPane.YES_OPTION)
 				{
 					agency.removeTravel(travelsList.getSelectedValue());
 					performSearch();
+					centerEastJTextArea.setText("");
 				}
 			}
 		}

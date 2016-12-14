@@ -11,6 +11,7 @@ public class BusAndChaffeurTravel extends Travel
 		super(bus, chauffeur, reservationStartDate, reservationEndDate);
 		this.personCount = personCount;
 		this.customer = customer;
+		customer.incrementReservations();
 	}
 
 	public int getPersonCount()

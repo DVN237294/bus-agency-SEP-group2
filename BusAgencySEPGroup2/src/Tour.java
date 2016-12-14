@@ -20,6 +20,7 @@ public class Tour extends Travel
 	public void addCustomer(Customer customer)
 	{
 		customers.addCustomer(customer);
+		customer.incrementReservations();
 	}
 
 	public LocalDateTime getDepartureDate()
@@ -64,8 +65,8 @@ public class Tour extends Travel
 		text += "Customers:\n";
 		for (Customer customer : customers.getAllCustomers())
 		{
-			text += "\t" + customer.getName() + " Phone: " + customer.getPhoneNumber() + " Passengers: " + customer.getPassengerCount() + " Total amount: "
-					+ customer.getTicketTotalAmount() + "\n";
+			text += "\t" + customer.getName() + " - Phone: " + customer.getPhoneNumber() + " - Passengers: " + customer.getPassengerCount() + "\n\tTotal amount: "
+					+ customer.getTicketTotalAmount() + "\n\tAll-time reservations by customer: " + customer.getReservationCount() + "\n";
 			for (Passenger passenger : customer.getAllPassengers())
 			{
 				text += "\t\t" + passenger.getName() + " - Phone: " + passenger.getPhoneNumber() + " - Email: " + passenger.getEmail() + "\n"; 
