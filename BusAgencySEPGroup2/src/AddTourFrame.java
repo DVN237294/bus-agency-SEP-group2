@@ -41,11 +41,9 @@ import javax.swing.plaf.metal.MetalComboBoxUI;
 
 public class AddTourFrame extends JFrame
 {
+	private Tour resultTour;
 	private static final long serialVersionUID = 1L;
 	private TravelAgency agency;
-	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-			"December" };
-
 	private DateJPanel resvStartDatePanel;
 	private DateJPanel resvEndDatePanel;
 	private DateJPanel departureDatePanel;
@@ -65,13 +63,9 @@ public class AddTourFrame extends JFrame
 
 	private JButton addCustomerButton;
 	private JButton addRemoveDstButton;
+	private JButton addPassengerButton;
 	private DestinationAddButtonHandler addDestinationHandler;
 	private JList<String> destinationsList;
-
-	public String getResult()
-	{
-		return "this is it";
-	}
 
 	public AddTourFrame(TravelAgency agency)
 	{
@@ -112,8 +106,9 @@ public class AddTourFrame extends JFrame
 		basePriceField.addFocusListener(basePriceHandler);
 
 		submitFormButton = new JButton("Submit");
+		submitFormButton.addActionListener(new SubmitFormHandler());
 		passengerLimitPanel = new JPanel();
-		// passengerLimitPanel.setBorder(BorderFactory.createTitledBorder("Passenger limit"));
+
 		passengerLimitPanel.setLayout(new GridLayout());
 		passengerLimitPanel.add(maxPassengerCountCBox);
 		middlePanel = new JPanel();
@@ -121,19 +116,18 @@ public class AddTourFrame extends JFrame
 		lowerPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		lowerPanel.add(submitFormButton);
 		middlePanel.setLayout(new GridLayout(1, 2));
-		// middleDestinationPanel = new JPanel();
-		// middleDestinationPanel.setBorder(BorderFactory.createTitledBorder("Destination"));
-		// middlePanel.setBorder(BorderFactory.createTitledBorder("Bus & Chauffeur"));
 
 		// middle panel
 		chauffeurCBox = new JExtendedComboBox<Chauffeur>();
 		chauffeurCBox.setDefaultDisplayedItem(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
 		chauffeurCBox.setPrototypeDisplayValue(new Chauffeur("Chauffeur", null, Integer.MIN_VALUE));
+		chauffeurCBox.addItemListener(new BusAndChauffeurSelectedHandler());
 		chauffeurCBox.setEnabled(false);
 
 		busCBox = new JExtendedComboBox<Bus>();
 		busCBox.setDefaultDisplayedItem(new Bus("Bus", null, null, Integer.MIN_VALUE));
 		busCBox.setPrototypeDisplayValue(new Bus("Bus", null, null, Integer.MIN_VALUE));
+		busCBox.addItemListener(new BusAndChauffeurSelectedHandler());
 		busCBox.setEnabled(false);
 
 		String[] destinations = agency.getAllDestinations();
@@ -176,15 +170,17 @@ public class AddTourFrame extends JFrame
 		middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		customerList = new JList<Customer>(new DefaultListModel<Customer>());
+		customerList.addListSelectionListener(new EnablePassengerAddHandler());
 		addCustomerButton = new JButton("Add Customer");
 		addCustomerButton.addActionListener(new AddCustomerHandler());
 		addCustomerButton.setEnabled(false);
-		JButton addPassengerButton = new JButton("Add Passenger");
+		addPassengerButton = new JButton("Add Passenger");
+		addPassengerButton.setEnabled(false);
+		addPassengerButton.addActionListener(new AddPassengerHandler());
 		middleEastLowerSouthPanel.add(addCustomerButton);
 		middleEastLowerSouthPanel.add(Box.createHorizontalGlue());
 		middleEastLowerSouthPanel.add(addPassengerButton);
-		// middleEastUpperPanel.setBorder(BorderFactory.createEmptyBorder(3, 0,
-		// 6, 0));
+
 		middleEastPanel.setLayout(new GridLayout(2, 1));
 		middleEastPanel.add(middleEastUpperPanel);
 		middleEastPanel.add(middleEastLowerPanel);
@@ -217,16 +213,11 @@ public class AddTourFrame extends JFrame
 		middleWestThirdPanel.setLayout(new GridLayout());
 		middleWestFourthPanel.setLayout(new GridLayout());
 
-		// middleWestFirstPanel.add(busChauffeurCheckBox);
 		middleWestFirstPanel.add(passengerLimitPanel);
 		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
 		middleWestFirstPanel.add(Box.createHorizontalStrut(1));
 
-		// middleWestSecondPanel.add(chauffeurCBox);
 		middleWestSecondPanel.add(busCBox);
-
-		// middleWestThirdPanel.add(basePriceField);
-		// middleWestThirdPanel.add(enableDiscounts);
 
 		middleWestThirdPanel.add(chauffeurCBox);
 
@@ -256,6 +247,76 @@ public class AddTourFrame extends JFrame
 		setVisible(true);
 	}
 
+	public Tour getResultTour()
+	{
+		return resultTour;
+	}
+
+	private class BusAndChauffeurSelectedHandler implements ItemListener
+	{
+		@Override
+		public void itemStateChanged(ItemEvent e)
+		{
+			submitFormButton.setEnabled(!busCBox.isDefaultItemSelected() && !chauffeurCBox.isDefaultItemSelected());
+		}
+	}
+
+	private class SubmitFormHandler implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			// collect all of the information into a tour object
+
+			Tour newTour = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+
+			try
+			{
+				double price = Double.parseDouble(basePriceField.getText().replace(',', '.'));
+				newTour.setBasePrice(price);
+			} catch (NumberFormatException e2)
+			{
+				//user didn't input a tour price. sooo 0?
+				newTour.setBasePrice(0);
+			}
+
+			if (departureDatePanel.hasDateSelected())
+				newTour.setDepartureDate(departureDatePanel.getDate());
+
+			if (arrivalDatePanel.hasDateSelected())
+				newTour.setArrivalDate(arrivalDatePanel.getDate());
+
+			if (returnDatePanel.hasDateSelected())
+				newTour.setReturnDate(returnDatePanel.getDate());
+
+			DefaultListModel<String> destinationsModel = (DefaultListModel<String>) destinationsList.getModel();
+
+			if (!destinationsModel.isEmpty())
+			{
+				String[] destinations = new String[destinationsModel.getSize()];
+				for (int i = 0; i < destinations.length; i++)
+					destinations[i] = destinationsModel.get(i);
+
+				newTour.setDestinations(destinations);
+			}
+
+			resultTour = newTour;
+			
+			//signal parent frame to get the result
+			AddTourFrame.this.dispatchEvent(
+					new java.awt.event.WindowEvent(AddTourFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+		}
+	}
+
+	private class EnablePassengerAddHandler implements ListSelectionListener
+	{
+		@Override
+		public void valueChanged(ListSelectionEvent e)
+		{
+			addPassengerButton.setEnabled(customerList.hasFocus());
+		}
+	}
+
 	private class DestinationButtonLabelSwapper implements ItemListener, FocusListener
 	{
 
@@ -269,15 +330,12 @@ public class AddTourFrame extends JFrame
 		@Override
 		public void focusLost(FocusEvent e)
 		{
-			// destinationsList.clearSelection();
 			addRemoveDstButton.setText("Add destination");
 		}
 
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
-			// TODO Auto-generated method stub
-
 			addRemoveDstButton.setText("Add destination");
 		}
 	}
@@ -301,54 +359,113 @@ public class AddTourFrame extends JFrame
 		}
 	}
 
+	private class AddPassengerHandler implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			double price = Double.parseDouble(basePriceField.getText().replace(',', '.'));
+			AddPassengerFrame frame = new AddPassengerFrame(agency, customerList.getSelectedValue(), price);
+			frame.addWindowListener(new AddPassengerFrameClosedHandler());
+		}
+	}
+
 	private class AddCustomerHandler implements ActionListener
 	{
 
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			// TODO Auto-generated method stub
 			double price = Double.parseDouble(basePriceField.getText().replace(',', '.'));
 			AddCustomerFrame frame = new AddCustomerFrame(agency, price);
 			frame.addWindowListener(new AddCustomerFrameClosedHandler());
 		}
 	}
+
+	private class AddPassengerFrameClosedHandler implements WindowListener
+	{
+
+		@Override
+		public void windowActivated(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e)
+		{
+			customerList.repaint();
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e)
+		{
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e)
+		{
+		}
+
+	}
+
 	private class AddCustomerFrameClosedHandler implements WindowListener
 	{
 		@Override
 		public void windowActivated(WindowEvent e)
 		{
 		}
+
 		@Override
 		public void windowClosed(WindowEvent e)
 		{
 		}
+
 		@Override
 		public void windowClosing(WindowEvent e)
 		{
-			if(e.getSource() instanceof AddCustomerFrame)
+			if (e.getSource() instanceof AddCustomerFrame)
 			{
-				AddCustomerFrame source = (AddCustomerFrame)e.getSource();
-				((DefaultListModel<Customer>)customerList.getModel()).addElement(source.getCustomerResult());
+				AddCustomerFrame source = (AddCustomerFrame) e.getSource();
+				((DefaultListModel<Customer>) customerList.getModel()).addElement(source.getCustomerResult());
 			}
 		}
+
 		@Override
 		public void windowDeactivated(WindowEvent e)
 		{
 		}
+
 		@Override
 		public void windowDeiconified(WindowEvent e)
 		{
 		}
+
 		@Override
 		public void windowIconified(WindowEvent e)
 		{
 		}
+
 		@Override
 		public void windowOpened(WindowEvent e)
 		{
 		}
 	}
+
 	private class DestinationSearchHandler implements KeyListener, FocusListener
 	{
 		private JExtendedComboBox<String> cbox;
@@ -481,9 +598,9 @@ public class AddTourFrame extends JFrame
 				{
 					field.setText(defaultText);
 					addCustomerButton.setEnabled(false);
-				}
-				else {
-					//valid price
+				} else
+				{
+					// valid price
 					addCustomerButton.setEnabled(true);
 				}
 			}
@@ -554,20 +671,4 @@ public class AddTourFrame extends JFrame
 			}
 		}
 	}
-
-	/*
-	 * public String getReservationStartDate() { return "Day:" +
-	 * resvStartDayCBox.getSelectedItem() + "Month:" +
-	 * resvStartMonthCBox.getSelectedItem() + "Year:" +
-	 * resvStartYearCBox.getSelectedItem() + "Hour:" +
-	 * resvStartHourCBox.getSelectedItem() + "Minute:" +
-	 * resvStartMinCBox.getSelectedItem(); }
-	 * 
-	 * public String getReservationEndDate() { return "Day:" +
-	 * resvEndDayCBox.getSelectedItem() + "Month:" +
-	 * resvEndMonthCBox.getSelectedItem() + "Year:" +
-	 * resvEndYearCBox.getSelectedItem() + "Hour:" +
-	 * resvEndHourCBox.getSelectedItem() + "Minute:" +
-	 * resvEndMinCBox.getSelectedItem(); }
-	 */
 }

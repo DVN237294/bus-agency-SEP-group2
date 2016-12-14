@@ -59,7 +59,7 @@ public class Bus
 
    public boolean equals(Bus other)
    {
-      return other.getLicensePlate().equals(this.licensePlate);
+      return other.getLicensePlate() != null && this.licensePlate != null && other.getLicensePlate().equals(this.licensePlate);
    }
    
    public String toString()

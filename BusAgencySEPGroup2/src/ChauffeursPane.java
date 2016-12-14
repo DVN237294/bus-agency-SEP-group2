@@ -355,7 +355,6 @@ public class ChauffeursPane extends JPanel
       public void windowClosing(WindowEvent e)
       {
          AddTourFrame frame = (AddTourFrame) e.getSource();
-         System.out.println(frame.getResult());
       }
 
       @Override

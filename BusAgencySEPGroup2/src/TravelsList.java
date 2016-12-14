@@ -10,8 +10,6 @@ public class TravelsList
 		travels = new ArrayList<Travel>();
 	}
 
-	// public addTourPassenger() pointless
-
 	public void addTravel(Travel travel)
 	{
 		travels.add(travel);

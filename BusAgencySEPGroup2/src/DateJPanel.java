@@ -10,8 +10,6 @@ import javafx.scene.layout.Border;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-
-
 public class DateJPanel extends JPanel
 {	
 	private String[] months = new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
@@ -27,7 +25,7 @@ public class DateJPanel extends JPanel
 		
 
 		yearComboBox = new JExtendedComboBox<String>();
-		for (int i = 0, year = LocalDateTime.now().getYear(); i < 10; i++, year++)
+		for (int year = startYear; year <= endYear; year++)
 		{
 			yearComboBox.addItem(Integer.toString(year));
 		}

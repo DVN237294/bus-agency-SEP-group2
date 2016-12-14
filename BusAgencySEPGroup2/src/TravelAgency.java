@@ -225,6 +225,11 @@ public class TravelAgency
 	{
 		return busList.getBusCapacities();
 	}
+	
+	public void addTravel(Travel travel)
+	{
+		travelsList.addTravel(travel);
+	}
 
 	/*
 	 * public String getReservationStartDate() { return

@@ -16,10 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 
-public class AddCustomerFrame extends JFrame
+public class AddPassengerFrame extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-	private Customer resultCustomer;
+	private Customer relatedCustomer;
+	private Passenger resultPassenger;
 	private double tourPrice;
 	private TravelAgency agency;
 	private JTextField nameField;
@@ -29,16 +30,17 @@ public class AddCustomerFrame extends JFrame
 	private JTextField zipCodeField;
 	private JTextField doorNumberField;
 	private JTextField floorNumberField;
-	private JCheckBox customerIsPassengerBox;
+	//private JCheckBox customerIsPassengerBox;
 	private JButton submitFormButton;
 	private MinimumInputHandler minimumInputHandler;
 	private DateJPanel birthdayPanel;
 
-	public AddCustomerFrame(TravelAgency agency, double tourPrice)
+	public AddPassengerFrame(TravelAgency agency, Customer relatedCustomer, double tourPrice)
 	{
-		super("Add Customer");
+		super("Add Passenger");
 		this.agency = agency;
 		this.tourPrice = tourPrice;
+		this.relatedCustomer = relatedCustomer;
 		setSize(400, 400);
 		setLayout(new GridBagLayout());
 
@@ -52,7 +54,7 @@ public class AddCustomerFrame extends JFrame
 		streetHouseNumberField = new JTextField();
 		submitFormButton = new JButton("Submit");
 		minimumInputHandler = new MinimumInputHandler(nameField, phoneNumberField);
-		customerIsPassengerBox = new JCheckBox("<html>Customer is a<br>passenger", false);
+		//customerIsPassengerBox = new JCheckBox("<html>Customer is a<br>passenger", false);
 		
 		birthdayPanel.setBorder(BorderFactory.createTitledBorder("Birthday"));
 		nameField.setBorder(BorderFactory.createTitledBorder("Name"));
@@ -63,7 +65,7 @@ public class AddCustomerFrame extends JFrame
 		zipCodeField.setBorder(BorderFactory.createTitledBorder("Zipcode"));
 		doorNumberField.setBorder(BorderFactory.createTitledBorder("Door number"));
 		floorNumberField.setBorder(BorderFactory.createTitledBorder("Floor number"));
-		customerIsPassengerBox.addChangeListener(minimumInputHandler);
+		//customerIsPassengerBox.addChangeListener(minimumInputHandler);
 
 		submitFormButton.setEnabled(false);
 		submitFormButton.addActionListener(new SubmitFormHandler());
@@ -165,14 +167,14 @@ public class AddCustomerFrame extends JFrame
 
 		fourth.gridx = 0;
 		fourth.anchor = GridBagConstraints.LAST_LINE_START;
-		add(customerIsPassengerBox, fourth);
+		//add(customerIsPassengerBox, fourth);
 
 		setVisible(true);
 	}
 
-	public Customer getCustomerResult()
+	public Passenger getPassengerResult()
 	{
-		return resultCustomer;
+		return resultPassenger;
 	}
 	private class SubmitFormHandler implements ActionListener
 	{
@@ -187,10 +189,10 @@ public class AddCustomerFrame extends JFrame
 				phoneNumber = Integer.parseInt(phoneNumberField.getText().trim());
 			} catch (NumberFormatException e2)
 			{
-				JOptionPane.showMessageDialog(AddCustomerFrame.this, "Phone number is invalid. Please only use whole numbers");
+				JOptionPane.showMessageDialog(AddPassengerFrame.this, "Phone number is invalid. Please only use whole numbers");
 				return;
 			}
-			Customer newCustomer = new Customer(name, phoneNumber);
+			Passenger newPassenger = new Passenger(name, phoneNumber, birthdayPanel.getDate());
 			if (streetNameField.getText() != null && !streetNameField.getText().trim().equals("") && streetHouseNumberField.getText() != null
 					&& !streetHouseNumberField.getText().trim().equals("") && zipCodeField.getText() != null && !zipCodeField.getText().trim().equals(""))
 			{
@@ -201,7 +203,7 @@ public class AddCustomerFrame extends JFrame
 					streetHouseNumber = Integer.parseInt(streetHouseNumberField.getText().trim());
 				} catch (NumberFormatException e2)
 				{
-					JOptionPane.showMessageDialog(AddCustomerFrame.this, "Street number is invalid. Please only use whole numbers");
+					JOptionPane.showMessageDialog(AddPassengerFrame.this, "Street number is invalid. Please only use whole numbers");
 					return;
 				}
 				try
@@ -209,10 +211,10 @@ public class AddCustomerFrame extends JFrame
 					zipCode = Integer.parseInt(zipCodeField.getText().trim());
 				} catch (NumberFormatException e2)
 				{
-					JOptionPane.showMessageDialog(AddCustomerFrame.this, "Zipcode is invalid. Please only use whole numbers");
+					JOptionPane.showMessageDialog(AddPassengerFrame.this, "Zipcode is invalid. Please only use whole numbers");
 					return;
 				}
-				Address customerAddress = new Address(streetNameField.getText().trim(), streetHouseNumber, zipCode);
+				Address passengerAddress = new Address(streetNameField.getText().trim(), streetHouseNumber, zipCode);
 
 				int doorNumber;
 				if (doorNumberField.getText() != null && !doorNumberField.getText().trim().equals(""))
@@ -222,31 +224,25 @@ public class AddCustomerFrame extends JFrame
 						doorNumber = Integer.parseInt(doorNumberField.getText().trim());
 					} catch (NumberFormatException e2)
 					{
-						JOptionPane.showMessageDialog(AddCustomerFrame.this, "Door number is invalid. Please only use whole numbers");
+						JOptionPane.showMessageDialog(AddPassengerFrame.this, "Door number is invalid. Please only use whole numbers");
 						return;
 					}
-					customerAddress.setDoorNumber(doorNumber);
+					passengerAddress.setDoorNumber(doorNumber);
 				}
 				
-				newCustomer.setAddress(customerAddress);
+				newPassenger.setAddress(passengerAddress);
 
 			}
-			if(birthdayPanel.hasDateSelected())
-			{
-				newCustomer.setBirthday(birthdayPanel.getDate());
-			}
-			if(customerIsPassengerBox.isSelected())
-			{
-				//figure out price and add a passenger with identical info..
-				Passenger passenger = new Passenger(newCustomer.getName(), newCustomer.getPhoneNumber(), newCustomer.getBirthday());
-				newCustomer.addPassenger(passenger, agency.getCustomerSuggestedPrice(tourPrice, newCustomer));
-			}
 			
-			//customer ready to be returned to parent frame.
-			resultCustomer = newCustomer;
+				//figure out price and add a passenger with identical info..
+				relatedCustomer.addPassenger(newPassenger, agency.getCustomerSuggestedPrice(tourPrice, relatedCustomer));
+			
+			
+			//passenger ready to be returned to parent frame.
+			resultPassenger = newPassenger;
 			//signal parent frame to get the result
-			AddCustomerFrame.this.dispatchEvent(
-					new java.awt.event.WindowEvent(AddCustomerFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+			AddPassengerFrame.this.dispatchEvent(
+					new java.awt.event.WindowEvent(AddPassengerFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
 		}
 	}
 
@@ -282,7 +278,7 @@ public class AddCustomerFrame extends JFrame
 		{
 			if (field1.getText() != null && !field1.getText().trim().equals("") && field2.getText() != null && !field2.getText().trim().equals(""))
 			{
-				if(customerIsPassengerBox.isSelected() && !birthdayPanel.hasDateSelected())
+				if(!birthdayPanel.hasDateSelected())
 					submitFormButton.setEnabled(false);
 				else
 					submitFormButton.setEnabled(true);

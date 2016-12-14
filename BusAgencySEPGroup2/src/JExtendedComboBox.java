@@ -108,11 +108,17 @@ public class JExtendedComboBox<T> extends JComboBox<T>
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e)
 		{
+			int step;
+			if(e.getPreciseWheelRotation() > 0)
+				step = 1;
+			else
+				step = -1;
+			
 			if (isDefaultItemSelected())
 				removeDefaultFromList();
-			else if ((JExtendedComboBox.this.getSelectedIndex() > 0 && e.getPreciseWheelRotation() < 0)
-					|| (JExtendedComboBox.this.getSelectedIndex() < JExtendedComboBox.this.getItemCount() - 1 && e.getPreciseWheelRotation() > 0))
-				JExtendedComboBox.this.setSelectedIndex(JExtendedComboBox.this.getSelectedIndex() + (int) e.getPreciseWheelRotation());
+			else if ((JExtendedComboBox.this.getSelectedIndex() > 0 && step < 0)
+					|| (JExtendedComboBox.this.getSelectedIndex() < JExtendedComboBox.this.getItemCount() - 1 && step > 0))
+				JExtendedComboBox.this.setSelectedIndex(JExtendedComboBox.this.getSelectedIndex() + (int) step);
 		}
 	}
 
