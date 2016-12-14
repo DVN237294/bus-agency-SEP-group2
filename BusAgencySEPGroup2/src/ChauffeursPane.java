@@ -345,7 +345,6 @@ public class ChauffeursPane extends JPanel
       {
          // TODO Auto-generated method stub
 
-         System.out.println("closed");
          firstNameBox.setItems(agency.getAllFirstNames());
          lastNameBox.setItems(agency.getAllLastNames());
          chauffeurIdBox.setItems(agency.getAllChauffeurIds());
@@ -383,7 +382,6 @@ public class ChauffeursPane extends JPanel
       {
          // TODO Auto-generated method stub
 
-         System.out.println("opened");
       }
 
    }

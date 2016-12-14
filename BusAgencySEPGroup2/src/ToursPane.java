@@ -109,23 +109,23 @@ public class ToursPane extends JPanel
 
 		}
 	}
-	
+
 	private class DeleteButtonAction implements ActionListener
 	{
 
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			if(centerWestList.getSelectedIndex() != -1)
+			if (centerWestList.getSelectedIndex() != -1)
 			{
 				int result = JOptionPane.showConfirmDialog(ToursPane.this, "Are you sure you wish to delete this Tour?");
-				if(result == JOptionPane.YES_OPTION)
+				if (result == JOptionPane.YES_OPTION)
 				{
 					agency.removeTravel(centerWestList.getSelectedValue());
 				}
 			}
 		}
-		
+
 	}
 
 	private class SearchAction implements ActionListener
@@ -179,7 +179,8 @@ public class ToursPane extends JPanel
 		{
 			AddTourFrame frame = (AddTourFrame) e.getSource();
 			Travel result = frame.getResultTour();
-			agency.addTravel(result);
+			if (result != null)
+				agency.addTravel(result);
 		}
 
 		@Override

@@ -93,7 +93,10 @@ public class AddTourFrame extends JFrame
 		for (int i = 0; i < busCapacities.length; i++)
 			passengerCounts[i] = Integer.toString(busCapacities[i]);
 		maxPassengerCountCBox = new JExtendedComboBox<String>(passengerCounts);
-		maxPassengerCountCBox.setDefaultDisplayedItem("Passenger limit");
+		if (busCapacities.length == 0)
+			maxPassengerCountCBox.setDefaultDisplayedItem("No buses added");
+		else
+			maxPassengerCountCBox.setDefaultDisplayedItem("Passenger limit");
 
 		new ReservationDateChangedHandler(resvStartDatePanel, resvEndDatePanel);
 
@@ -276,7 +279,7 @@ public class AddTourFrame extends JFrame
 				newTour.setBasePrice(price);
 			} catch (NumberFormatException e2)
 			{
-				//user didn't input a tour price. sooo 0?
+				// user didn't input a tour price. sooo 0?
 				newTour.setBasePrice(0);
 			}
 
@@ -298,20 +301,19 @@ public class AddTourFrame extends JFrame
 					destinations[i] = destinationsModel.get(i);
 
 				newTour.setDestinations(destinations);
-				
-				//keep these destinations for future tours:
+
+				// keep these destinations for future tours:
 				agency.addDestinations(destinations);
 			}
 
-			DefaultListModel<Customer> customers = (DefaultListModel<Customer>)customerList.getModel();
-			for(int i = 0; i < customers.getSize(); i++)
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+			for (int i = 0; i < customers.getSize(); i++)
 				newTour.addCustomer(customers.get(i));
-			
+
 			resultTour = newTour;
-			
-			//signal parent frame to get the result
-			AddTourFrame.this.dispatchEvent(
-					new java.awt.event.WindowEvent(AddTourFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+
+			// signal parent frame to get the result
+			AddTourFrame.this.dispatchEvent(new java.awt.event.WindowEvent(AddTourFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
 		}
 	}
 

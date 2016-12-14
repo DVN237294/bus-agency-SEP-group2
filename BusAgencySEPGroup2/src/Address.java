@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Address
+
+public class Address implements Serializable
 {
 	private int zipCode;
 	private String streetName;
