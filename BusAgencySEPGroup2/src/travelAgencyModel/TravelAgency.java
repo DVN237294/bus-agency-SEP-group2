@@ -93,6 +93,7 @@ public class TravelAgency implements Serializable
 
 		Travel travel2 = new BusAndChaffeurTravel(customer2, bus2, chauffeur2, 30, LocalDateTime.of(2017, 1, 11, 9, 0), LocalDateTime.of(2017, 1, 11, 20, 0));
 		travel2.setDestinations(new String[] { destination3 });
+		travel2.setBasePrice(2099);
 
 		this.addBus(bus1);
 		this.addBus(bus2);
