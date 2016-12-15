@@ -75,11 +75,21 @@ public class AddReservationFrame extends JFrame
 	private int customerLimit = Integer.MAX_VALUE;
 	private String tourPriceString = "Price per seat";;
 	private String bAndCPriceString = "Reservation price";
+	private boolean editMode;
+
+	public AddReservationFrame(TravelAgency agency, Travel travel)
+	{
+		this(agency);
+		this.editMode = true;
+		this.resultTravel = travel;
+		super.setTitle("Edit Reservation");
+		loadTravel(travel);
+	}
 
 	public AddReservationFrame(TravelAgency agency)
 	{
 		super("Add Reservation");
-
+		this.editMode = false;
 		this.agency = agency;
 		setSize(735, 540);
 		setResizable(false);
@@ -182,7 +192,8 @@ public class AddReservationFrame extends JFrame
 		middleEastUpperCenterPanel.setLayout(new GridLayout());
 		middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		middleEastLowerSouthPanel.setLayout(new GridLayout(1, 3));
-		//middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		// middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5,
+		// 5, 5, 5));
 
 		customerList = new JList<Customer>(new DefaultListModel<Customer>());
 		customerList.addListSelectionListener(new EnableCustomerModificationHandler());
@@ -300,6 +311,47 @@ public class AddReservationFrame extends JFrame
 		setVisible(true);
 	}
 
+	private void loadTravel(Travel travel)
+	{
+
+		resvStartDatePanel.setDate(travel.getReservationStartDate());
+		resvEndDatePanel.setDate(travel.getReservationEndDate());
+		maxPassengerCountCBox.setSelectedItem(Integer.toString(travel.getBus().getMaxCapacity()));
+
+		// all requirements for updating chauffeur and bus comboboxes, they
+		// should be populated by now..
+		busCBox.setSelectedItem(travel.getBus());
+		chauffeurCBox.setSelectedItem(travel.getChauffeur());
+		basePriceField.setText(Double.toString(travel.getBasePrice()));
+
+		DefaultListModel<String> destinations = (DefaultListModel<String>) destinationsList.getModel();
+		DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+
+		for (String destination : travel.getDestinations())
+			destinations.addElement(destination);
+
+		if (travel instanceof Tour)
+		{
+			Tour tour = (Tour) travel;
+			busAndChauffeurReservationBox.setSelected(false);
+			if (tour.getDepartureDate() != null)
+				departureDatePanel.setDate(tour.getDepartureDate());
+			if (tour.getArrivalDate() != null)
+				arrivalDatePanel.setDate(tour.getArrivalDate());
+			if (tour.getReturnDate() != null)
+				returnDatePanel.setDate(tour.getReturnDate());
+			for (Customer customer : tour.getCustomers())
+				customers.addElement(customer);
+
+		} else if (travel instanceof BusAndChaffeurTravel)
+		{
+			BusAndChaffeurTravel bncTravel = (BusAndChaffeurTravel) travel;
+			busAndChauffeurReservationBox.setSelected(true);
+			customers.addElement(bncTravel.getCustomer());
+		}
+
+	}
+
 	public Travel getResultTravel()
 	{
 		return resultTravel;
@@ -335,20 +387,23 @@ public class AddReservationFrame extends JFrame
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
-			// swap the base price fields text
-			if (busAndChauffeurReservationBox.isSelected())
+			if (!editMode)
 			{
-				if (basePriceField.getText().equals(tourPriceString))
-					basePriceField.setText(bAndCPriceString);
+				// swap the base price fields text
+				if (busAndChauffeurReservationBox.isSelected())
+				{
+					if (basePriceField.getText().equals(tourPriceString))
+						basePriceField.setText(bAndCPriceString);
 
-				// a B&C reservation can only have one customer
-				customerLimit = 1;
-			} else
-			{
-				customerLimit = Integer.MAX_VALUE;
+					// a B&C reservation can only have one customer
+					customerLimit = 1;
+				} else
+				{
+					customerLimit = Integer.MAX_VALUE;
 
-				if (basePriceField.getText().equals(bAndCPriceString))
-					basePriceField.setText(tourPriceString);
+					if (basePriceField.getText().equals(bAndCPriceString))
+						basePriceField.setText(tourPriceString);
+				}
 			}
 			checkSubmitButton();
 			// departure, arrival and return dates are not applicable to a B&C
@@ -376,17 +431,19 @@ public class AddReservationFrame extends JFrame
 		public void actionPerformed(ActionEvent e)
 		{
 			boolean isTour = !busAndChauffeurReservationBox.isSelected();
-			// collect all of the information into a tour object
 
-			Travel newTravel;
-			if (isTour)
-				newTravel = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
-			else
+			Travel newTravel = resultTravel;
+			if (!editMode)
 			{
-				DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
-				int personCount = Integer.parseInt(maxPassengerCountCBox.getSelectedItem());
-				newTravel = new BusAndChaffeurTravel(customers.get(0), busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), personCount,
-						resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+				if (isTour)
+					newTravel = new Tour(busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+				else
+				{
+					DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+					int personCount = Integer.parseInt(maxPassengerCountCBox.getSelectedItem());
+					newTravel = new BusAndChaffeurTravel(customers.get(0), busCBox.getSelectedItem(), chauffeurCBox.getSelectedItem(), personCount,
+							resvStartDatePanel.getDate(), resvEndDatePanel.getDate());
+				}
 			}
 
 			try
@@ -426,7 +483,8 @@ public class AddReservationFrame extends JFrame
 			{
 				DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
 				for (int i = 0; i < customers.getSize(); i++)
-					((Tour) newTravel).addCustomer(customers.get(i));
+					if(!((Tour) newTravel).hasCustomer(customers.get(i)))
+						((Tour) newTravel).addCustomer(customers.get(i));
 			}
 			resultTravel = newTravel;
 
@@ -805,8 +863,14 @@ public class AddReservationFrame extends JFrame
 						for (Chauffeur chauffeur : agency.listAvailableChauffeurs(startDate, endDate))
 							chauffeurCBox.addItem(chauffeur);
 
+						if (editMode)
+						{
+							busCBox.addItem(resultTravel.getBus());
+							chauffeurCBox.addItem(resultTravel.getChauffeur());
+						}
 						busCBox.setEnabled(true);
 						chauffeurCBox.setEnabled(true);
+
 					}
 				}
 			} else

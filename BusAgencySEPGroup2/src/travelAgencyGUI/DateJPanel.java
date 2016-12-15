@@ -2,6 +2,7 @@ package travelAgencyGUI;
 import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -87,6 +88,14 @@ public class DateJPanel extends JPanel
 				!dayComboBox.isDefaultItemSelected() &&
 				!hourComboBox.isDefaultItemSelected() &&
 				!minComboBox.isDefaultItemSelected();
+	}
+	public void setDate(LocalDateTime date)
+	{
+		yearComboBox.setSelectedItem(Integer.toString(date.getYear()));
+		monthComboBox.setSelectedIndex(date.getMonthValue());
+		dayComboBox.setSelectedItem(Integer.toString(date.getDayOfMonth()));
+		hourComboBox.setSelectedItem(travelAgencyModel.Time.doubleDigits(date.getHour()));
+		minComboBox.setSelectedItem(travelAgencyModel.Time.doubleDigits(date.getMinute()));
 	}
 	public LocalDateTime getDate()
 	{

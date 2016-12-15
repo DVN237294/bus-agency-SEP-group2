@@ -127,6 +127,7 @@ public class ReservationsPane extends JPanel
 		southWestPanel.add(deleteTourButton);
 
 		addTourButton.addActionListener(new AddTourAction());
+		editTourButton.addActionListener(new EditButtonAction());
 
 		this.setLayout(new BorderLayout());
 		this.add(toursNorthPanel, BorderLayout.NORTH);
@@ -182,6 +183,20 @@ public class ReservationsPane extends JPanel
 		}
 	}
 
+	private class EditButtonAction implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			if(travelsList.getSelectedIndex() > 0)
+			{
+				AddReservationFrame frame = new AddReservationFrame(agency, travelsList.getSelectedValue());
+				//frame.addWindowListener(new WindowStateChangedHandler());
+			}
+		}
+		
+	}
 	private class DeleteButtonAction implements ActionListener
 	{
 

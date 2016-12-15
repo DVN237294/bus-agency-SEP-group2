@@ -149,4 +149,13 @@ public class Tour extends Travel
 	{
 		return "Tour Reservation";
 	}
+	
+	/**
+	 * Gets all of the customers associated with this {@link Tour}.
+	 * @return Returns an array of {@link Customer}s.
+	 */
+	public Customer[] getCustomers()
+	{
+		return customers.getAllCustomers().toArray(new Customer[0]);
+	}
 }

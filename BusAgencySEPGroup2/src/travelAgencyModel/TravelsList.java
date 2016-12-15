@@ -1,4 +1,5 @@
 package travelAgencyModel;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -237,10 +238,11 @@ public class TravelsList implements Serializable
 
 		return temp.toArray(tempArray);
 	}
-	
-	
+
 	/**
-	 * Returns every {@link Travel} in the underlying collection as a shallow copy.
+	 * Returns every {@link Travel} in the underlying collection as a shallow
+	 * copy.
+	 * 
 	 * @return A collection of {@link Travel}s.
 	 */
 	public Travel[] getAllTravels()
@@ -248,5 +250,35 @@ public class TravelsList implements Serializable
 		Travel[] temp = new Travel[travels.size()];
 		travels.toArray(temp);
 		return temp;
+	}
+
+	/**
+	 * Returns the first {@link Customer} in the underlying collection whose
+	 * name and phoneNumber is equal to the provided arguments.
+	 * 
+	 * @param name
+	 *            The name to look for.
+	 * @param phoneNumber
+	 *            The phone number to look for
+	 * @return Returns the first instance of {@link Customer} that satisfies the
+	 *         condition if any, otherwise returns {@link null}.
+	 */
+	public Customer getCustomer(String name, int phoneNumber)
+	{
+		for (Travel travel : travels)
+		{
+			if (travel instanceof Tour)
+			{
+				for (Customer customer : ((Tour) travel).getCustomers())
+					if (customer.getName().equals(name) && customer.getPhoneNumber() == phoneNumber)
+						return customer;
+			} else if (travel instanceof BusAndChaffeurTravel)
+			{
+				Customer customer = ((BusAndChaffeurTravel) travel).getCustomer();
+				if (customer.getName().equals(name) && customer.getPhoneNumber() == phoneNumber)
+					return customer;
+			}
+		}
+		return null;
 	}
 }

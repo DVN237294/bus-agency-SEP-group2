@@ -286,14 +286,22 @@ public class TravelAgency implements Serializable
 		this.defaultDiscountRate = rate;
 	}
 
-	/*
-	 * public void addTourPassenger(Tour tour, Customer payingCustomer,
-	 * Passenger passenger, double price) { if
-	 * (!tour.hasCustomer(payingCustomer)) tour.addCustomer(payingCustomer);
+
+	/**
+	 * Returns the first {@link Customer} in the underlying collection whose
+	 * name and phoneNumber is equal to the provided arguments.
 	 * 
-	 * if (!payingCustomer.hasAssociatedPassenger(passenger))
-	 * payingCustomer.addPassenger(passenger, price); }
+	 * @param name
+	 *            The name to look for.
+	 * @param phoneNumber
+	 *            The phone number to look for
+	 * @return Returns the first instance of {@link Customer} that satisfies the
+	 *         condition if any, otherwise returns {@link null}.
 	 */
+	public Customer getCustomer(String name, int phoneNumber)
+	{
+		return travelsList.getCustomer(name, phoneNumber);
+	}
 
 	/**
 	 * Determines whether the specified {@link Customer}s all-time reservation

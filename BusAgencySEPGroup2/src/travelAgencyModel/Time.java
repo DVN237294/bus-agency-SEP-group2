@@ -37,7 +37,7 @@ public abstract class Time
 	 * @param number The number to convert.
 	 * @return Returns a double digit {@link String} representation of the passed integer.
 	 */
-	private static String doubleDigits(int number)
+	public static String doubleDigits(int number)
 	{
 		if(number < 9 && number >= 0)
 			return "0" + Integer.toString(number);

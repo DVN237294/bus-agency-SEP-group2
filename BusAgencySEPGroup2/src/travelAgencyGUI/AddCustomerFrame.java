@@ -187,7 +187,7 @@ public class AddCustomerFrame extends JFrame
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-
+			Customer theCustomer;
 			String name = nameField.getText();
 			int phoneNumber;
 			try
@@ -198,7 +198,9 @@ public class AddCustomerFrame extends JFrame
 				JOptionPane.showMessageDialog(AddCustomerFrame.this, "Phone number is invalid. Please only use whole numbers");
 				return;
 			}
-			Customer newCustomer = new Customer(name, phoneNumber);
+			theCustomer = agency.getCustomer(name, phoneNumber);
+			if(theCustomer == null)
+				theCustomer = new Customer(name, phoneNumber);
 			if (streetNameField.getText() != null && !streetNameField.getText().trim().equals("") && streetHouseNumberField.getText() != null
 					&& !streetHouseNumberField.getText().trim().equals("") && zipCodeField.getText() != null && !zipCodeField.getText().trim().equals(""))
 			{
@@ -236,22 +238,22 @@ public class AddCustomerFrame extends JFrame
 					customerAddress.setDoorNumber(doorNumber);
 				}
 				
-				newCustomer.setAddress(customerAddress);
+				theCustomer.setAddress(customerAddress);
 
 			}
 			if(birthdayPanel.hasDateSelected())
 			{
-				newCustomer.setBirthday(birthdayPanel.getDate());
+				theCustomer.setBirthday(birthdayPanel.getDate());
 			}
 			if(customerIsPassengerBox.isSelected())
 			{
 				//figure out price and add a passenger with identical info..
-				Passenger passenger = new Passenger(newCustomer.getName(), newCustomer.getPhoneNumber(), newCustomer.getBirthday());
-				newCustomer.addPassenger(passenger, agency.getCustomerSuggestedPrice(tourPrice, newCustomer));
+				Passenger passenger = new Passenger(theCustomer.getName(), theCustomer.getPhoneNumber(), theCustomer.getBirthday());
+				theCustomer.addPassenger(passenger, agency.getCustomerSuggestedPrice(tourPrice, theCustomer));
 			}
 			
 			//customer ready to be returned to parent frame.
-			resultCustomer = newCustomer;
+			resultCustomer = theCustomer;
 			//signal parent frame to get the result
 			AddCustomerFrame.this.dispatchEvent(
 					new java.awt.event.WindowEvent(AddCustomerFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
