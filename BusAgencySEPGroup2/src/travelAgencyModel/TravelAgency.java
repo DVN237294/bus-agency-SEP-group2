@@ -410,7 +410,7 @@ public class TravelAgency implements Serializable
 
 	public void deleteChauffeur(Chauffeur chauffeur)
 	{
-		chauffeurList.deleteChauffeur(chauffeur);
+		chauffeurList.removeChauffeur(chauffeur);
 		saveFileChauffeurList();
 	}
 
