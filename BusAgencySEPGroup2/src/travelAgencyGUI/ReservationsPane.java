@@ -147,6 +147,7 @@ public class ReservationsPane extends JPanel
 		Travel[] searchResult = agency.searchTravel(destinationString, chauffeur, bus);
 		DefaultListModel<Travel> listModel = (DefaultListModel<Travel>) travelsList.getModel();
 		listModel.clear();
+		centerEastJTextArea.setText("");
 		for (Travel travel : searchResult)
 		{
 			listModel.addElement(travel);

@@ -121,6 +121,7 @@ public class AddTourFrame extends JFrame
 
 		submitFormButton = new JButton("Submit");
 		submitFormButton.addActionListener(new SubmitFormHandler());
+		submitFormButton.setEnabled(false);
 		passengerLimitPanel = new JPanel();
 
 		passengerLimitPanel.setLayout(new GridLayout());
