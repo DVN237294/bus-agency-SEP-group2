@@ -7,8 +7,9 @@ import java.util.Arrays;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 /**
- * {@link ArrayList} backed list containing instances of {@link Bus}.
- * Implements {@link Serializable}
+ * {@link ArrayList} backed list containing instances of {@link Bus}. Implements
+ * {@link Serializable}
+ * 
  * @author DVN, Afonso, Carlos
  */
 public class BusList implements Serializable
@@ -184,5 +185,44 @@ public class BusList implements Serializable
 		}
 		Arrays.sort(returnArray);
 		return returnArray;
+	}
+
+	/**
+	 * Searches for {@link Bus}es that satisfies the given input parameters.
+	 * Does exclusive search by default.If any of the passed parameters are
+	 * {@link null}, they are ignored, in which case they do not affect the
+	 * search result.
+	 * 
+	 * @param make The manufacturer to search for.
+	 * @param model The vehicle model to search for.
+	 * @param licensePlate The vehicle license plate to search for.
+	 * @param maxCapacity The vehicle maximum passenger capacity to search for.
+	 * @return Returns an array of {@link Bus}es that satisfies the given parameters.
+	 */
+	public Bus[] search(String make, String model, String licensePlate, int maxCapacity)
+	{
+		ArrayList<Bus> temp = new ArrayList<Bus>();
+		Bus[] tempArray = new Bus[0];
+
+		boolean mustHaveMake = make != null;
+		boolean mustHaveModel = model != null;
+		boolean mustHaveLicensePlate = licensePlate != null;
+		boolean mustHaveMaxCapacity = maxCapacity != 0;
+
+		for (Bus bus : buses)
+		{
+			boolean hasMake = mustHaveMake && bus.getMake().equals(make);
+			boolean hasModel = mustHaveModel && bus.getModel().equals(model);
+			boolean hasLicensePlate = mustHaveLicensePlate && bus.getLicensePlate().equals(licensePlate);
+			boolean hasMaxCapacity = mustHaveMaxCapacity && bus.getMaxCapacity() == maxCapacity;
+
+			if (mustHaveMake == hasMake && mustHaveModel == hasModel && mustHaveLicensePlate == hasLicensePlate && mustHaveMaxCapacity == hasMaxCapacity)
+			{
+				temp.add(bus);
+			}
+
+		}
+
+		return temp.toArray(tempArray);
 	}
 }

@@ -286,7 +286,6 @@ public class TravelAgency implements Serializable
 		this.defaultDiscountRate = rate;
 	}
 
-
 	/**
 	 * Returns the first {@link Customer} in the underlying collection whose
 	 * name and phoneNumber is equal to the provided arguments.
@@ -317,14 +316,6 @@ public class TravelAgency implements Serializable
 		return travelsList.getCustomerFrequency(customer) >= frequentCustomerThreshHold;
 	}
 
-	/*
-	 * public void addTourPassenger(Tour tour, Customer payingCustomer,
-	 * Passenger passenger) { // this one uses the base price of the tour +
-	 * default discount rate double price = tour.getBasePrice(); if
-	 * (isFrequentCustomer(payingCustomer)) { // apply discount price *=
-	 * defaultDiscountRate; } addTourPassenger(tour, payingCustomer, passenger,
-	 * price); }
-	 */
 
 	/**
 	 * Returns the suggested price for a given {@link Customer} given a specific
@@ -379,10 +370,6 @@ public class TravelAgency implements Serializable
 		return destinationsList.getAllDestinations();
 	}
 
-	/*
-	 * public String getDestination(String destination) { return
-	 * destinationsList.getDestination(destination); }
-	 */
 
 	public void addDestinations(String[] destinations)
 	{
@@ -402,10 +389,6 @@ public class TravelAgency implements Serializable
 		return chauffeurList.getChauffeur(firstName, lastName, chauffeurID);
 	}
 
-	/*
-	 * public String getFirstName(String firstName) { return
-	 * chauffeurList.getFirstName(firstName); }
-	 */
 
 	public String[] getAllFirstNames()
 	{
@@ -422,15 +405,6 @@ public class TravelAgency implements Serializable
 		return chauffeurList.getAllChauffeurIds();
 	}
 
-	/*
-	 * public String getLastName(String lastName) { return
-	 * chauffeurList.getLastName(lastName); }
-	 */
-
-	/*
-	 * public int getChauffeurId(int ID) { return
-	 * chauffeurList.getChauffeurId(ID); }
-	 */
 
 	public Bus[] getAllBusses()
 	{
@@ -460,6 +434,17 @@ public class TravelAgency implements Serializable
 	public Integer[] getAllBusMaxCapacities()
 	{
 		return busList.getAllMaxCapacities();
+	}
+	
+	public String[] getAllBusMaxCapacitiesAsStrings()
+	{
+		Integer[] capacitiesIntegers = busList.getAllMaxCapacities();
+		String[] capacitieStrings = new String[capacitiesIntegers.length];
+		for(int i = 0; i < capacitiesIntegers.length; i++)
+		{
+			capacitieStrings[i] = Integer.toString(capacitiesIntegers[i]);
+		}
+		return capacitieStrings;
 	}
 
 	public void addChauffeur(Chauffeur chauffeur)
@@ -526,10 +511,68 @@ public class TravelAgency implements Serializable
 		saveFileBusList();
 	}
 
+	/**
+	 * Searches for {@link Travel}s that satisfies the given input parameters.
+	 * If any of the passed parameters are {@link null}, they are ignored, in
+	 * which case they do not affect the search result. Does exclusive search by
+	 * default.
+	 * 
+	 * @param destination
+	 *            A destination that is searched for in the {@link Travel}s
+	 *            destinations collection.
+	 * @param chauffeur
+	 *            A {@link Chauffeur} that is searched for.
+	 * @param bus
+	 *            A {@link Bus} that is searched {@link Bus}.
+	 * @param inclusive
+	 *            Specifies whether the search should be done inclusive or
+	 *            exclusive.
+	 *
+	 * @return A collection of {@link Travel}s that matches the search
+	 *         parameters.
+	 */
 	public Travel[] searchTravel(String destination, Chauffeur chauffeur, Bus bus)
 	{
-		return travelsList.searchTravel(destination, chauffeur, bus, false);
+		return travelsList.search(destination, chauffeur, bus, false);
 	}
+	
+	/**
+	 * Searches for {@link Bus}es that satisfies the given input parameters.
+	 * Does exclusive search by default.If any of the passed parameters are
+	 * {@link null}, they are ignored, in which case they do not affect the
+	 * search result.
+	 * 
+	 * @param make The manufacturer to search for.
+	 * @param model The vehicle model to search for.
+	 * @param licensePlate The vehicle license plate to search for.
+	 * @param maxCapacity The vehicle maximum passenger capacity to search for.
+	 * @return Returns an array of {@link Bus}es that satisfies the given parameters.
+	 */
+	public Bus[] searchBus(String make, String model, String licensePlate, int maxCapacity)
+	{
+		return busList.search(make, model, licensePlate, maxCapacity);
+	}
+	
+	/**
+	 * Searches for {@link Chauffeur}s that satisfies the given input
+	 * parameters. Does exclusive search by default. If any of the passed
+	 * parameters are {@link null}, they are ignored, in which case they do not
+	 * affect the search result.
+	 * 
+	 * @param firstName
+	 *            The fist name to search for.
+	 * @param lastName
+	 *            The last name to search for.
+	 * @param chauffeurID
+	 *            The chauffeur ID to search for.
+	 * @return Returns an array of {@link Chauffeur}es that satisfies the given
+	 *         parameters.
+	 */
+	public Chauffeur[] searchChauffeur(String firstName, String lastName, int chauffeurID)
+	{
+		return chauffeurList.search(firstName, lastName, chauffeurID);
+	}
+	
 
 	public int[] getBusCapacities()
 	{
@@ -548,11 +591,4 @@ public class TravelAgency implements Serializable
 		saveFileTravelsList();
 	}
 
-	/*
-	 * public String getReservationStartDate() { return
-	 * addTourFrame.getReservationStartDate(); }
-	 * 
-	 * public String getReservationEndDate() { return
-	 * addTourFrame.getReservationEndDate(); }
-	 */
 }

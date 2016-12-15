@@ -85,12 +85,17 @@ public class ChauffeurList implements Serializable
 	/**
 	 * Returns the first {@link Chauffeur} in the underlying collection which
 	 * has their first name, last name or ID equal to any of the passed
-	 * parameters. If any of the passed reference type parameters are null, they are ignored.
+	 * parameters. If any of the passed reference type parameters are null, they
+	 * are ignored.
 	 * 
-	 * @param firstName The first name of the {@link Chauffeur}.
-	 * @param lastName The last name of the {@link Chauffeur}.
-	 * @param chauffeurID The ID of the {@link Chauffeur}.
-	 * @return Returns the first {@link Chauffeur} that matches any of the parameters.
+	 * @param firstName
+	 *            The first name of the {@link Chauffeur}.
+	 * @param lastName
+	 *            The last name of the {@link Chauffeur}.
+	 * @param chauffeurID
+	 *            The ID of the {@link Chauffeur}.
+	 * @return Returns the first {@link Chauffeur} that matches any of the
+	 *         parameters.
 	 */
 	public Chauffeur getChauffeur(String firstName, String lastName, int chauffeurID)
 	{
@@ -107,6 +112,7 @@ public class ChauffeurList implements Serializable
 
 	/**
 	 * Returns a shallow copy collection of {@link Chauffeur}s
+	 * 
 	 * @return An array of {@link Chauffeur}.
 	 */
 	public Chauffeur[] getAllChauffeurs()
@@ -115,5 +121,45 @@ public class ChauffeurList implements Serializable
 		chauffeurs.toArray(temp);
 		return temp;
 
+	}
+
+	/**
+	 * Searches for {@link Chauffeur}s that satisfies the given input
+	 * parameters. Does exclusive search by default.If any of the passed
+	 * parameters are {@link null}, they are ignored, in which case they do not
+	 * affect the search result.
+	 * 
+	 * @param firstName
+	 *            The fist name to search for.
+	 * @param lastName
+	 *            The last name to search for.
+	 * @param chauffeurID
+	 *            The chauffeur ID to search for.
+	 * @return Returns an array of {@link Chauffeur}es that satisfies the given
+	 *         parameters.
+	 */
+	public Chauffeur[] search(String firstName, String lastName, int chauffeurID)
+	{
+		ArrayList<Chauffeur> temp = new ArrayList<Chauffeur>();
+		Chauffeur[] tempArray = new Chauffeur[0];
+
+		boolean mustHaveFirstName = firstName != null;
+		boolean mustHaveLastName = lastName != null;
+		boolean mustHaveChauffeurID = chauffeurID != 0;
+
+		for (Chauffeur chauffeur : chauffeurs)
+		{
+			boolean hasFirstName = mustHaveFirstName && chauffeur.getFirstName().equals(firstName);
+			boolean hasLastName = mustHaveLastName && chauffeur.getLastName().equals(lastName);
+			boolean hasChauffeurID = mustHaveChauffeurID && chauffeur.getChauffeurID() == chauffeurID;
+
+			if (mustHaveFirstName == hasFirstName && mustHaveLastName == hasLastName && mustHaveChauffeurID == hasChauffeurID)
+			{
+				temp.add(chauffeur);
+			}
+
+		}
+
+		return temp.toArray(tempArray);
 	}
 }

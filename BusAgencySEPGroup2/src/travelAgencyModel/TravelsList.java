@@ -149,7 +149,7 @@ public class TravelsList implements Serializable
 	 * @return A collection of {@link Travel}s that matches the search
 	 *         parameters.
 	 */
-	public Travel[] searchTravel(String destination, Chauffeur chauffeur, Bus bus, Boolean inclusive)
+	public Travel[] search(String destination, Chauffeur chauffeur, Bus bus, Boolean inclusive)
 	{
 		if (inclusive)
 			return searchTravel(destination, chauffeur, bus);
