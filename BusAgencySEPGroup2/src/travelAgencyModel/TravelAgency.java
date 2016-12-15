@@ -85,7 +85,7 @@ public class TravelAgency implements Serializable
 		travel1.setBasePrice(99.75);
 		travel1.setDestinations(new String[] { destination1 });
 		((Tour)travel1).addCustomer(customer1);
-		customer1.addPassenger(new Passenger("Ander", 53432591, LocalDateTime.of(1987, 4, 20, 0, 0)), 99.75);
+		customer1.addPassenger(new Passenger("Anders", 53432591, LocalDateTime.of(1987, 4, 20, 0, 0)), 99.75);
 		customer1.addPassenger(new Passenger("Thomas", 23112591, LocalDateTime.of(1987, 9, 11, 0, 0)), 99.75);
 		customer1.addPassenger(new Passenger("Nicklas", 73342511, LocalDateTime.of(1988, 1, 19, 0, 0)), 99.75);
 
