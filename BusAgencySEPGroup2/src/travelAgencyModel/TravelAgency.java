@@ -42,10 +42,70 @@ public class TravelAgency implements Serializable
 		this.destinationsList = new DestinationsList();
 		this.frequentCustomerThreshHold = Integer.MAX_VALUE;
 
-		loadFilePersistence();
+		if(!loadFilePersistence())
+		{
+			//No files exists, must be the first time the program is run.. load in some dummy data:
+			loadDummyData();
+		}
 	}
 
-	private void loadFilePersistence()
+	private void loadDummyData()
+	{
+		Bus bus1 = new Bus("International Harvester", "S-Series", "AB 555422", 54);
+		Bus bus2 = new Bus("Nissan Diesel", "Space Arrow", "QS 153422", 47);
+		Bus bus3 = new Bus("Volkswagen", "Volksbus", "PA 923152", 49);
+		bus1.setColor("Yellow");
+		bus2.setColor("Blue");
+		bus3.setColor("Green");
+		
+		Address chauffeurAddress1 = new Address("Allegade", 47, 8700);
+		Address chauffeurAddress2 = new Address("Høegh Guldbergs Gade", 99, 8700);
+		Address chauffeurAddress3 = new Address("Grusdalsvej", 26, 8700);
+		Chauffeur chauffeur1 = new Chauffeur("Martin", "Christensen", 8452);
+		Chauffeur chauffeur2 = new Chauffeur("Jens", "Petersen", 2932);
+		Chauffeur chauffeur3 = new Chauffeur("Michael", "Pedersen", 9271);
+		chauffeur1.setEmail("MC@viabus.dk");
+		chauffeur2.setEmail("JP@viabus.dk");
+		chauffeur3.setEmail("MP@viabus.dk");
+		chauffeur1.setAddress(chauffeurAddress1);
+		chauffeur2.setAddress(chauffeurAddress2);
+		chauffeur3.setAddress(chauffeurAddress3);
+		chauffeur1.setPhoneNumber("23759316");
+		chauffeur2.setPhoneNumber("23661991");
+		chauffeur3.setPhoneNumber("23439901");
+		
+		String destination1 = "Legoland, Billund";
+		String destination2 = "Djurs Sommerland";
+		String destination3 = "Grænsen, Tyskland";
+		
+		Customer customer1 = new Customer("Jørgen Møller", 88245691);
+		Customer customer2 = new Customer("Søren", 33265542);
+
+		Travel travel1 = new Tour(bus1, chauffeur1, LocalDateTime.of(2016, 11, 10, 9, 0), LocalDateTime.of(2016, 11, 10, 17, 59));
+		travel1.setBasePrice(99.75);
+		travel1.setDestinations(new String[] { destination1 });
+		((Tour)travel1).addCustomer(customer1);
+		customer1.addPassenger(new Passenger("Ander", 53432591, LocalDateTime.of(1987, 4, 20, 0, 0)), 99.75);
+		customer1.addPassenger(new Passenger("Thomas", 23112591, LocalDateTime.of(1987, 9, 11, 0, 0)), 99.75);
+		customer1.addPassenger(new Passenger("Nicklas", 73342511, LocalDateTime.of(1988, 1, 19, 0, 0)), 99.75);
+
+		Travel travel2 = new BusAndChaffeurTravel(customer2, bus2, chauffeur2, 30, LocalDateTime.of(2017, 1, 11, 9, 0), LocalDateTime.of(2017, 1, 11, 20, 0));
+		travel2.setDestinations(new String[] { destination3 });
+
+		busList.addBus(bus1);
+		busList.addBus(bus2);
+		busList.addBus(bus3);
+		chauffeurList.addChauffeur(chauffeur1);
+		chauffeurList.addChauffeur(chauffeur2);
+		chauffeurList.addChauffeur(chauffeur3);
+		destinationsList.add(destination1);
+		destinationsList.add(destination2);
+		destinationsList.add(destination3);
+		travelsList.addTravel(travel1);
+		travelsList.addTravel(travel2);
+		
+	}
+	private boolean loadFilePersistence()
 	{
 		File buslist = new File(filePersistenceLocationBusList);
 		File chaffeurlist = new File(filePersistenceLocationChaffeurList);
@@ -108,6 +168,7 @@ public class TravelAgency implements Serializable
 				// just continue
 			}
 		}
+		return buslist.exists() && chaffeurlist.exists() && travelslist.exists() && destinationslist.exists();
 	}
 
 	private void saveObjectInFile(String file, Object obj)

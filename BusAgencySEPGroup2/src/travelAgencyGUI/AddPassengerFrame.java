@@ -1,4 +1,5 @@
 package travelAgencyGUI;
+
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,6 +11,8 @@ import java.awt.event.KeyListener;
 import java.time.LocalDateTime;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -27,9 +30,6 @@ public class AddPassengerFrame extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private Customer relatedCustomer;
-	private Passenger resultPassenger;
-	private double tourPrice;
-	private TravelAgency agency;
 	private JTextField nameField;
 	private JTextField phoneNumberField;
 	private JTextField streetNameField;
@@ -37,16 +37,13 @@ public class AddPassengerFrame extends JFrame
 	private JTextField zipCodeField;
 	private JTextField doorNumberField;
 	private JTextField floorNumberField;
-	//private JCheckBox customerIsPassengerBox;
+	private JTextField ticketPriceField;
 	private JButton submitFormButton;
-	private MinimumInputHandler minimumInputHandler;
 	private DateJPanel birthdayPanel;
 
 	public AddPassengerFrame(TravelAgency agency, Customer relatedCustomer, double tourPrice)
 	{
 		super("Add Passenger");
-		this.agency = agency;
-		this.tourPrice = tourPrice;
 		this.relatedCustomer = relatedCustomer;
 		setSize(400, 400);
 		setLayout(new GridBagLayout());
@@ -59,10 +56,15 @@ public class AddPassengerFrame extends JFrame
 		floorNumberField = new JTextField();
 		doorNumberField = new JTextField();
 		streetHouseNumberField = new JTextField();
-		submitFormButton = new JButton("Submit");
-		minimumInputHandler = new MinimumInputHandler(nameField, phoneNumberField);
-		//customerIsPassengerBox = new JCheckBox("<html>Customer is a<br>passenger", false);
+		ticketPriceField = new JTextField(10);
+		ticketPriceField.setText(Double.toString(agency.getCustomerSuggestedPrice(tourPrice, relatedCustomer)));
 		
+		new MinimumInputHandler(new JTextField[] {
+			nameField, phoneNumberField, ticketPriceField	
+		});
+		
+		submitFormButton = new JButton("Submit");
+
 		birthdayPanel.setBorder(BorderFactory.createTitledBorder("Birthday"));
 		nameField.setBorder(BorderFactory.createTitledBorder("Name"));
 		phoneNumberField.setBorder(BorderFactory.createTitledBorder("Phone"));
@@ -72,13 +74,19 @@ public class AddPassengerFrame extends JFrame
 		zipCodeField.setBorder(BorderFactory.createTitledBorder("Zipcode"));
 		doorNumberField.setBorder(BorderFactory.createTitledBorder("Door number"));
 		floorNumberField.setBorder(BorderFactory.createTitledBorder("Floor number"));
-		//customerIsPassengerBox.addChangeListener(minimumInputHandler);
+
+		ticketPriceField.setBorder(BorderFactory.createTitledBorder("Ticket price"));
 
 		submitFormButton.setEnabled(false);
 		submitFormButton.addActionListener(new SubmitFormHandler());
-		JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		JPanel submitPanel = new JPanel();
+		JPanel ticketPricePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		ticketPricePanel.add(ticketPriceField);
+		submitPanel.setLayout(new BoxLayout(submitPanel, BoxLayout.LINE_AXIS));
+		submitPanel.add(ticketPricePanel);
+		submitPanel.add(Box.createHorizontalGlue());
 		submitPanel.add(submitFormButton);
-		
+
 		JPanel addressPanel = new JPanel(new GridBagLayout());
 		addressPanel.setBorder(BorderFactory.createTitledBorder("Address"));
 
@@ -132,7 +140,7 @@ public class AddPassengerFrame extends JFrame
 		second.insets = new Insets(5, 5, 5, 5);
 		second.anchor = GridBagConstraints.FIRST_LINE_START;
 		second.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		GridBagConstraints birthdayPanelBagConstraints = new GridBagConstraints();
 		birthdayPanelBagConstraints.gridx = 0;
 		birthdayPanelBagConstraints.gridy = 1;
@@ -164,7 +172,7 @@ public class AddPassengerFrame extends JFrame
 		fourth.weighty = 1;
 		fourth.insets = new Insets(5, 5, 5, 5);
 		fourth.anchor = GridBagConstraints.LAST_LINE_END;
-		fourth.fill = GridBagConstraints.NONE;
+		fourth.fill = GridBagConstraints.HORIZONTAL;
 
 		add(nameField, first);
 		add(phoneNumberField, second);
@@ -174,15 +182,11 @@ public class AddPassengerFrame extends JFrame
 
 		fourth.gridx = 0;
 		fourth.anchor = GridBagConstraints.LAST_LINE_START;
-		//add(customerIsPassengerBox, fourth);
 
 		setVisible(true);
 	}
 
-	public Passenger getPassengerResult()
-	{
-		return resultPassenger;
-	}
+
 	private class SubmitFormHandler implements ActionListener
 	{
 		@Override
@@ -236,33 +240,35 @@ public class AddPassengerFrame extends JFrame
 					}
 					passengerAddress.setDoorNumber(doorNumber);
 				}
-				
+
 				newPassenger.setAddress(passengerAddress);
 
 			}
 			
-				//figure out price and add a passenger with identical info..
-				relatedCustomer.addPassenger(newPassenger, agency.getCustomerSuggestedPrice(tourPrice, relatedCustomer));
-			
-			
-			//passenger ready to be returned to parent frame.
-			resultPassenger = newPassenger;
-			//signal parent frame to get the result
-			AddPassengerFrame.this.dispatchEvent(
-					new java.awt.event.WindowEvent(AddPassengerFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+			double price;
+			try
+			{
+				price = Double.parseDouble(ticketPriceField.getText().replace(',', '.'));
+			} catch (NumberFormatException e2)
+			{
+				JOptionPane.showMessageDialog(AddPassengerFrame.this, "Ticket price is invalid. Please use only decimal numbers");
+				return;
+			}
+
+			relatedCustomer.addPassenger(newPassenger, price);
+			AddPassengerFrame.this.dispatchEvent(new java.awt.event.WindowEvent(AddPassengerFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
 		}
 	}
 
 	private class MinimumInputHandler implements KeyListener, javax.swing.event.ChangeListener
 	{
-		private JTextField field1;
-		private JTextField field2;
-		public MinimumInputHandler(JTextField field1, JTextField field2)
+		private JTextField[] fields;
+
+		public MinimumInputHandler(JTextField[] fields)
 		{
-			this.field1 = field1;
-			this.field2 = field2;
-			this.field1.addKeyListener(this);
-			this.field2.addKeyListener(this);
+			this.fields = fields;
+			for (JTextField field : fields)
+				field.addKeyListener(this);
 		}
 
 		@Override
@@ -280,19 +286,16 @@ public class AddPassengerFrame extends JFrame
 		{
 			check();
 		}
-		
+
 		private void check()
 		{
-			if (field1.getText() != null && !field1.getText().trim().equals("") && field2.getText() != null && !field2.getText().trim().equals(""))
+			boolean allFieldsOK = true;
+			for (JTextField field : fields)
 			{
-				if(!birthdayPanel.hasDateSelected())
-					submitFormButton.setEnabled(false);
-				else
-					submitFormButton.setEnabled(true);
-			} else
-			{
-				submitFormButton.setEnabled(false);
+				if (field.getText() == null || field.getText().trim().equals(""))
+					allFieldsOK = false;
 			}
+			submitFormButton.setEnabled(allFieldsOK && birthdayPanel.hasDateSelected());
 		}
 
 		@Override

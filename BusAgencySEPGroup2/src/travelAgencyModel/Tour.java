@@ -105,7 +105,13 @@ public class Tour extends Travel
 					+ "\n";
 			for (Passenger passenger : customer.getAllPassengers())
 			{
-				text += "\t\t" + passenger.getName() + " - Phone: " + passenger.getPhoneNumber() + " - Email: " + passenger.getEmail() + "\n";
+				text += "\t\t" + passenger.getName();
+				if(passenger.getPhoneNumber() != 0)
+					text += " - Phone: " + passenger.getPhoneNumber();
+				if(passenger.getEmail() != null && !passenger.getEmail().equals(""))
+					text += " - Email: " + passenger.getEmail() + "\n";
+				else 
+					text += "\n";
 			}
 			text += "\n\n";
 		}

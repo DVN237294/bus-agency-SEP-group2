@@ -1,4 +1,5 @@
 package travelAgencyGUI;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
@@ -17,17 +18,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.CellRendererPane;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -36,13 +30,10 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.metal.MetalComboBoxUI;
 
 import travelAgencyModel.Bus;
 import travelAgencyModel.BusAndChaffeurTravel;
@@ -51,8 +42,6 @@ import travelAgencyModel.Customer;
 import travelAgencyModel.Tour;
 import travelAgencyModel.Travel;
 import travelAgencyModel.TravelAgency;
-
-import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultText;
 
 public class AddTourFrame extends JFrame
 {
@@ -78,6 +67,7 @@ public class AddTourFrame extends JFrame
 	private JCheckBox busAndChauffeurReservationBox;
 
 	private JButton addCustomerButton;
+	private JButton removeCustomerButton;
 	private JButton addRemoveDstButton;
 	private JButton addPassengerButton;
 	private DestinationAddButtonHandler addDestinationHandler;
@@ -190,19 +180,22 @@ public class AddTourFrame extends JFrame
 		middleEastUpperPanel.setLayout(new BorderLayout());
 		middleEastUpperCenterPanel.setLayout(new GridLayout());
 		middleEastUpperNorthPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		middleEastLowerSouthPanel.setLayout(new BoxLayout(middleEastLowerSouthPanel, BoxLayout.LINE_AXIS));
-		middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		middleEastLowerSouthPanel.setLayout(new GridLayout(1, 3));
+		//middleEastLowerSouthPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		customerList = new JList<Customer>(new DefaultListModel<Customer>());
-		customerList.addListSelectionListener(new EnablePassengerAddHandler());
+		customerList.addListSelectionListener(new EnableCustomerModificationHandler());
 		addCustomerButton = new JButton("Add Customer");
 		addCustomerButton.addActionListener(new AddCustomerHandler());
 		addCustomerButton.setEnabled(false);
+		removeCustomerButton = new JButton("Remove Customer");
+		removeCustomerButton.addActionListener(new RemoveCustomerHandler());
+		removeCustomerButton.setEnabled(false);
 		addPassengerButton = new JButton("Add Passenger");
 		addPassengerButton.setEnabled(false);
 		addPassengerButton.addActionListener(new AddPassengerHandler());
 		middleEastLowerSouthPanel.add(addCustomerButton);
-		middleEastLowerSouthPanel.add(Box.createHorizontalGlue());
+		middleEastLowerSouthPanel.add(removeCustomerButton);
 		middleEastLowerSouthPanel.add(addPassengerButton);
 
 		middleEastPanel.setLayout(new GridLayout(2, 1));
@@ -441,7 +434,7 @@ public class AddTourFrame extends JFrame
 		}
 	}
 
-	private class EnablePassengerAddHandler implements ListSelectionListener
+	private class EnableCustomerModificationHandler implements ListSelectionListener
 	{
 		@Override
 		public void valueChanged(ListSelectionEvent e)
@@ -451,6 +444,7 @@ public class AddTourFrame extends JFrame
 			for (int i = 0; i < customers.getSize(); i++)
 				currentPassengerCount += customers.get(i).getPassengerCount();
 			addPassengerButton.setEnabled(customerList.hasFocus() && currentPassengerCount < getMaxPassengerCount());
+			removeCustomerButton.setEnabled(customerList.hasFocus());
 		}
 	}
 
@@ -505,6 +499,20 @@ public class AddTourFrame extends JFrame
 			AddPassengerFrame frame = new AddPassengerFrame(agency, customerList.getSelectedValue(), price);
 			frame.addWindowListener(new AddPassengerFrameClosedHandler());
 		}
+	}
+
+	private class RemoveCustomerHandler implements ActionListener
+	{
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			DefaultListModel<Customer> customers = (DefaultListModel<Customer>) customerList.getModel();
+			customers.removeElementAt(customerList.getSelectedIndex());
+			addCustomerButton.setEnabled(customers.size() < customerLimit);
+			checkSubmitButton();
+		}
+
 	}
 
 	private class AddCustomerHandler implements ActionListener

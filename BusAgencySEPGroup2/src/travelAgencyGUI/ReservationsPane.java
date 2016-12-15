@@ -20,7 +20,10 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -42,6 +45,7 @@ public class ReservationsPane extends JPanel
 	private JPanel southEastPanel;
 	private JList<Travel> travelsList;
 	private JTextArea centerEastJTextArea;
+	private JScrollPane reservationDetailScrollPane;
 	private JExtendedComboBox<String> destinationBox;
 	private JExtendedComboBox<Chauffeur> chauffeurBox;
 	private JExtendedComboBox<Bus> busBox;
@@ -71,8 +75,13 @@ public class ReservationsPane extends JPanel
 		travelsList.setBorder(BorderFactory.createTitledBorder("Search results"));
 		centerEastJTextArea = new JTextArea();
 		centerEastJTextArea.setTabSize(4);
-		centerEastJTextArea.setPreferredSize(new Dimension(200, 200));
+		centerEastJTextArea.setEditable(false);
+		
 		centerEastJTextArea.setBorder(BorderFactory.createTitledBorder("Reservation details"));
+
+		reservationDetailScrollPane = new JScrollPane(centerEastJTextArea);
+		reservationDetailScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		reservationDetailScrollPane.setPreferredSize(new Dimension(200, 200));
 		toursCenterPanel.setLayout(new GridBagLayout());
 		GridBagConstraints listBagConstraints = new GridBagConstraints();
 		listBagConstraints.insets = new Insets(5, 5, 5, 5);
@@ -86,7 +95,7 @@ public class ReservationsPane extends JPanel
 		textAreaBagConstraints.weighty = 2;
 		textAreaBagConstraints.fill = GridBagConstraints.BOTH;
 
-		toursCenterPanel.add(centerEastJTextArea, textAreaBagConstraints);
+		toursCenterPanel.add(reservationDetailScrollPane, textAreaBagConstraints);
 		searchButton = new JButton("Search");
 		searchButton.addActionListener(new SearchAction());
 		resetButton = new JButton("Reset");
