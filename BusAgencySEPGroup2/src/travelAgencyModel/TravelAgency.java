@@ -1,4 +1,5 @@
 package travelAgencyModel;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -42,9 +43,10 @@ public class TravelAgency implements Serializable
 		this.destinationsList = new DestinationsList();
 		this.frequentCustomerThreshHold = Integer.MAX_VALUE;
 
-		if(!loadFilePersistence())
+		if (!loadFilePersistence())
 		{
-			//No files exists, must be the first time the program is run.. load in some dummy data:
+			// No files exists, must be the first time the program is run.. load
+			// in some dummy data:
 			loadDummyData();
 		}
 	}
@@ -57,7 +59,7 @@ public class TravelAgency implements Serializable
 		bus1.setColor("Yellow");
 		bus2.setColor("Blue");
 		bus3.setColor("Green");
-		
+
 		Address chauffeurAddress1 = new Address("Allegade", 47, 8700);
 		Address chauffeurAddress2 = new Address("Høegh Guldbergs Gade", 99, 8700);
 		Address chauffeurAddress3 = new Address("Grusdalsvej", 26, 8700);
@@ -73,18 +75,18 @@ public class TravelAgency implements Serializable
 		chauffeur1.setPhoneNumber("23759316");
 		chauffeur2.setPhoneNumber("23661991");
 		chauffeur3.setPhoneNumber("23439901");
-		
+
 		String destination1 = "Legoland, Billund";
 		String destination2 = "Djurs Sommerland";
 		String destination3 = "Grænsen, Tyskland";
-		
+
 		Customer customer1 = new Customer("Jørgen Møller", 88245691);
 		Customer customer2 = new Customer("Søren", 33265542);
 
 		Travel travel1 = new Tour(bus1, chauffeur1, LocalDateTime.of(2016, 11, 10, 9, 0), LocalDateTime.of(2016, 11, 10, 17, 59));
 		travel1.setBasePrice(99.75);
 		travel1.setDestinations(new String[] { destination1 });
-		((Tour)travel1).addCustomer(customer1);
+		((Tour) travel1).addCustomer(customer1);
 		customer1.addPassenger(new Passenger("Anders", 53432591, LocalDateTime.of(1987, 4, 20, 0, 0)), 99.75);
 		customer1.addPassenger(new Passenger("Thomas", 23112591, LocalDateTime.of(1987, 9, 11, 0, 0)), 99.75);
 		customer1.addPassenger(new Passenger("Nicklas", 73342511, LocalDateTime.of(1988, 1, 19, 0, 0)), 99.75);
@@ -92,19 +94,17 @@ public class TravelAgency implements Serializable
 		Travel travel2 = new BusAndChaffeurTravel(customer2, bus2, chauffeur2, 30, LocalDateTime.of(2017, 1, 11, 9, 0), LocalDateTime.of(2017, 1, 11, 20, 0));
 		travel2.setDestinations(new String[] { destination3 });
 
-		busList.addBus(bus1);
-		busList.addBus(bus2);
-		busList.addBus(bus3);
-		chauffeurList.addChauffeur(chauffeur1);
-		chauffeurList.addChauffeur(chauffeur2);
-		chauffeurList.addChauffeur(chauffeur3);
-		destinationsList.add(destination1);
-		destinationsList.add(destination2);
-		destinationsList.add(destination3);
-		travelsList.addTravel(travel1);
-		travelsList.addTravel(travel2);
-		
+		this.addBus(bus1);
+		this.addBus(bus2);
+		this.addBus(bus3);
+		this.addChauffeur(chauffeur1);
+		this.addChauffeur(chauffeur2);
+		this.addChauffeur(chauffeur3);
+		this.addDestinations(new String[] { destination1, destination2, destination3 });
+		this.addTravel(travel1);
+		this.addTravel(travel2);
 	}
+
 	private boolean loadFilePersistence()
 	{
 		File buslist = new File(filePersistenceLocationBusList);
@@ -342,16 +342,16 @@ public class TravelAgency implements Serializable
 
 	/**
 	 * Returns the suggested price for a given {@link Customer} given a specific
-	 * {@link Travel}. The base price of the {@link Travel} is returned as-is if the
-	 * {@link Customer } is not applicable to a discount.
+	 * {@link Travel}. The base price of the {@link Travel} is returned as-is if
+	 * the {@link Customer } is not applicable to a discount.
 	 * 
 	 * @param travel
 	 *            The {@link Travel} from which the base price is determined.
 	 * @param payingCustomer
 	 *            The {@link Customer} to be assessed for a discount.
-	 * @return Returns the base price of the given {@link Travel} if the given {@link Customer }
-	 *         is not applicable for a discount. Otherwise returns a new price
-	 *         with a discount deducted.
+	 * @return Returns the base price of the given {@link Travel} if the given
+	 *         {@link Customer } is not applicable for a discount. Otherwise
+	 *         returns a new price with a discount deducted.
 	 */
 	public double getCustomerSuggestedPrice(Travel travel, Customer payingCustomer)
 	{
@@ -475,10 +475,35 @@ public class TravelAgency implements Serializable
 		saveFileChauffeurList();
 	}
 
+	/**
+	 * Adds the specified bus to the underlying collection, and saves the
+	 * collection to the hard drive.
+	 * 
+	 * @param bus
+	 *            The bus to add.
+	 */
+	public void addBus(Bus bus)
+	{
+		busList.addBus(bus);
+		saveFileBusList();
+	}
+
+	/**
+	 * Adds a new bus with the specified parameters to the underlying
+	 * collection, and saves the collection to the hard drive.
+	 * 
+	 * @param make
+	 *            The manufacturer of the bus.
+	 * @param model
+	 *            The model name of the bus.
+	 * @param licensePlate
+	 *            The vehicle license plate.
+	 * @param maxCapacity
+	 *            The maximum passenger capacity of this bus.
+	 */
 	public void addBus(String make, String model, String licensePlate, int maxCapacity)
 	{
-		busList.addBus(new Bus(make, model, licensePlate, maxCapacity));
-		saveFileBusList();
+		addBus(new Bus(make, model, licensePlate, maxCapacity));
 	}
 
 	public void deleteBus(String make, String model, String licensePlate, int maxCapacity)
