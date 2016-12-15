@@ -219,7 +219,7 @@ public class ReservationsPane extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			AddTourFrame frame = new AddTourFrame(agency);
+			AddReservationFrame frame = new AddReservationFrame(agency);
 			frame.addWindowListener(new WindowStateChangedHandler());
 		}
 	}
@@ -239,7 +239,7 @@ public class ReservationsPane extends JPanel
 		@Override
 		public void windowClosing(WindowEvent e)
 		{
-			AddTourFrame frame = (AddTourFrame) e.getSource();
+			AddReservationFrame frame = (AddReservationFrame) e.getSource();
 			Travel result = frame.getResultTravel();
 			if (result != null)
 				agency.addTravel(result);

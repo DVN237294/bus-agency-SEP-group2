@@ -43,7 +43,7 @@ import travelAgencyModel.Tour;
 import travelAgencyModel.Travel;
 import travelAgencyModel.TravelAgency;
 
-public class AddTourFrame extends JFrame
+public class AddReservationFrame extends JFrame
 {
 	private Travel resultTravel;
 	private static final long serialVersionUID = 1L;
@@ -76,9 +76,9 @@ public class AddTourFrame extends JFrame
 	private String tourPriceString = "Price per seat";;
 	private String bAndCPriceString = "Reservation price";
 
-	public AddTourFrame(TravelAgency agency)
+	public AddReservationFrame(TravelAgency agency)
 	{
-		super("Add Tour");
+		super("Add Reservation");
 
 		this.agency = agency;
 		setSize(735, 540);
@@ -431,7 +431,7 @@ public class AddTourFrame extends JFrame
 			resultTravel = newTravel;
 
 			// signal parent frame to get the result
-			AddTourFrame.this.dispatchEvent(new java.awt.event.WindowEvent(AddTourFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
+			AddReservationFrame.this.dispatchEvent(new java.awt.event.WindowEvent(AddReservationFrame.this, java.awt.event.WindowEvent.WINDOW_CLOSING));
 		}
 	}
 
