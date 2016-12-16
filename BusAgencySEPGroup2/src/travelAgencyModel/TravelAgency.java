@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 public class TravelAgency implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private String filePersistenceLocationBusList = "C:\\SEP_GROUP2\\TRAVELAGENCY_BUSLIST.o";
 	private String filePersistenceLocationChaffeurList = "C:\\SEP_GROUP2\\TRAVELAGENCY_CHAUFFEURLIST.o";
 	private String filePersistenceLocationTravelsList = "C:\\SEP_GROUP2\\TRAVELAGENCY_TRAVELSLIST.o";

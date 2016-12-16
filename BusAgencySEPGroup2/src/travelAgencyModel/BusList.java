@@ -14,6 +14,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
  */
 public class BusList implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Bus> buses;
 
 	/**

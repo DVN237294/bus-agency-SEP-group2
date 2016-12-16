@@ -39,7 +39,7 @@ public abstract class Time
 	 */
 	public static String doubleDigits(int number)
 	{
-		if(number < 9 && number >= 0)
+		if(number < 10 && number >= 0)
 			return "0" + Integer.toString(number);
 		
 		return Integer.toString(number);
