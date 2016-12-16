@@ -26,10 +26,15 @@ public abstract class Travel implements Serializable
 	 * {@link Chauffeur} to be associated with this {@link Travel} as well as a
 	 * time interval for the reservation.
 	 * 
-	 * @param bus The {@link Bus} to be associated with this {@link Travel}.
-	 * @param chauffeur The {@link Chauffeur} to be associated with this {@link Travel}.
-	 * @param reservationStartDate The start date of the reservation time interval.
-	 * @param reservationEndDate The end date of the reservation time interval.
+	 * @param bus
+	 *            The {@link Bus} to be associated with this {@link Travel}.
+	 * @param chauffeur
+	 *            The {@link Chauffeur} to be associated with this
+	 *            {@link Travel}.
+	 * @param reservationStartDate
+	 *            The start date of the reservation time interval.
+	 * @param reservationEndDate
+	 *            The end date of the reservation time interval.
 	 */
 	public Travel(Bus bus, Chauffeur chauffeur, LocalDateTime reservationStartDate, LocalDateTime reservationEndDate)
 	{
@@ -95,9 +100,13 @@ public abstract class Travel implements Serializable
 	}
 
 	/**
-	 * Determines if this {@link Travel}s reservation interval overlaps with the specified time interval.
-	 * @param startDate The start of the specified time interval.
-	 * @param endDate The end of the specified time interval.
+	 * Determines if this {@link Travel}s reservation interval overlaps with the
+	 * specified time interval.
+	 * 
+	 * @param startDate
+	 *            The start of the specified time interval.
+	 * @param endDate
+	 *            The end of the specified time interval.
 	 * @return Returns true if the two time intervals overlap.
 	 */
 	public boolean reservationOverlaps(LocalDateTime startDate, LocalDateTime endDate)
@@ -110,8 +119,11 @@ public abstract class Travel implements Serializable
 	}
 
 	/**
-	 * Determines if this {@link Travel}s reservation interval overlaps with the specified {@link Travel}s time interval.
-	 * @param other The other {@link Travel} to compare against.
+	 * Determines if this {@link Travel}s reservation interval overlaps with the
+	 * specified {@link Travel}s time interval.
+	 * 
+	 * @param other
+	 *            The other {@link Travel} to compare against.
 	 * @return Returns true if the time intervals overlap.
 	 */
 	public boolean reservationOverlaps(Travel other)
@@ -122,7 +134,9 @@ public abstract class Travel implements Serializable
 	protected abstract String getReservationType();
 
 	/**
-	 * Returns a human readable {@link String} representation of this {@link Travel}. Suitable for a TextArea.
+	 * Returns a human readable {@link String} representation of this
+	 * {@link Travel}. Suitable for a TextArea.
+	 * 
 	 * @return Returns the readable {@link String}.
 	 */
 	public String getText()
@@ -150,8 +164,10 @@ public abstract class Travel implements Serializable
 		}
 		return text;
 	}
+
 	/**
 	 * Returns a {@link String} representation of this {@link Travel}.
+	 * 
 	 * @return Returns the {@link String} representation.
 	 */
 	@Override
